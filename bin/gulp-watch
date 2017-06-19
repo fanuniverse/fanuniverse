@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+cd ../assets
+
+while true
+do
+  gulp watch
+  echo -e '\033[0;31mGulp.js has encountered an error and will be restarted in 2 seconds\033[0m'
+  sleep 2
+done

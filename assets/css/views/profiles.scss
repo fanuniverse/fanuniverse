@@ -1,0 +1,82 @@
+@import "common/global";
+
+.avatar {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  border-radius: 50%;
+  background: $black;
+  border: 1px solid $black;
+}
+
+.avatar__image {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 100%;
+}
+
+.avatar--large {
+  width: 150px;
+  height: 150px;
+}
+
+.avatar--small {
+  width: 60px;
+  height: 60px;
+}
+
+.role {
+  margin: 0 6px;
+
+  font-size: 12px;
+  text-transform: uppercase;
+  font-family: "Sansita", sans-serif;
+
+  color: $accent_color;
+}
+
+.role--block {
+  display: block;
+  margin: 0 0 0.2em;
+
+  font-size: 14px;
+}
+
+.profile {
+  margin: 0 0 40px;
+  display: flex;
+}
+
+.profile__avatar {
+  margin-right: 40px;
+}
+
+.profile__info {
+  flex: 1 1 0;
+}
+
+.profile__info__name {
+  display: inline-block;
+  margin: 0.4em 0;
+}
+
+.profile__info__button--edit {
+  vertical-align: super;
+}
+
+@include mobile {
+  .profile {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile__avatar {
+    margin: 0;
+  }
+
+  .profile__info {
+    text-align: center;
+  }
+}

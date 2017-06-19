@@ -1,0 +1,44 @@
+@import "global";
+
+.inline-form {
+  display: inline;
+}
+
+.input {
+  display: block;
+  box-sizing: border-box;
+  padding: 6px;
+  margin-bottom: 6px;
+  font-size: 16px;
+
+  max-width: 100%; /* prevent resizable inputs from overflowing the container */
+
+  color: $input_text_color;
+  border: 1px solid $border_color;
+}
+
+.input:focus {
+  color: $black;
+  outline: none;
+  border: 1px solid $accent_focus_color;
+}
+
+.input--inline {
+  display: inline-block;
+}
+
+.input--wide {
+  width: 100%;
+}
+
+.input--no-margin {
+  margin: 0;
+}
+
+.input--spacing-left {
+   margin-left: 4px;
+}
+
+textarea {
+  height: 4em;
+}

@@ -1,0 +1,37 @@
+header.navbar.flex
+  .flex__main
+    / Burger toggle
+    a.navbar__link href="#" data-click-toggle='{".burger":"open","body":"no-overflow"}'
+      i.fa.fa-bars
+    / Search
+    a.navbar__link href="#" data-click-toggle='{"#navbar-home":"hidden",".navbar__search":"hidden"}' data-click-focus=".navbar__search"
+      i.fa.fa-search
+    = form_tag image_path(@conn, :index), [method: :get, accept_charset: "UTF-8", enforce_utf8: false, class: "inline-form"] do
+      = tag :input, type: :text, name: "q", value: @conn.params["q"], class: "input navbar__search hidden", placeholder: "ruby, sapphire"
+    // Admin tools
+    /- if user_signed_in? && current_user.administrator?
+    /  a.navbar__link href= admin_dashboard_path
+    /    i.fa.fa-diamond
+    / Home link
+    a.navbar__link#navbar-home href='/' Fan Universe
+
+  .flex__right
+    = if user_signed_in?(@conn) do
+      a.navbar__user-link href="/profile_path"
+        .avatar.navbar__user-link__avatar
+          /img.avatar__image src=current_user.avatar.url
+    - else
+      a.navbar__link href="/sign_in"
+        i.fa.fa-sign-in
+
+.burger
+  .burger__menu
+    a.burger__link href="/images/new" Suggest an image
+    hr.burger__divider
+    = if user_signed_in?(@conn) do
+      = link to: "/sign_out", method: :delete do
+        i.fa.fa-fw.fa-sign-out>
+        | Sign out
+    - else
+      a.burger__link href="/sign_up" Join
+      a.burger__link href="/sign_in" Sign in

@@ -1,0 +1,24 @@
+@import "common/global";
+
+.tag {
+  display: inline-block;
+  font-size: 14px;
+  margin: 0 6px 4px 0;
+  padding: 4px 8px;
+  border-radius: 4px;
+
+  text-decoration: none;
+
+  color: $accent_color;
+  border: 1px solid;
+  font-weight: bold;
+
+  @include bg-color-transition;
+
+  &:hover {
+    background: $accent_light_hover_color;
+    color: $accent_hover_color;
+
+    cursor: pointer;
+  }
+}

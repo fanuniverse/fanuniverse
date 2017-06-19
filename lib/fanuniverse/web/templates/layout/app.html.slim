@@ -1,0 +1,30 @@
+doctype html
+html lang="en"
+  head
+    title
+      = page_title(@conn, assigns)
+
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+
+    link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,400i,700|Sansita"
+    link rel="stylesheet" href="#{static_path(@conn, "/app.css")}"
+
+    link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v1"
+    link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v1"
+    meta name="theme-color" content="#ffffff"
+
+    script src="#{static_path(@conn, "/app.js")}"
+
+  body
+    = render Fanuniverse.Web.LayoutView, "header.html", assigns
+    = render Fanuniverse.Web.LayoutView, "header_mobile.html", assigns
+
+    - error = get_flash(@conn, :error)
+    = if error do
+      p.alert.alert--danger = error
+
+    main.layout.layout--narrow
+      = render @view_module, @view_template, assigns
+
+    = render Fanuniverse.Web.LayoutView, "footer.html", assigns

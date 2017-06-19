@@ -1,0 +1,51 @@
+@import "global";
+
+.button {
+  display: block;
+  box-sizing: border-box;
+  padding: 4px 6px;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+
+  border-radius: 4px;
+  line-height: 24px;
+
+  @include bg-color-transition;
+
+  background: $accent_color;
+  color: white;
+  border: 1px solid $accent_color;
+
+  &:hover {
+    background: $accent_hover_color;
+    border: 1px solid $accent_hover_color;
+  }
+}
+
+.button--secondary {
+  background: white;
+  color: $accent_color;
+  border: 1px solid;
+
+  &:hover {
+    background: $accent_light_hover_color;
+    color: $accent_hover_color;
+  }
+}
+
+.button--spacing-left {
+  margin-left: 4px;
+}
+
+.button--inline {
+  display: inline-block;
+}
+
+.button--round {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  margin-left: 8px;
+}

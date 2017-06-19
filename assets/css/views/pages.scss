@@ -1,0 +1,45 @@
+@import "common/global";
+
+.intro {
+  text-align: center;
+}
+
+.intro__title {
+  display: inline-block;
+  margin: 24px;
+  font-size: 48px;
+
+  font-family: $font_family_header;
+}
+
+.intro__splash {
+  padding: 32px;
+  font-size: 22px;
+
+  background: $black;
+  color: white;
+}
+
+.intro__section {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 2vw;
+  font-size: 18px;
+}
+
+.intro__text {
+  line-height: 1.6em;
+}
+
+.intro__tag-row {
+  margin-bottom: 4px;
+}
+
+.intro__tag-row-title {
+  margin: 16px 0;
+
+  text-transform: uppercase;
+  font-family: $font_family_header;
+  font-size: 16px;
+  color: $accent_color;
+}

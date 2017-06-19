@@ -1,0 +1,186 @@
+@import "global";
+
+@include mobile {
+  .header { display: none !important; }
+}
+
+@include desktop {
+  .navbar { display: none !important; }
+}
+
+.header,
+.navbar,
+.burger {
+  font-family: $font_family_header;
+}
+
+.header,
+.navbar {
+  border-bottom: 1px solid $border_color;
+  background: white;
+}
+
+.header__link,
+.navbar__link {
+  display: inline-block;
+}
+
+.burger__link {
+  display: block;
+}
+
+.header__link, .header__user-toggle,
+.navbar__link,
+.burger__link {
+  padding: 0 $header_spacing;
+  font-size: $header_font_size;
+  text-decoration: none;
+
+  line-height: $header_height;
+  color: $black;
+}
+
+.header__link {
+  border-bottom: 3px solid white;
+
+  &:hover {
+    border-bottom: 3px solid $black;
+  }
+}
+
+.header__link--spacing-right {
+  margin-right: 20px;
+}
+
+.header__search-input {
+  width: 30vw;
+}
+
+.header__user-toggle,
+.navbar__user-link {
+  display: inline-flex;
+  align-items: center;
+  height: $header_height;
+}
+
+.navbar__user-link {
+  padding: 0 8px;
+}
+
+.header__user-toggle {
+  /* Compensate for .header__link having border-bottom set to 3px */
+  padding-bottom: 3px;
+
+  background-size: 100% 200%;
+  background-image: linear-gradient(to bottom, white 50%, $black 50%);
+  transition: background-position ease 0.2s,
+              color ease 0.2s;
+}
+
+.header__user-toggle:hover, .header__user-toggle.active {
+  background-position: 0 -100%;
+  color: white;
+  cursor: pointer;
+}
+
+.header__user-toggle__avatar {
+  margin: 1px 0 0 10px;
+  width: 34px;
+  height: 34px;
+}
+
+.navbar__user-link__avatar {
+  width: 30px;
+  height: 30px;
+}
+
+.header__user {
+  right: 8px;
+  margin-top: 8px;
+  line-height: 28px;
+  text-align: left;
+
+  background: $black;
+  color: white;
+}
+
+.header__user__arrow {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 12px solid $black;
+}
+
+.navbar__search {
+  display: inline;
+  border: 0;
+  width: calc(100vw - 130px);
+
+  &:focus {
+    border: 0;
+    border-bottom: 1px solid $border_color;
+  }
+}
+
+.burger {
+  position: fixed;
+  overflow: hidden;
+  visibility: hidden;
+
+  left: 0;
+  top: $header_height;
+  height: calc(100% - #{$header_height});
+  width: 100%;
+  z-index: 1;
+
+  transition: background 0.3s, visibility 0.3s;
+
+  &.open {
+    visibility: visible;
+    background: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.burger__menu {
+  overflow: auto;
+  height: 100%;
+  width: 200px;
+
+  border-top: 1px solid $border_color;
+  background: white;
+
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.burger.open > .burger__menu {
+  transform: translateX(0%);
+}
+
+.burger__divider {
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background: #e6e6e6;
+}
+
+.flash {
+  padding: 8px 12px;
+  background: white;
+  border-bottom: 1px solid $border_color;
+}
+
+.flashy-splash {
+  padding: 12px;
+  font-size: 18px;
+  background: $black;
+  color: white;
+}
+
+.flashy-splash__link {
+  color: white;
+}

@@ -1,0 +1,33 @@
+@import "global";
+
+.video-container {
+  position: relative;
+}
+
+.video-container.interactable {
+  cursor: pointer;
+}
+
+.video-container__overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+
+  font-family: $font_family_header;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 24px;
+}
+
+/* Remove video playback button on iOS — we have custom controls. */
+.video-container__video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}

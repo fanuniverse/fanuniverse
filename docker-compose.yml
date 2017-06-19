@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=fanuniverse
+      - POSTGRES_PASSWORD=fanuniverse
+    volumes:
+    - /var/lib/fanuniverse/postgresql/data/:/var/lib/postgresql/data
+    ports:
+      - "localhost:5434:5432"
+
+  vidalia:
+    image: littlebobbytables/vidalia:latest
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    environment:
+      - VIDALIA_PATH=/home/vidalia
+      - AMQP_URI=amqp://guest:guest@rabbitmq:5672
+    volumes:
+      - ./priv/vidalia:/home/vidalia
+    cap_drop:
+      - DAC_OVERRIDE
+      - FOWNER
+      - CHOWN
+      - SETGID
+      - SETUID
+      - SETPCAP
+      - NET_BIND_SERVICE
+      - SYS_CHROOT
+      - MKNOD
+
+  rabbitmq:
+    image: rabbitmq:management
+    hostname: rabbit
+    volumes:
+      - /var/lib/fanuniverse/rabbitmq/data:/var/lib/rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"

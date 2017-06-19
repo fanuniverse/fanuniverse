@@ -1,0 +1,13 @@
+/ Accepts :changeset
+= if @changeset.action do
+  .block.js-model-errors
+    h2
+      ' Oops!
+      = if Enum.count(@changeset.errors) == 1 do
+        ' There is an issue
+      - else
+        ' There are a couple of issues
+      | with your submission:
+    ul
+      = for {attr, {message, _}} <- @changeset.errors do
+        li #{humanize(attr)} #{message}

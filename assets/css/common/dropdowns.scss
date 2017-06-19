@@ -1,0 +1,27 @@
+@import "global";
+
+.js-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.js-dropdown__content {
+  position: absolute;
+  box-sizing: border-box;
+  z-index: 999;
+
+  background: $black;
+  color: white;
+}
+
+.js-dropdown__content > a {
+  display: block;
+  padding: 6px 12px;
+
+  text-decoration: none;
+  color: white;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

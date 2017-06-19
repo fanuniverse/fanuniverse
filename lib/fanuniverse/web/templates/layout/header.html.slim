@@ -1,0 +1,30 @@
+header.header.flex
+  .flex__main
+    a.header__link.header__link--spacing-right href="/" Fan Universe
+    a.header__link.header__link--spacing-right href="/images/new" Suggest an image
+    /= if user_signed_in? && current_user.administrator?
+    /  a.header__link.header__link--spacing-right href=admin_dashboard_path
+    /    i.fa.fa-diamond
+    = form_tag image_path(@conn, :index), [method: :get, accept_charset: "UTF-8", enforce_utf8: false, class: "inline-form"] do
+      = tag :input, type: :text, name: "q", value: @conn.params["q"], class: "input input--inline header__search-input", placeholder: "ruby, sapphire"
+  .flex__right
+    = if user_signed_in?(@conn) do
+     .js-dropdown.js-signed-in
+       a.js-dropdown__toggle.header__user-toggle href="/profile_path"
+         = user(@conn).name
+         .avatar.header__user-toggle__avatar
+           /img.avatar__image src=current_user.avatar.url
+       .js-dropdown__content.header__user.hidden
+         .header__user__arrow
+         = link to: "/profile_path" do
+           i.fa.fa-fw.fa-user>
+           | Profile
+         = link to: "/profile_edit?not_sure" do
+           i.fa.fa-fw.fa-cogs>
+           | Account
+         = link to: "/sign_out", method: :delete do
+           i.fa.fa-fw.fa-sign-out>
+           | Sign out
+    - else
+      a.header__link href="/sign_up" Join
+      a.header__link href="/sign_in" Sign in

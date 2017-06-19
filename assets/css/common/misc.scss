@@ -1,0 +1,41 @@
+@import "global";
+
+/* Pagination */
+
+.pagination {
+  display: inline-block;
+}
+
+.page, .current-page, .page-gap {
+  padding: 4px 8px;
+  font-weight: bold;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.page {
+  color: $meta_color;
+
+  @include bg-color-transition;
+
+  &:hover {
+    background: $pagination_hover_color;
+    color: $meta_hover_color;
+  }
+}
+
+.current-page {
+  background: $accent_color;
+  color: white;
+}
+
+.page-gap {
+  color: $meta_color;
+}
+
+/* JS link styles */
+
+.js-dropdown__toggle {
+  color: $black;
+  text-decoration: none;
+}

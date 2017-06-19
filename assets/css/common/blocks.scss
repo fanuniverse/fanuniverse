@@ -1,0 +1,27 @@
+@import "global";
+
+.block {
+  background: white;
+  border: 1px solid $border_color;
+
+  margin-bottom: $block_spacing;
+  border-radius: 4px;
+
+  padding: $block_spacing;
+
+  img {
+    max-width: 100%;
+  }
+}
+
+/* Somewhat dirty workaround for default element margins */
+
+.block {
+  > h1, > h2, > h3 {
+    margin-top: 6px;
+  }
+
+  > ul {
+    margin-bottom: 6px;
+  }
+}

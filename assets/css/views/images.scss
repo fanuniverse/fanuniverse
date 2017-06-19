@@ -1,0 +1,105 @@
+@import "common/global";
+
+.image-preview {
+  display: inline-block;
+  width: 200px;
+}
+
+.image {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background: $black;
+  padding: 8px 0;
+}
+
+.image__meta,
+.image__navigation {
+  font-size: 18px;
+  color: $meta_inverted_color;
+
+  &.active {
+    color: white;
+  }
+
+  &:hover {
+    color: $meta_inverted_hover_color;
+    cursor: pointer;
+  }
+}
+
+.image__navigation {
+  flex-grow: 1;
+
+  display: flex;
+  align-items: center;
+
+  padding: 16px;
+  text-decoration: none;
+}
+
+.image__navigation--left {
+  justify-content: flex-start;
+}
+
+.image__navigation--right {
+  justify-content: flex-end;
+}
+
+@include desktop {
+  .image__touch-info {
+    display: none;
+  }
+}
+
+@include mobile {
+  .image {
+    padding: 8px 16px;
+  }
+
+  .image__navigation {
+    display: none;
+  }
+
+  .image__touch-info {
+    color: $meta_inverted_hover_color;
+    text-align: center;
+    padding-top: 4px;
+  }
+}
+
+.image__content {
+  overflow: hidden;
+  text-align: center;
+}
+
+.image__image,
+.image__video {
+  max-width: 100%;
+  max-height: calc(100vh - 108px);
+}
+
+.image__image.full {
+  max-height: 100%;
+}
+
+.image__processing {
+  color: white;
+  font-family: $font_family_header;
+  font-size: 24px;
+}
+
+.history__user {
+  font-family: $font_family_header;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.history__label {
+  margin: 12px 0 6px;
+}
+
+.history__time {
+  margin-top: 12px;
+}
+

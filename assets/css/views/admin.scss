@@ -1,0 +1,47 @@
+@import "common/global";
+
+/* Reports */
+
+.report__title {
+  align-items: center;
+
+  font-family: $font_family_header;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 0 0 8px;
+}
+
+.report__main {
+  flex-wrap: wrap;
+}
+
+.report__side {
+  margin-right: 20px;
+}
+
+.report__body {
+  margin: 16px 0;
+  min-width: 200px;
+}
+
+.report__reported-by {
+  font-size: 14px;
+}
+
+/* Images */
+
+.image-comparison {
+  display: flex;
+}
+
+.image-comparison__item {
+  flex: 50%;
+
+  &:first-child {
+    margin-right: 16px;
+  }
+
+  > img {
+    max-width: 100%;
+  }
+}

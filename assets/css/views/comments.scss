@@ -1,0 +1,33 @@
+@import "common/global";
+
+/* TODO: merge with inline-form? */
+.comment-form {
+  display: flex;
+  align-items: center;
+}
+
+.comment__body {
+  position: relative;
+  margin-left: 20px;
+
+  word-wrap: break-word;
+}
+
+.comment__author {
+  display: flex;
+  align-items: center;
+
+  font-family: $font_family_header;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.comment__author-link {
+  color: $black;
+}
+
+.comment__meta {
+  font-size: 14px;
+  margin-top: 6px;
+  text-align: right;
+}

@@ -1,0 +1,17 @@
+h1 Sign in
+
+p
+  ' Don't have an account yet?
+  a href="/sign_up" Sign up here
+  | .
+
+= form_for @conn, user_session_path(@conn, :create), [as: :session], fn f ->
+  = label f, :email
+  = email_input f, :email, class: "input", autofocus: true
+  
+  = label f, :password
+  = password_input f, :password, class: "input", autocomplete: "off"
+
+  /a href="/password_recovery" Forgot your password?
+
+  = submit "Sign in", class: "button"

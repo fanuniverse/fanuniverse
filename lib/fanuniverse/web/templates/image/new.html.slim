@@ -1,0 +1,75 @@
+h1 Suggest an image
+
+p Have some fan art you love? Share it with fellow fans!
+
+= form_for @changeset, image_path(@conn, :create),
+  [multipart: true, class: "js-upload"], fn f ->
+
+  = render Fanuniverse.Web.LayoutView, "errors.html", changeset: @changeset
+
+  = if assigns[:image_cache] do
+    = hidden_input f, :cache, value: @image_cache
+    img.js-upload__preview.image-preview src=@image_preview_url
+  - else
+    img.js-upload__preview.image-preview.hidden
+
+  .js-upload__file
+    h3 Link an image page or a blog post
+
+    = tag :input, type: :url,
+      name: "fetch_image",
+      class: "input input--wide js-upload__url",
+      placeholder: "http://artist.tumblr.com/post/1",
+      autofocus: true
+    p.js-upload__fetch-error.hidden
+      | Oops! There doesn't seem to be any images at the URL you provided.
+    a.button.button--inline.js-upload__fetch data-toggle-text="Loading…" Fetch
+
+    h3 Alternatively, upload a file from your computer
+
+    p You'll need to specify a couple of things manually.
+    = file_input f, :image, class: "input file-upload__input"
+    = label f, :image, class: "button button--inline file-upload__label" do
+      i.fa.fa-upload>
+      | Choose a file…
+
+  .js-upload__meta.hidden
+    h2 Tag the image
+    p
+      | Please reference the artist with an
+         <em>(artist) artist name here</em> tag,
+         specify the fandom with a
+         <em>(fandom) fandom name here</em> tag,
+         and describe the image with at least one additional tag —
+         for example, character name or episode reference.
+    = textarea f, :tags,
+      class: "input input--wide",
+      placeholder: "(artist) somebody, (fandom) steven universe, pearl, smiling"
+
+    h2 Credit the artist
+    p
+      | Provide a link to the page you've found this image on.
+         We show it alongside images to give artists credit for their hard work.
+    = text_input f, :source,
+      class: "input input--wide",
+      placeholder: "http://blog.tumblr.com/post/1"
+
+    br
+    = submit "Submit", class: "button"
+
+br
+
+h3
+  a href="#" data-click-toggle="#content-restrictions"
+    | What kinds of images can I suggest?
+
+#content-restrictions.hidden
+  p
+    | We accept images that suit TV-PG.
+       Mild profanity, suggestive themes, and
+       moderate (non-graphic violence) is allowed.
+
+  p
+    | Submissions containing promotion of intolerance and hatred,
+       gruesome or disgusting imagery, explicit sexual themes, or
+       explicit coarse language are <strong>forbidden</strong>.

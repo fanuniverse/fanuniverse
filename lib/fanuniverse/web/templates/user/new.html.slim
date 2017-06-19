@@ -1,0 +1,38 @@
+h1 Join us!
+
+p Create an account to star your favorite images, leave comments, and participate in the community.
+
+p Already have an account? <a href="/sign_in">Sign in here</a>.
+
+= form_for @changeset, user_path(@conn, :create), fn f ->
+  = render Fanuniverse.Web.LayoutView, "errors.html", changeset: @changeset
+
+  strong = label f, :name, "Username"
+  = text_input f, :name, class: "input", autofocus: true
+
+  p
+    | You can use letters, numbers, and hyphens.
+       Spaces and other special characters are not allowed.
+
+  strong = label f, :email
+  = email_input f, :email, class: "input"
+
+  p
+    | You will use your email address to sign in.
+       We will only contact you for administrative purposes (e.g. resetting a password).
+
+  p For more information, please refer to our <a href="/privacy">Privacy Policy</a>.
+
+  strong = label f, :password
+  = password_input f, :password, class: "input", autocomplete: "off"
+
+  p Your password needs to have at least 8 characters.
+
+  strong = label f, :password_confirmation, "Confirm your password"
+  = password_input f, :password_confirmation, class: "input", autocomplete: "off"
+
+  br
+
+  = submit "Sign up", class: "button"
+
+p By creating an account, you agree to our <a href="/privacy">Privacy Policy</a>.
