@@ -39,7 +39,10 @@ defmodule Fanuniverse.ImageUploadAction do
 
     case Repo.insert(changeset) do
       {:ok, record} ->
-        Dispatcher.Image.request_processing(record.id, cached_file)
+        spawn fn ->
+          Dispatcher.Image.request_processing(record.id, cached_file)
+          Elasticfusion.Document.index(record, Fanuniverse.ImageIndex)
+        end
         {:ok, record}
       {:error, changeset} ->
         {:error, changeset, cached_file, cache_url(cached_file)}

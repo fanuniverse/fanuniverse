@@ -26,7 +26,11 @@ config :phoenix, :template_engines,
 config :redbird,
   key_namespace: "s_"
 
-config :comeonin, :bcrypt_log_rounds, 14
+config :comeonin,
+  :bcrypt_log_rounds, 14
+
+config :elasticfusion,
+  endpoint: "http://localhost:9200"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

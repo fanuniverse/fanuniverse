@@ -12,6 +12,24 @@ services:
     ports:
       - "localhost:5434:5432"
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.1
+    environment:
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=false
+      - xpack.graph.enabled=false
+      - xpack.watcher.enabled=false
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms768m -Xmx768m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - /var/lib/fanuniverse/elasticsearch/data:/usr/share/elasticsearch/data
+    ports:
+      - "localhost:9200:9200"
+
   vidalia:
     image: littlebobbytables/vidalia:latest
     restart: on-failure

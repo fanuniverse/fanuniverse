@@ -48,6 +48,8 @@ defmodule Fanuniverse.Mixfile do
       {:redbird, "~> 0.4.0"},
       {:amqp, "~> 0.2.2"},
       {:poison, "~> 3.1"},
+      {:elastix, "~> 0.4.0"},
+      {:elasticfusion, git: "https://github.com/fanuniverse/elasticfusion"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:ex_machina, "~> 2.0", only: :test}
    ]
