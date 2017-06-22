@@ -41,7 +41,7 @@ defmodule Fanuniverse.Mixfile do
       {:phoenix_ecto, "~> 3.2"},
       {:postgrex, ">= 0.13.0"},
       {:phoenix_html, "~> 2.9"},
-      {:phoenix_slime, "~> 0.9.0"},
+      {:phoenix_slime, git: "https://github.com/fbjork/phoenix_slime"},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:comeonin, "~> 3.0"},

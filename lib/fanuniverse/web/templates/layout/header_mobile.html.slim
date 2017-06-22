@@ -6,8 +6,13 @@ header.navbar.flex
     / Search
     a.navbar__link href="#" data-click-toggle='{"#navbar-home":"hidden",".navbar__search":"hidden"}' data-click-focus=".navbar__search"
       i.fa.fa-search
-    = form_tag image_path(@conn, :index), [method: :get, accept_charset: "UTF-8", enforce_utf8: false, class: "inline-form"] do
-      = tag :input, type: :text, name: "q", value: @conn.params["q"], class: "input navbar__search hidden", placeholder: "ruby, sapphire"
+    = form_tag image_path(@conn, :index),
+      [method: :get, accept_charset: "UTF-8", enforce_utf8: false,
+        class: "inline-form"] do
+      = tag :input, type: :text,
+        name: "q", value: @conn.params["q"],
+        class: "input navbar__search hidden",
+        placeholder: "ruby, sapphire"
     // Admin tools
     /- if user_signed_in? && current_user.administrator?
     /  a.navbar__link href= admin_dashboard_path

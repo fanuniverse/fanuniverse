@@ -8,7 +8,7 @@ p
 = form_for @conn, user_session_path(@conn, :create), [as: :session], fn f ->
   = label f, :email
   = email_input f, :email, class: "input", autofocus: true
-  
+
   = label f, :password
   = password_input f, :password, class: "input", autocomplete: "off"
 
