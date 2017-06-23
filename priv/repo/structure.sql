@@ -42,11 +42,13 @@ CREATE TABLE images (
     id integer NOT NULL,
     tags text[],
     source text DEFAULT ''::text NOT NULL,
+    suggested_by_id integer,
     stars_count integer DEFAULT 0 NOT NULL,
     comments_count integer DEFAULT 0 NOT NULL,
     width integer,
     height integer,
     phash text,
+    ext text,
     processed boolean DEFAULT false,
     merged_into_id integer,
     inserted_at timestamp without time zone NOT NULL,
@@ -184,8 +186,16 @@ ALTER TABLE ONLY images
 
 
 --
+-- Name: images images_suggested_by_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY images
+    ADD CONSTRAINT images_suggested_by_id_fkey FOREIGN KEY (suggested_by_id) REFERENCES users(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO "schema_migrations" (version) VALUES (20170414161847), (20170609105551);
+INSERT INTO "schema_migrations" (version) VALUES (20170414161847);
 

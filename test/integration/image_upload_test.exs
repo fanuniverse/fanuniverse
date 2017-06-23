@@ -5,11 +5,13 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
   alias Fanuniverse.Image
 
   @fixture "test/fixtures/vidalia.png"
+  @tmp_dir "/tmp/plug-1497"
   @tmp_path "/tmp/plug-1497/multipart-random"
   @plug_upload %Plug.Upload{
     content_type: "image/png", filename: "somefile.png", path: @tmp_path}
 
   setup do
+    File.mkdir(@tmp_dir)
     :ok = File.cp(@fixture, @tmp_path)
 
     session = build_conn() |> post("/sign_in", %{"session" => %{
@@ -37,6 +39,7 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
       assert updated_record.width == 564
       assert updated_record.height == 720
       assert updated_record.phash != ""
+      assert updated_record.ext == "png"
       assert updated_record.processed
 
       assert File.exists?("priv/vidalia/images/#{id}/thumbnail.png")

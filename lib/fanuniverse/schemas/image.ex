@@ -13,6 +13,7 @@ defmodule Fanuniverse.Image do
     field :width, :integer
     field :height, :integer
     field :phash, :string
+    field :ext, :string
 
     field :processed, :boolean, default: false
 
@@ -30,8 +31,8 @@ defmodule Fanuniverse.Image do
 
   def processed_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:width, :height, :phash])
-    |> validate_required([:width, :height, :phash])
+    |> cast(params, [:width, :height, :phash, :ext])
+    |> validate_required([:width, :height, :phash, :ext])
     |> put_change(:processed, true)
   end
 end

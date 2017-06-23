@@ -10,11 +10,11 @@ defmodule Fanuniverse.ImageProcessingUpdateAction do
   alias Ecto.Changeset
   alias Elasticfusion.Document
 
-  def perform!(id, width, height, phash) do
+  def perform!(id, width, height, phash, ext) do
     Image
     |> Repo.get!(id)
     |> Image.processed_changeset(
-         %{width: width, height: height, phash: phash})
+         %{width: width, height: height, phash: phash, ext: ext})
     |> Repo.update!
     |> Document.index(ImageIndex)
   end

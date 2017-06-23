@@ -46,10 +46,10 @@ defmodule Dispatcher.Image do
   # Consumes image metadata from the `@processed_queue`.
   def handle_info({:basic_deliver, payload, %{delivery_tag: tag}}, {channel, callback}) do
     %{"id" => id, "width" => width, "height" => height,
-      "phash" => phash} = Poison.decode!(payload)
+      "phash" => phash, "ext" => ext} = Poison.decode!(payload)
 
     spawn fn ->
-      ImageUpdate.perform!(id, width, height, phash)
+      ImageUpdate.perform!(id, width, height, phash, ext)
       if Mix.env == :test, do: callback.(id)
     end
 
