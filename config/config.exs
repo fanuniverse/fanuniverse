@@ -6,7 +6,9 @@
 use Mix.Config
 
 config :fanuniverse,
-  ecto_repos: [Fanuniverse.Repo]
+  ecto_repos: [Fanuniverse.Repo],
+  image_url_root: "http://localhost:4001/images",
+  image_cache_root: "http://localhost:4001/upload"
 
 config :fanuniverse, Fanuniverse.Web.Endpoint,
   url: [host: "localhost"],

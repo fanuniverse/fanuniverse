@@ -57,5 +57,6 @@ defmodule Fanuniverse.ImageUploadAction do
     String.replace(cache_string, ~r/[^0-9A-Z+]/i, "")
   end
 
-  defp cache_url(cache_string), do: "/upload/" <> cache_string
+  defp cache_url(cache_string), do:
+    Application.get_env(:fanuniverse, :image_cache_root) <> "/" <> cache_string
 end

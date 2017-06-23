@@ -1,6 +1,8 @@
 defmodule Fanuniverse.Web.ImageView do
   use Fanuniverse.Web, :view
 
+  alias Fanuniverse.Image
+
   @image_sort_keys ~w(newest oldest popular undiscovered most_discussed)
   @image_sorts [
     newest:         {"Newest first",   "created_at", :desc},
@@ -9,6 +11,11 @@ defmodule Fanuniverse.Web.ImageView do
     undiscovered:   {"Undiscovered",   "stars",      :asc},
     most_discussed: {"Most discussed", "comments",   :desc}
   ]
+
+  def render("title", %{action_name: :new}), do: "Suggest an image"
+  def render("title", %{action_name: :show, image: image}) do
+    "#{image.id} ∙ #{image.tags}"
+  end
 
   def image_sort_key(%{"sort" => sort}) when sort in @image_sort_keys,
     do: String.to_existing_atom(sort)
@@ -25,9 +32,15 @@ defmodule Fanuniverse.Web.ImageView do
     {@image_sorts[current], Keyword.delete(@image_sorts, current)}
   end
 
-  def render("title", %{action_name: :new}), do: "Suggest an image"
-  def render("title", %{action_name: :show, image: image}) do
-    "#{image.id} ∙ #{image.tags}"
+  def animated?(%Image{ext: "gif"}), do: true
+  def animated?(_), do: false
+
+  def version_url(%Image{ext: ext} = image, version) do
+    version_url(image, version, ext)
+  end
+  def version_url(%Image{id: id}, version, ext) do
+    root = Application.get_env(:fanuniverse, :image_url_root)
+    "#{root}/#{id}/#{version}.#{ext}"
   end
 
   def short_source(image) do
