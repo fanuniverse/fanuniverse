@@ -24,7 +24,7 @@ html lang="en"
     = if error do
       p.alert.alert--danger = error
 
-    main.layout.layout--narrow
+    main.layout class=layout_class(@conn, assigns)
       = render @view_module, @view_template, assigns
 
     = render Fanuniverse.Web.LayoutView, "footer.html", assigns

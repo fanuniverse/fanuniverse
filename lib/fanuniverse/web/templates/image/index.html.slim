@@ -27,7 +27,8 @@ elixir:
 
   .media-grid.js-grid
     = for image <- @images do
-      - image_show_link = image_path(@conn, :show, image.id, Map.take(@conn.params, ["q", "sort"]))
+      - image_show_link = image_path(@conn,
+          :show, image.id, Map.take(@conn.params, ["q", "sort"]))
       .media.block.js-grid__item
         / Meta links
         a.meta data-starrable="Image" data-starrable-id=image.id title="Star this image!" href="#"

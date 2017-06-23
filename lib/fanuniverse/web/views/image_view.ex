@@ -17,6 +17,9 @@ defmodule Fanuniverse.Web.ImageView do
     "#{image.id} ∙ #{image.tags}"
   end
 
+  def render("layout", %{action_name: :index}), do: :wide
+  def render("layout", %{action_name: :show}), do: :custom
+
   def image_sort_key(%{"sort" => sort}) when sort in @image_sort_keys,
     do: String.to_existing_atom(sort)
   def image_sort_key(_default),
