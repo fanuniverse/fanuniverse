@@ -33,6 +33,10 @@ defmodule Fanuniverse.Web.ImageController do
   end
 
   # TODO: generalize & move to a separate module
+
+  alias Elasticfusion.Search
+  alias Elasticfusion.Search.Builder
+
   defp find_images(params) do
     page = Fanuniverse.Utils.parse_integer(params["page"], 0)
 
@@ -40,19 +44,23 @@ defmodule Fanuniverse.Web.ImageController do
     per_page = if per_page > 20, do: 20, else: per_page
 
     query = if is_binary(params["q"]) && params["q"] != "" do
-      Elasticfusion.Search.Builder.parse_search_string(
-        params["q"], Fanuniverse.ImageIndex)
+      Builder.parse_search_string(params["q"], Fanuniverse.ImageIndex)
     else
       %{}
     end
+
+    {sort_field, sort_direction} =
+      Fanuniverse.Web.ImageView.image_sort_field_direction(params)
+
     query =
       query
-      |> Elasticfusion.Search.Builder.add_sort("id", :desc)
-      |> Elasticfusion.Search.Builder.paginate(page, per_page)
-      |> Elasticfusion.Search.Builder.add_filter_clause(%{term: %{visible: true}})
+      |> Builder.add_sort(sort_field, sort_direction)
+      |> Builder.add_sort("id", :desc)
+      |> Builder.paginate(page, per_page)
+      |> Builder.add_filter_clause(%{term: %{visible: true}})
 
-    {:ok, ids} = Elasticfusion.Search.find_ids(query, Fanuniverse.ImageIndex)
+    {:ok, ids} = Search.find_ids(query, Fanuniverse.ImageIndex)
 
-    Repo.all(from(i in Image, where: i.id in ^ids))
+    Repo.get_by_ids_sorted(Image, ids)
   end
 end

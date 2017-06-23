@@ -5,5 +5,8 @@ defmodule Fanuniverse.Utils do
       _ -> default
     end
   end
-  def parse_integer(_, default), do: default
+  def parse_integer(integer, _) when is_integer(integer),
+    do: integer
+  def parse_integer(_, default),
+    do: default
 end
