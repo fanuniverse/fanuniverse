@@ -30,6 +30,15 @@ services:
     ports:
       - "localhost:9200:9200"
 
+  nginx:
+    image: nginx
+    volumes:
+     - ./priv/vidalia/images:/srv/static/images
+     - ./priv/vidalia/cache:/srv/static/upload
+     - ./priv/devserver.nginx.conf:/etc/nginx/nginx.conf
+    ports:
+     - "localhost:4001:80"
+
   vidalia:
     image: littlebobbytables/vidalia:latest
     restart: on-failure
