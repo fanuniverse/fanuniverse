@@ -7,10 +7,10 @@ defmodule Fanuniverse.Image.Tags do
   def type, do: {:array, :string}
 
   def cast(tag_string) when is_binary(tag_string), do: {:ok, parse(tag_string)}
-  def cast(_), do: :error
 
-  def load(tags) when is_list(tags), do: {:ok, tags}
+  def load(tags) when is_list(tags), do: {:ok, Enum.join(tags, ", ")}
 
+  def dump(tags) when is_binary(tags), do: cast(tags)
   def dump(tags) when is_list(tags), do: {:ok, tags}
 
   def validate(changeset) do

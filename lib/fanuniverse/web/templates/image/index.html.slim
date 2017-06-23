@@ -1,3 +1,59 @@
-h1 Images
-= for image <- @images do
-  p = inspect(image)
+elixir:
+  heading = case @conn.params["q"] do
+    empty when empty in [nil, ""] -> "Images"
+    query -> "Searching for #{query}"
+  end
+
+.js-grid-container.invisible
+
+  .media-grid-header.js-grid-header
+    h1 = heading
+
+    .image-sort-dropdown.js-dropdown
+      - {{current_label, _, _}, rest} = image_sort_options(@conn)
+      a.js-dropdown__toggle href="#"
+        = current_label
+        span
+          i.fa.fa-caret-down<
+      .js-dropdown__content.hidden
+        = Enum.map rest, fn({key, {label, _, _}}) ->
+          a href=image_path(@conn, :index, q: @conn.params["q"], sort: key)
+            = label
+
+    = if Enum.any?(@images) do
+      p Pagination
+    - else
+      p No images found
+
+  .media-grid.js-grid
+    = for image <- @images do
+      .media.block.js-grid__item
+        / Meta links
+        a.meta data-starrable="Image" data-starrable-id=image.id title="Star this image!" href="#"
+          i.fa.fa-star>
+          span.meta__count= image.stars_count
+        a.meta href="#{image_path(@conn, :show, image.id)}#comments"
+          i.fa.fa-comments>
+          span.meta__count= image.comments_count
+        = if false do
+          / Animated image
+          .video-container
+          /.video-container.js-video
+          /  a.media__link href=image_path(@conn, params.permit(:q, :sort)) title=image.tag_names.join(', ')
+          /    .video-container__overlay.js-video__controls
+          /      section
+          /        i.fa.fa-play
+          /        br
+          /        span.js-video__state Animated
+          /    video.video-container__video.media__video(loop muted playsinline preload="none" poster=image.image.poster_url)
+          /      source src=image.image.webm_url type="video/webm"
+          /      source src=image.image.mp4_url type="video/mp4"
+          /      img src=image.image.poster_url
+        - else
+          / Still image
+          a.media__link href=image_path(@conn, :show, image.id, Map.take(@conn.params, ["q", "sort"])) title=image.tags
+          /  img src=image.image.thumbnail_url
+        // Source
+        a.meta.meta--bottom.meta--text-overflow href=image.source
+          i.fa.fa-retweet>
+          span= short_source(image)
