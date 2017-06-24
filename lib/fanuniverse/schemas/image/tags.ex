@@ -9,19 +9,24 @@ defmodule Fanuniverse.Image.Tags do
   end
 
   defimpl String.Chars, for: Wrapper do
-    def to_string(%Wrapper{tags: tags}), do: Enum.join(tags, ", ")
+    def to_string(%Wrapper{tags: tags}),
+      do: Enum.join(tags, ", ")
   end
 
   defimpl Phoenix.HTML.Safe, for: Wrapper do
-    def to_iodata(wrapper), do: Phoenix.HTML.Safe.to_iodata(to_string(wrapper))
+    def to_iodata(wrapper),
+      do: Phoenix.HTML.Safe.to_iodata(to_string(wrapper))
   end
 
   defimpl Enumerable, for: Wrapper do
-    def reduce(%Wrapper{tags: tags}, acc, fun), do: Enum.reduce(tags, acc, fun)
+    def reduce(%Wrapper{tags: tags}, acc, fun),
+      do: Enumerable.reduce(tags, acc, fun)
 
-    def member?(%Wrapper{tags: tags}, elem), do: Enum.member?(tags, elem)
+    def member?(%Wrapper{tags: tags}, elem),
+      do: Enumerable.member?(tags, elem)
 
-    def count(%Wrapper{tags: tags}), do: Enum.count(tags)
+    def count(%Wrapper{tags: tags}),
+      do: Enumerable.count(tags)
   end
 
   def type, do: {:array, :string}
