@@ -68,8 +68,9 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
       "tags" => "(artist) msillzie, (fandom) steven universe, vidalia"
     }})
 
+    cache_root = Application.get_env(:fanuniverse, :image_cache_root) <> "/"
     cache_string = session.assigns.image_cache
-    assert "/upload/" <> ^cache_string = session.assigns.image_preview_url
+    assert cache_root <> cache_string == session.assigns.image_preview_url
     assert [source: {"can't be blank", _}] = session.assigns.changeset.errors
   end
 end
