@@ -40,7 +40,7 @@ defmodule Fanuniverse.Mixfile do
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
       {:postgrex, ">= 0.13.0"},
-      {:phoenix_html, "~> 2.9"},
+      {:phoenix_html, git: "https://github.com/little-bobby-tables/phoenix_html", branch: "textarea-html-escape-fix", override: true},
       {:phoenix_slime, git: "https://github.com/fbjork/phoenix_slime"},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
