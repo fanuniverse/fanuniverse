@@ -1,1 +1,63 @@
-= inspect(@image)
+- previous_href = "#"#navigate_image_path(@image, :previous, params.permit(:q, :sort))
+- next_href = "#" #navigate_image_path(@image, :next, params.permit(:q, :sort))
+
+.image data-swipe-to='{"left":"#{next_href}","right":"#{previous_href}"}'
+
+  = if @image.processed do
+    a.image__navigation.image__navigation--left.image__meta href=previous_href
+      i.fa.fa-chevron-left
+
+    .image__content
+      / Meta links & source
+      section
+       a.meta.image__meta data-starrable="Image" data-starrable-id=@image.id title="Star this image!" href="#"
+         i.fa.fa-star>
+         span.meta__count= @image.stars_count
+       a.meta.image__meta href="#comments" title="View comments"
+         i.fa.fa-comments>
+         span.meta__count= @image.comments_count
+       a.meta.image__meta href=version_url(@image, "source") title="View full-sized image"
+         i.fa.fa-eye>
+         = @image.width
+         | x
+         = @image.height
+       a.meta.image__meta.meta--text-overflow href=@image.source
+         i.fa.fa-retweet>
+         = short_source(@image)
+      = if animated?(@image) do
+        / Animated image
+        .video-container.interactable.js-video
+          .video-container__overlay.js-video__controls
+            section
+              i.fa.fa-play
+              br
+              span.js-video__state Animated
+          video.video-container__video.image__video(autoplay loop muted playsinline poster=version_url(@image, "poster", "jpg"))
+            source src=version_url(@image, "rendered", "webm") type="video/webm"
+            source src=version_url(@image, "rendered", "mp4") type="video/mp4"
+            img src=version_url(@image, "poster", "jpg")
+      - else
+        / Still image
+        img.image__image src=version_url(@image, "preview") data-click-toggle='{".image__image":"full"}'
+      / Touch controls
+      .image__touch-info
+        i.fa.fa-angle-double-left>
+        | Swipe to navigate
+        i.fa.fa-angle-double-right<
+
+    a.image__navigation.image__navigation--right.image__meta href=next_href
+      i.fa.fa-chevron-right
+
+  - else
+    .image__content: .image__processing
+      h1
+        i.fa.fa-cogs>
+        | Hold on…
+      p We need a few more seconds to process the image.
+        Refresh the page to see if we're done!
+
+.layout.layout--narrow
+  .block.flex: .flex__grow: section
+    = for tag <- @image.tags do
+      a.tag href=image_path(@conn, :index, q: tag)
+        = tag
