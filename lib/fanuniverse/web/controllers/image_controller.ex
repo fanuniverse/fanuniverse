@@ -32,12 +32,29 @@ defmodule Fanuniverse.Web.ImageController do
     end
   end
 
+  def next(conn, params),
+    do: navigate(conn, params, &Elasticfusion.Peek.next_id/3)
+  def previous(conn, params),
+    do: navigate(conn, params, &Elasticfusion.Peek.previous_id/3)
+  def navigate(conn, %{"id" => id} = params, peeker_fun) do
+    current = Repo.get!(Image, id)
+    query = image_search_query(params)
+
+    target = case peeker_fun.(current, query, Fanuniverse.ImageIndex) do
+      {:ok, target} when is_binary(target) -> target
+      _ -> current
+    end
+
+    redirect conn, to: image_path(conn, :show, target,
+      Map.take(params, ["q", "sort"]))
+  end
+
   # TODO: generalize & move to a separate module
 
   alias Elasticfusion.Search
   alias Elasticfusion.Search.Builder
 
-  defp find_images(params) do
+  defp image_search_query(params) do
     page = Fanuniverse.Utils.parse_integer(params["page"], 0)
 
     per_page = Fanuniverse.Utils.parse_integer(params["per_page"], 10)
@@ -52,14 +69,16 @@ defmodule Fanuniverse.Web.ImageController do
     {sort_field, sort_direction} =
       Fanuniverse.Web.ImageView.image_sort_field_direction(params)
 
-    query =
-      query
-      |> Builder.add_sort(sort_field, sort_direction)
-      |> Builder.add_sort("id", :desc)
-      |> Builder.paginate(page, per_page)
-      |> Builder.add_filter_clause(%{term: %{visible: true}})
+    query
+    |> Builder.add_sort(sort_field, sort_direction)
+    |> Builder.add_sort("id", :desc)
+    |> Builder.paginate(page, per_page)
+    |> Builder.add_filter_clause(%{term: %{visible: true}})
+  end
 
-    {:ok, ids} = Search.find_ids(query, Fanuniverse.ImageIndex)
+  defp find_images(params) do
+    {:ok, ids} = Search.find_ids(
+      image_search_query(params), Fanuniverse.ImageIndex)
 
     Repo.get_by_ids_sorted(Image, ids)
   end

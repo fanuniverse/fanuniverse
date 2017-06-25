@@ -1,5 +1,6 @@
-- previous_href = "#"#navigate_image_path(@image, :previous, params.permit(:q, :sort))
-- next_href = "#" #navigate_image_path(@image, :next, params.permit(:q, :sort))
+- navigation_params = Map.take(@conn.params, ["q", "sort"])
+- previous_href = image_path(@conn, :previous, @image.id, navigation_params)
+- next_href = image_path(@conn, :next, @image.id, navigation_params)
 
 .image data-swipe-to='{"left":"#{next_href}","right":"#{previous_href}"}'
 

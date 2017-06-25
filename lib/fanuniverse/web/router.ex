@@ -21,6 +21,8 @@ defmodule Fanuniverse.Web.Router do
 
     resources "/images", ImageController,
       only: [:show, :new, :create, :edit, :update]
+    get "/images/:id/next", ImageController, :next
+    get "/images/:id/previous", ImageController, :previous
 
     get "/sign_in", UserSessionController, :new
     post "/sign_in", UserSessionController, :create
