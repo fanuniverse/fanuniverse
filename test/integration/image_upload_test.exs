@@ -14,11 +14,7 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
     File.mkdir(@tmp_dir)
     :ok = File.cp(@fixture, @tmp_path)
 
-    session = build_conn() |> post("/sign_in", %{"session" => %{
-      "email" => test_user().email, "password" => test_user().password
-    }})
-
-    {:ok, %{session: session}}
+    {:ok, %{session: test_user_session()}}
   end
 
   test "creates a new image and performs background processing", %{session: session} do

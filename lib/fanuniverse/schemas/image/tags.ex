@@ -5,11 +5,11 @@ defmodule Fanuniverse.Image.Tags do
   import String, only: [split: 2, starts_with?: 2]
 
   defmodule Wrapper do
-    defstruct tags: []
+    defstruct list: []
   end
 
   defimpl String.Chars, for: Wrapper do
-    def to_string(%Wrapper{tags: tags}),
+    def to_string(%Wrapper{list: tags}),
       do: Enum.join(tags, ", ")
   end
 
@@ -19,31 +19,31 @@ defmodule Fanuniverse.Image.Tags do
   end
 
   defimpl Enumerable, for: Wrapper do
-    def reduce(%Wrapper{tags: tags}, acc, fun),
+    def reduce(%Wrapper{list: tags}, acc, fun),
       do: Enumerable.reduce(tags, acc, fun)
 
-    def member?(%Wrapper{tags: tags}, elem),
+    def member?(%Wrapper{list: tags}, elem),
       do: Enumerable.member?(tags, elem)
 
-    def count(%Wrapper{tags: tags}),
+    def count(%Wrapper{list: tags}),
       do: Enumerable.count(tags)
   end
 
   def type, do: {:array, :string}
 
   def cast(tag_string) when is_binary(tag_string),
-    do: {:ok, %Wrapper{tags: parse(tag_string)}}
+    do: {:ok, %Wrapper{list: parse(tag_string)}}
 
   def load(tags) when is_list(tags),
-    do: {:ok, %Wrapper{tags: tags}}
+    do: {:ok, %Wrapper{list: tags}}
 
-  def dump(%Wrapper{tags: tags}),      do: {:ok, tags}
+  def dump(%Wrapper{list: tags}),      do: {:ok, tags}
   def dump(tags) when is_list(tags),   do: {:ok, tags}
   def dump(tags) when is_binary(tags), do: cast(tags)
 
   def validate(changeset) do
     Ecto.Changeset.validate_change(changeset, :tags,
-      fn(:tags, %Wrapper{tags: tags}) ->
+      fn(:tags, %Wrapper{list: tags}) ->
         []
         |> validate_length(tags)
         |> validate_prefix(tags, "(artist) ",

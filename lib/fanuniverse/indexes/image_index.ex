@@ -39,7 +39,7 @@ defmodule Fanuniverse.ImageIndex do
   def serialize(%Fanuniverse.Image{} = record) do
     %{
       "id" => record.id,
-      "tags" => record.tags,
+      "tags" => record.tags.list,
       "stars" => record.stars_count,
       "comments" => record.comments_count,
       "width" => record.width,

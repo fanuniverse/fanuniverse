@@ -32,6 +32,15 @@ defmodule Fanuniverse.Web.ConnCase do
 
       # The default endpoint for testing
       @endpoint Fanuniverse.Web.Endpoint
+
+      def test_user_session do
+        build_conn() |> post("/sign_in", %{"session" => %{
+          "email" => test_user().email, "password" => test_user().password
+        }})
+      end
+
+      def refresh_index(elasticfusion_index),
+        do: Elastix.Index.refresh("localhost:9200", elasticfusion_index.index_name())
     end
   end
 
