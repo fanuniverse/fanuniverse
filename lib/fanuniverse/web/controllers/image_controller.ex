@@ -77,7 +77,7 @@ defmodule Fanuniverse.Web.ImageController do
   end
 
   defp find_images(params) do
-    {:ok, ids} = Search.find_ids(
+    {:ok, ids, _total_count} = Search.find_ids(
       image_search_query(params), Fanuniverse.ImageIndex)
 
     Repo.get_by_ids_sorted(Image, ids)

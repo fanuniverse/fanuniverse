@@ -40,8 +40,8 @@ defmodule Fanuniverse.Mixfile do
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
       {:postgrex, ">= 0.13.0"},
-      {:phoenix_html, git: "https://github.com/little-bobby-tables/phoenix_html", branch: "textarea-html-escape-fix", override: true},
-      {:phoenix_slime, git: "https://github.com/fbjork/phoenix_slime"},
+      {:phoenix_html, github: "phoenixframework/phoenix_html", override: true},
+      {:phoenix_slime, github: "fbjork/phoenix_slime"},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:comeonin, "~> 3.0"},
@@ -49,7 +49,7 @@ defmodule Fanuniverse.Mixfile do
       {:amqp, "~> 0.2.2"},
       {:poison, "~> 3.1"},
       {:elastix, "~> 0.4.0"},
-      {:elasticfusion, git: "https://github.com/fanuniverse/elasticfusion"},
+      {:elasticfusion, github: "fanuniverse/elasticfusion"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:ex_machina, "~> 2.0", only: :test}
    ]
