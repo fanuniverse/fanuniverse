@@ -35,6 +35,42 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: comments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE comments (
+    id integer NOT NULL,
+    body text,
+    user_id integer,
+    stars_count integer DEFAULT 0 NOT NULL,
+    image_id integer,
+    user_profile_id integer,
+    inserted_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT belongs_to_integrity CHECK (((((image_id IS NOT NULL))::integer + ((user_profile_id IS NOT NULL))::integer) = 1))
+);
+
+
+--
+-- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE comments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE comments_id_seq OWNED BY comments.id;
+
+
+--
 -- Name: images; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -150,6 +186,13 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: comments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY comments ALTER COLUMN id SET DEFAULT nextval('comments_id_seq'::regclass);
+
+
+--
 -- Name: images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -168,6 +211,14 @@ ALTER TABLE ONLY user_profiles ALTER COLUMN id SET DEFAULT nextval('user_profile
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY comments
+    ADD CONSTRAINT comments_pkey PRIMARY KEY (id);
 
 
 --
@@ -203,6 +254,20 @@ ALTER TABLE ONLY users
 
 
 --
+-- Name: comments_image_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX comments_image_id_index ON comments USING btree (image_id) WHERE (image_id IS NOT NULL);
+
+
+--
+-- Name: comments_user_profile_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX comments_user_profile_id_index ON comments USING btree (user_profile_id) WHERE (user_profile_id IS NOT NULL);
+
+
+--
 -- Name: images_tags_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -228,6 +293,30 @@ CREATE UNIQUE INDEX users_email_index ON users USING btree (email);
 --
 
 CREATE UNIQUE INDEX users_lowercase_name_index ON users USING btree (lower(name));
+
+
+--
+-- Name: comments comments_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY comments
+    ADD CONSTRAINT comments_image_id_fkey FOREIGN KEY (image_id) REFERENCES images(id);
+
+
+--
+-- Name: comments comments_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY comments
+    ADD CONSTRAINT comments_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
+-- Name: comments comments_user_profile_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY comments
+    ADD CONSTRAINT comments_user_profile_id_fkey FOREIGN KEY (user_profile_id) REFERENCES user_profiles(id);
 
 
 --

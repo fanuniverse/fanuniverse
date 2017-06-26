@@ -24,6 +24,9 @@ defmodule Fanuniverse.Web.Router do
     get "/images/:id/next", ImageController, :next
     get "/images/:id/previous", ImageController, :previous
 
+    resources "/comments", CommentController,
+      only: [:index, :create]
+
     get "/sign_in", UserSessionController, :new
     post "/sign_in", UserSessionController, :create
     delete "/sign_out", UserSessionController, :delete

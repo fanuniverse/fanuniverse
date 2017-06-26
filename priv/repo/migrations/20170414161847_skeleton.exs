@@ -4,6 +4,7 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
   def change do
     users()
     images()
+    comments()
   end
 
   def users do
@@ -54,5 +55,32 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
     end
 
     create index(:images, [:tags], using: :gin)
+  end
+
+  def comments do
+    create table(:comments) do
+      add :body, :text
+      add :user_id, references(:users)
+      add :stars_count, :integer, null: false, default: 0
+
+      # Polymorphic resources
+      add :image_id, references(:images)
+      add :user_profile_id, references(:user_profiles)
+
+      timestamps()
+    end
+
+    # Ensure that any given comment belongs to exactly one resource
+    create constraint(:comments, :belongs_to_integrity, check: """
+    (
+      (image_id IS NOT NULL)::integer +
+      (user_profile_id IS NOT NULL)::integer
+    ) = 1
+    """)
+
+    create index(:comments, [:image_id],
+      where: "image_id IS NOT NULL")
+    create index(:comments, [:user_profile_id],
+      where: "user_profile_id IS NOT NULL")
   end
 end
