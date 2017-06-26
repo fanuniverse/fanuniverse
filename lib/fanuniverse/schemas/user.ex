@@ -2,6 +2,7 @@ defmodule Fanuniverse.User do
   use Fanuniverse.Schema
 
   alias Comeonin.Bcrypt
+  alias Fanuniverse.UserProfile
 
   # Catches basic mistakes such as having multiple @s or whitespace.
   # Source: https://stackoverflow.com/a/742588/1726690
@@ -21,6 +22,8 @@ and cannot begin or end with a hyphen."
 
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
+
+    has_one :user_profile, UserProfile
 
     timestamps()
   end

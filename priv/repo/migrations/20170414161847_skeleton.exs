@@ -3,7 +3,6 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
 
   def change do
     users()
-    profiles()
     images()
   end
 
@@ -21,16 +20,15 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
     CREATE UNIQUE INDEX users_lowercase_name_index
     ON users USING btree (lower(name));
     """
-  end
 
-  def profiles do
-    create table(:profiles) do
+    create table(:user_profiles) do
       add :bio, :text, null: false, default: ""
       add :comments_count, :integer, null: false, default: 0
-      add :user_id, references(:users)
+
+      add :user_id, references(:users, on_delete: :delete_all)
     end
 
-    create unique_index(:profiles, [:user_id])
+    create unique_index(:user_profiles, [:user_id])
   end
 
   def images do

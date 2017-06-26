@@ -14,9 +14,12 @@ defmodule Fanuniverse.UserControllerTest do
       assert redirected_to(session) == "/"
       assert get_flash(session, :info) == "You have signed up successfully."
 
-      user = Repo.get(User, get_session(session, "user_id"))
+      user =
+        Repo.get!(User, get_session(session, "user_id"))
+        |> Repo.preload(:user_profile)
 
       assert user.name == "agate"
+      assert user.user_profile.bio == ""
     end
 
     test "displays an error message if validation fails" do

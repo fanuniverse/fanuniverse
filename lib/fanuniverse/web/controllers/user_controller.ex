@@ -2,6 +2,7 @@ defmodule Fanuniverse.Web.UserController do
   use Fanuniverse.Web, :controller
 
   alias Fanuniverse.User
+  alias Fanuniverse.UserProfile
 
   plug EnsureNotAuthenticated when action in [:new, :create]
 
@@ -11,7 +12,8 @@ defmodule Fanuniverse.Web.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    changeset = User.registration_changeset(%User{}, user_params)
+    changeset = User.registration_changeset(
+      %User{user_profile: %UserProfile{}}, user_params)
 
     case Repo.insert(changeset) do
       {:ok, user} ->
