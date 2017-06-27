@@ -1,0 +1,19 @@
+= for comment <- @comments do
+  article.comment.block.flex
+    .flex__fixed.avatar.avatar--small
+      /img.avatar__image src=comment.author.avatar.url
+    .flex__grow.comment__body
+      .comment__author
+        a.comment__author-link href="#"
+        = comment.user.name
+        /profile_path(comment.author.name) =comment.author.name
+        /= if comment.author.administrator? do
+        /  span.role Site Administrator
+      = comment.body
+      .comment__meta
+        =<> time_tag(comment.inserted_at)
+        a.meta.meta--inline data-starrable="Comment" data-starrable-id=comment.id title="Star this comment!" href="#"
+          i.fa.fa-star
+          span.meta__count
+            = if comment.stars_count > 0 do
+              = comment.star_count
