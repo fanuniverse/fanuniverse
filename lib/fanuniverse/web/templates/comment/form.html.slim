@@ -1,0 +1,15 @@
+/ accepts :conn and :resource
+= if user_signed_in?(@conn) do
+  - changeset = Fanuniverse.Comment.changeset(%Fanuniverse.Comment{})
+  = form_for changeset, comment_path(@conn, :create),
+    [class: "comment-form", data_remote: "true"], fn f ->
+    - {resource, id} = Fanuniverse.Comment.resource_key_and_id(@resource)
+    = hidden_input f, resource, value: id
+    = textarea f, :body,
+      class: "input input--no-margin input--wide",
+      placeholder: "Leave a comment…"
+    = submit class: "button button--round" do
+      i.fa.fa-paper-plane
+- else
+  | You need an account to leave comments — you can create one
+     <a href="/sign_up">here</a>.

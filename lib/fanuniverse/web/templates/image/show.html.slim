@@ -62,5 +62,8 @@
     = for tag <- @image.tags do
       a.tag href=image_path(@conn, :index, q: tag)
         = tag
+  .block
+    = render Fanuniverse.Web.CommentView, "form.html",
+        conn: @conn, resource: @image
 
   = Fanuniverse.Web.CommentView.js_comments(@conn, @image)
