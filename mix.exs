@@ -50,6 +50,7 @@ defmodule Fanuniverse.Mixfile do
       {:poison, "~> 3.1"},
       {:elastix, "~> 0.4.0"},
       {:elasticfusion, github: "fanuniverse/elasticfusion"},
+      {:calendar, "~> 0.17.2"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:ex_machina, "~> 2.0", only: :test}
    ]

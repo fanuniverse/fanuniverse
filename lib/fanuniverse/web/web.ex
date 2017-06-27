@@ -46,9 +46,11 @@ defmodule Fanuniverse.Web do
         get_csrf_token: 0, get_flash: 2, view_module: 1, action_name: 1]
 
       import Fanuniverse.Web.Router.Helpers
-      import Fanuniverse.Web.ErrorHelpers
       import Fanuniverse.Web.Gettext
       import Auth.Helpers
+
+      import Fanuniverse.Web.ErrorHelpers
+      import Fanuniverse.Web.HTMLHelpers
     end
   end
 
