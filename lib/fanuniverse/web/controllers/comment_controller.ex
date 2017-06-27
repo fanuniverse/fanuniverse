@@ -4,12 +4,15 @@ defmodule Fanuniverse.Web.CommentController do
   alias Fanuniverse.Comment
   alias Fanuniverse.Image
 
+  plug EnsureAuthenticated when action in [:create]
+
   def index(conn, params) do
     comment_listing conn, Comment.single_resource_query(params)
   end
 
   def create(conn, %{"comment" => comment_params} = params) do
-    changeset = Comment.changeset(%Comment{}, comment_params)
+    changeset = Comment.changeset(
+      %Comment{user: user(conn)}, comment_params)
 
     with {:ok, comment} <- Repo.insert(changeset) do
       comment_query =
@@ -22,6 +25,11 @@ defmodule Fanuniverse.Web.CommentController do
   end
 
   defp comment_listing(conn, comment_query) do
-    render conn, "index.html", comments: Repo.all(comment_query)
+    comments =
+      comment_query
+      |> preload(:user)
+      |> Repo.all()
+
+    render conn, "index.html", comments: comments
   end
 end

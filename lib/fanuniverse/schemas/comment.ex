@@ -24,6 +24,7 @@ defmodule Fanuniverse.Comment do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:body, :image_id, :user_profile_id])
+    |> cast_assoc(:user, required: true)
     |> validate_required([:body])
     |> foreign_key_constraint(:image_id)
     |> foreign_key_constraint(:user_profile_id)

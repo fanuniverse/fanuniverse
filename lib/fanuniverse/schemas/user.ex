@@ -28,6 +28,8 @@ and cannot begin or end with a hyphen."
     timestamps()
   end
 
+  def changeset(struct, params \\ %{}), do: struct
+
   def registration_changeset(struct, params \\ %{}) do
    struct
    |> cast(params, [:name, :email, :password, :password_confirmation])

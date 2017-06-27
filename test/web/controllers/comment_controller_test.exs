@@ -15,8 +15,12 @@ defmodule Fanuniverse.CommentControllerTest do
           %{"image_id" => image.id, "body" => "hh"}})
 
     assert length(session.assigns.comments) == 2
-    assert List.first(session.assigns.comments).body == "h"
-    assert List.last(session.assigns.comments).body == "hh"
-    assert List.first(session.assigns.comments).image_id == image.id
+
+    [first, last] = session.assigns.comments
+
+    assert first.body == "h"
+    assert last.body == "hh"
+    assert first.image_id == image.id
+    assert first.user == %{test_user() | password: nil}
   end
 end
