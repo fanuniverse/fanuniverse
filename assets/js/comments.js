@@ -34,33 +34,39 @@ function pagination(container) {
 }
 
 function setupAjax(container) {
-  /* Form submission is handled by rails-ujs,
+  /* Form submission is handled by UJS,
    * we just need to display the comments we get as a response. */
   document.addEventListener('ajax:success', (e) => {
-    if (e.target.id === 'js-commentable-form') showPosted(container, e.detail);
+    if (e.target.id === 'js-comment-form') showPosted(container, e.data);
   });
   document.addEventListener('ajax:error', (e) => {
-    if (e.target.id === 'js-commentable-form') showError(e.detail);
+    if (e.target.id === 'js-comment-form') showError(e.data);
   });
 }
 
 function showPosted(container, response) {
-  const comments      = response[2].responseText,
-        editArea      = $('#js-commentable-form textarea'),
-        previousError = $('.js-model-errors');
+  response
+    .text()
+    .then((comments) => {
+      const editArea      = $('#js-comment-form textarea'),
+            previousError = $('.js-model-errors');
 
-  editArea.value = '';
-  previousError && previousError.remove();
+      editArea.value = '';
+      previousError && previousError.remove();
 
-  display(container, comments);
+      display(container, comments);
+    });
 }
 
 function showError(response) {
-  const errorHtml     = response[2].status === 422 && response[2].responseText,
-        container     = $('#js-commentable-form').parentNode,
-        previousError = $('.js-model-errors', container);
+  response
+    .text()
+    .then((errors) => {
+        const container     = $('#js-comment-form').parentNode,
+              previousError = $('.js-model-errors', container);
 
-  previousError && previousError.remove();
+        previousError && previousError.remove();
 
-  errorHtml && container.insertAdjacentHTML('afterbegin', errorHtml);
+        container.insertAdjacentHTML('afterbegin', errors);
+    });
 }

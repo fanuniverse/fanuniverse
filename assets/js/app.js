@@ -5,11 +5,13 @@ import upload from './upload';
 import timeago from './timeago';
 import comments from './comments';
 
-import dataevents from './dataevents';
 import dropdowns from './dropdowns';
 import video from './video';
 import masonry from './masonry';
 import swipeto from './swipeto';
+
+import ujsEventactions from './ujs/eventactions';
+import ujsForm from './ujs/form';
 
 import ga from './googleanalytics';
 
@@ -19,11 +21,13 @@ function load() {
   timeago();
   comments();
 
-  dataevents();
   dropdowns();
   video();
   masonry();
   swipeto();
+
+  ujsEventactions();
+  ujsForm();
 
   ga();
 }

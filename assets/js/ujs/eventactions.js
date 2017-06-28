@@ -1,10 +1,10 @@
-import { $ } from './utils/dom';
+import { $ } from '../utils/dom';
 
 export default function() {
   document.addEventListener('click', (e) => {
     Object.keys(actions).forEach((action) => {
-      const target = e.target && e.target.closest(`[data-click-${action}]`),
-            data   = target && target.getAttribute(`data-click-${action}`);
+      const target = e.target && e.target.closest(`[ujs-click-${action}]`),
+            data   = target && target.getAttribute(`ujs-click-${action}`);
 
       /* preventDefault unless the action returns true */
       target && (actions[action](target, data) ||

@@ -7,3 +7,12 @@ export function $(selector, container = document) {
 export function $$(selector, container = document) {
   return [].slice.call(container.querySelectorAll(selector));
 }
+
+export function fireEvent(target, name, data) {
+  const event = document.createEvent('Event');
+
+  event.initEvent(name, true, true);
+  event.data = data;
+
+  return target.dispatchEvent(event);
+}

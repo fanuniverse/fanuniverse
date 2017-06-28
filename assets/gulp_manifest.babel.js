@@ -26,7 +26,7 @@ export const javascripts = {
     './node_modules/masonry-layout/dist/masonry.pkgd.js',
     './node_modules/imagesloaded/imagesloaded.pkgd.js'
   ],
-  all:         `${root}/assets/js/*.js`,
+  all:         `${root}/assets/js/**/*.js`,
   application: `${root}/assets/js/app.js`,
 };
 
