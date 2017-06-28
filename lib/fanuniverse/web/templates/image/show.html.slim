@@ -39,7 +39,7 @@
             img src=version_url(@image, "poster", "jpg")
       - else
         / Still image
-        img.image__image src=version_url(@image, "preview") data-click-toggle='{".image__image":"full"}'
+        img.image__image src=version_url(@image, "preview") ujs-click-toggle='{".image__image":"full"}'
       / Touch controls
       .image__touch-info
         i.fa.fa-angle-double-left>

@@ -1,10 +1,10 @@
 header.navbar.flex
   .flex__main
     / Burger toggle
-    a.navbar__link href="#" data-click-toggle='{".burger":"open","body":"no-overflow"}'
+    a.navbar__link href="#" ujs-click-toggle='{".burger":"open","body":"no-overflow"}'
       i.fa.fa-bars
     / Search
-    a.navbar__link href="#" data-click-toggle='{"#navbar-home":"hidden",".navbar__search":"hidden"}' data-click-focus=".navbar__search"
+    a.navbar__link href="#" ujs-click-toggle='{"#navbar-home":"hidden",".navbar__search":"hidden"}' ujs-click-focus=".navbar__search"
       i.fa.fa-search
     = form_tag image_path(@conn, :index),
       [method: :get, accept_charset: "UTF-8", enforce_utf8: false,

@@ -15,13 +15,20 @@ defmodule Fanuniverse.Web.CommentController do
     changeset = Comment.changeset(
       %Comment{user: user(conn)}, comment_params)
 
-    with {:ok, comment} <- Repo.insert(changeset) do
-      comment_query =
-        Comment.query_for_resource(comment)
-      conn =
-        update_in(conn.params, &Map.put(&1, "comment_id", comment.id))
+    case Repo.insert(changeset) do
+      {:ok, comment} ->
+        comment_query =
+          Comment.query_for_resource(comment)
 
-      comment_listing(conn, comment_query)
+        conn =
+          update_in(conn.params, &Map.put(&1, "comment_id", comment.id))
+
+        comment_listing(conn, comment_query)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Fanuniverse.Web.LayoutView, "errors.html",
+            changeset: changeset)
     end
   end
 
