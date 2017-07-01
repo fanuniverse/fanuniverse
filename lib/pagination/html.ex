@@ -2,7 +2,29 @@ defmodule Pagination.HTML do
   import Phoenix.HTML.Link
   import Phoenix.HTML.Tag, only: [content_tag: 3]
 
-  def render_pagination(%Pagination{} = pagination, params, path_with_params)
+  def render_pagination(item_label, %Pagination{} = pagination, params, path_with_params)
+      when is_binary(item_label) and is_map(params) and is_function(path_with_params, 1) do
+    content_tag :div, class: "block flex" do
+      [
+        content_tag :div, class: "flex__main" do
+          content_tag :nav, class: "pagination" do
+            render_pagination_links(pagination, params, path_with_params)
+          end
+        end,
+
+        content_tag :div, class: "flex__right" do
+          %{page: page, per_page: per_page, total_count: total} = pagination
+
+          from = 1 + ((page - 1) * per_page)
+          to = min(from + per_page - 1, total)
+
+          "Showing #{item_label} #{from}-#{to} out of #{total}"
+        end
+      ]
+    end
+  end
+
+  def render_pagination_links(%Pagination{} = pagination, params, path_with_params)
       when is_function(path_with_params, 1) do
     initial_state = %{
       pagination: pagination,
