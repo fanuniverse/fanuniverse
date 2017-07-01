@@ -2,7 +2,6 @@ defmodule Fanuniverse.Web.CommentController do
   use Fanuniverse.Web, :controller
 
   alias Fanuniverse.Comment
-  alias Fanuniverse.Image
 
   plug :put_layout, false
   plug EnsureAuthenticated when action in [:create]
@@ -11,17 +10,22 @@ defmodule Fanuniverse.Web.CommentController do
     comment_listing conn, Comment.query_for_resource(params)
   end
 
-  def create(conn, %{"comment" => comment_params} = params) do
+  def create(conn, %{"comment" => comment_params}) do
     changeset = Comment.changeset(
       %Comment{user: user(conn)}, comment_params)
 
     case Repo.insert(changeset) do
       {:ok, comment} ->
+        {resource_param, resource_id} =
+          Comment.resource_key_and_id(comment)
         comment_query =
           Comment.query_for_resource(comment)
 
         conn =
-          update_in(conn.params, &Map.put(&1, "comment_id", comment.id))
+          update_in(conn.params, &(
+            &1
+            |> Map.take(["page", "per_page"])
+            |> Map.put(resource_param, resource_id)))
 
         comment_listing(conn, comment_query)
       {:error, changeset} ->
@@ -33,11 +37,12 @@ defmodule Fanuniverse.Web.CommentController do
   end
 
   defp comment_listing(conn, comment_query) do
-    comments =
+    {:ok, pagination, comments} =
       comment_query
       |> preload(:user)
-      |> Repo.all()
+      |> order_by(desc: :id)
+      |> Repo.paginate(conn.params, [default_per_page: 10, max_per_page: 50])
 
-    render conn, "index.html", comments: comments
+    render conn, "index.html", comments: comments, pagination: pagination
   end
 end

@@ -1,3 +1,9 @@
+= if Enum.any?(@comments) do
+  = render_pagination("comments", @pagination,
+      @conn.params, &comment_path(@conn, :index, &1))
+- else
+  .block No comments posted yet.
+
 = for comment <- @comments do
   article.comment.block.flex
     .flex__fixed.avatar.avatar--small

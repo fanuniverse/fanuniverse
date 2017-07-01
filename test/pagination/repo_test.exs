@@ -15,7 +15,7 @@ defmodule Pagination.RepoTest do
 
     assert {:ok, pagination, page_records} =
       Repo.paginate(query, %{"page" => "2", "per_page" => "3"})
-    assert pagination =
+    assert pagination ==
       %Pagination{page: 2, per_page: 3, total_pages: 3, total_count: 8}
     assert [4, 5, 6] ==
       Enum.map(page_records, &(&1.stars_count))
@@ -25,7 +25,7 @@ defmodule Pagination.RepoTest do
 
     assert {:ok, pagination, page_records} =
       Repo.paginate(empty_query, %{"page" => "2", "per_page" => "3"})
-    assert pagination =
+    assert pagination ==
       %Pagination{page: 2, per_page: 3, total_pages: 0, total_count: 0}
     assert [] = page_records
   end
