@@ -47,7 +47,9 @@ defmodule Fanuniverse.Web do
 
       import Fanuniverse.Web.Router.Helpers
       import Fanuniverse.Web.Gettext
+
       import Auth.Helpers
+      import Pagination.HTML
 
       import Fanuniverse.Web.ErrorHelpers
       import Fanuniverse.Web.HTMLHelpers
