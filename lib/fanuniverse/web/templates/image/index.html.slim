@@ -21,7 +21,8 @@ elixir:
             = label
 
     = if Enum.any?(@images) do
-      p Pagination
+      = render_pagination("images", @pagination,
+          @conn.params, &image_path(@conn, :index, &1))
     - else
       p No images found
 
