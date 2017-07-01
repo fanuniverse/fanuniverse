@@ -6,6 +6,7 @@ defmodule Pagination.Repo do
   import Ecto.Query
   import Enum, only: [map: 2, find: 2, reject: 2]
   import Fanuniverse.Utils, only: [parse_integer: 2]
+  import Pagination, only: [extract_page_and_per_page: 2]
 
   alias Elasticfusion.Search, as: Elasticsearch
   alias Elasticfusion.Search.Builder, as: ElasticsearchQuery
@@ -16,7 +17,58 @@ defmodule Pagination.Repo do
         Pagination.Repo.paginate_es(
           es_query, es_index, __MODULE__, queryable, params, opts)
       end
+
+      def paginate(queryable, params \\ %{}, opts \\ []) do
+        Pagination.Repo.paginate(
+          __MODULE__, queryable, params, opts)
+      end
     end
+  end
+
+  # Based on https://github.com/elixirdrops/kerosene/blob/master/lib/kerosene.ex
+  def paginate(repo, queryable, params, opts) do
+    {page, per_page} =
+      extract_page_and_per_page(params, opts)
+    total_count =
+      total_count(repo, queryable)
+    pagination =
+      Pagination.struct(page, per_page, total_count)
+
+    paginate(repo, queryable, pagination)
+  end
+  def paginate(repo, queryable, %Pagination{total_count: 0} = pagination),
+    do: {:ok, pagination, []}
+  def paginate(repo, queryable, %Pagination{
+      page: page, per_page: per_page, total_count: total_count} = pagination) do
+    max_pages =
+      (total_count / per_page) |> Float.ceil() |> trunc()
+    page =
+      min(page, max_pages)
+    offset =
+      per_page * (page - 1)
+
+    records =
+      queryable
+      |> limit(^per_page)
+      |> offset(^offset)
+      |> repo.all
+
+    {:ok, pagination, records}
+  end
+
+  defp total_count(repo, queryable) do
+    basic_query =
+      queryable
+      |> exclude(:preload)
+      |> exclude(:order_by)
+      |> exclude(:select)
+
+    {_, schema} = basic_query.from
+    primary_key = List.first(schema.__schema__(:primary_key))
+
+    basic_query
+    |> select([r], count(field(r, ^primary_key)))
+    |> repo.one
   end
 
   def paginate_es(es_query, es_index, repo, queryable, params, opts) do
@@ -38,20 +90,6 @@ defmodule Pagination.Repo do
       error ->
         error
     end
-  end
-
-  defp extract_page_and_per_page(params, opts) do
-    page = parse_integer(params["page"], 1)
-    page = if page < 1, do: 1, else: page
-
-    per_page = parse_integer(params["per_page"], opts[:default_per_page] || 10)
-    per_page = if opts[:max_per_page] && per_page > opts[:max_per_page] do
-      opts[:max_per_page]
-    else
-      per_page
-    end
-
-    {page, per_page}
   end
 
   defp get_by_ids_sorted(repo, query, ids) do
