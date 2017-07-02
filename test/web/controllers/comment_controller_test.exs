@@ -13,6 +13,8 @@ defmodule Fanuniverse.CommentControllerTest do
 
     assert session.params == %{image_id: image.id}
 
+    assert Repo.get!(Fanuniverse.Image, image.id).comments_count == 2
+
     assert length(session.assigns.comments) == 2
 
     [first, last] = session.assigns.comments

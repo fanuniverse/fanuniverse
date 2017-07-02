@@ -2,6 +2,9 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
   use Ecto.Migration
 
   def change do
+    add_by_sql_script "functions/counter_cache_incr.sql"
+    add_by_sql_script "functions/counter_cache_update.sql"
+
     users()
     images()
     comments()
@@ -64,6 +67,7 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
       add :stars_count, :integer, null: false, default: 0
 
       # Polymorphic resources
+      # NOTE: See the SQL script referenced below
       add :image_id, references(:images)
       add :user_profile_id, references(:user_profiles)
 
@@ -78,9 +82,21 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
     ) = 1
     """)
 
+    # Add a trigger for counter cache updates
+    add_by_sql_script "functions/assoc_for_comment.sql"
+    add_by_sql_script "triggers/comments_update_counter_cache.sql"
+
     create index(:comments, [:image_id],
       where: "image_id IS NOT NULL")
     create index(:comments, [:user_profile_id],
       where: "user_profile_id IS NOT NULL")
+  end
+
+  defp add_by_sql_script(path_relative_to_repo) do
+    :code.priv_dir(:fanuniverse)
+    |> Path.join("repo")
+    |> Path.join(path_relative_to_repo)
+    |> File.read!()
+    |> execute()
   end
 end

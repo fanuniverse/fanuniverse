@@ -34,8 +34,8 @@ defmodule Fanuniverse.Comment do
     from c in Comment, where: ^[resource_key_and_id(resource)]
   end
 
-  for {resource, resource_struct} <- @resources do
-    resource_string = Atom.to_string(resource)
+  for {resource_key, resource} <- @resources do
+    resource_string_key = Atom.to_string(resource_key)
 
     @doc """
     Extracts a tuple of `{resource_key_atom, resource_id}` (e.g. {:image_id, 1})
@@ -43,11 +43,11 @@ defmodule Fanuniverse.Comment do
     a) has the resource_key as string or an atom (e.g. %{"image_id" => 1})
     b) belongs to the resource_struct type (e.g. %Image{id: 1})
     """
-    def resource_key_and_id(%{unquote(resource_string) => id})
-      when not is_nil(id), do: {unquote(resource), id}
-    def resource_key_and_id(%{unquote(resource) => id})
-      when not is_nil(id), do: {unquote(resource), id}
-    def resource_key_and_id(%unquote(resource_struct){id: id}),
-      do: {unquote(resource), id}
+    def resource_key_and_id(%{unquote(resource_string_key) => id})
+      when not is_nil(id), do: {unquote(resource_key), id}
+    def resource_key_and_id(%{unquote(resource_key) => id})
+      when not is_nil(id), do: {unquote(resource_key), id}
+    def resource_key_and_id(%unquote(resource){id: id}),
+      do: {unquote(resource_key), id}
   end
 end

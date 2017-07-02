@@ -52,6 +52,95 @@ CREATE TABLE comments (
 
 
 --
+-- Name: assoc_for_comment(comments); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION assoc_for_comment(comment comments, OUT assoc_name text, OUT assoc_id integer) RETURNS record
+    LANGUAGE plpgsql
+    AS $$
+  BEGIN
+    IF comment.image_id IS NOT NULL THEN
+      assoc_name := 'images';
+      assoc_id := comment.image_id;
+    ELSIF comment.user_profile_id IS NOT NULL THEN
+      assoc_name := 'user_profiles';
+      assoc_id := comment.user_profile_id;
+    END IF;
+  END
+  $$;
+
+
+--
+-- Name: counter_cache_incr(text, integer, text, integer); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION counter_cache_incr(table_name text, id integer, counter_name text, step integer) RETURNS void
+    LANGUAGE plpgsql
+    AS $_$
+    DECLARE
+      table_name text := quote_ident(table_name);
+      counter_name text := quote_ident(counter_name);
+      updates text := counter_name || ' = ' || counter_name || ' + ' || step;
+    BEGIN
+      EXECUTE 'UPDATE ' || table_name || ' SET ' || updates || ' WHERE id = $1'
+      USING id;
+    END;
+  $_$;
+
+
+--
+-- Name: counter_cache_update(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION counter_cache_update() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $_$
+    DECLARE
+      counter_name text := quote_ident(TG_ARGV[0]);
+      assoc_fun_name text := quote_ident(TG_ARGV[1]);
+
+      old_assoc text;
+      old_assoc_id integer;
+
+      new_assoc text;
+      new_assoc_id integer;
+
+      assoc_changed boolean;
+    BEGIN
+      IF TG_OP != 'INSERT' THEN -- OLD record is available
+        EXECUTE 'SELECT * FROM ' || assoc_fun_name || '($1)'
+        USING OLD
+        INTO old_assoc, old_assoc_id;
+      END IF;
+      IF TG_OP != 'DELETE' THEN -- NEW record is available
+        EXECUTE 'SELECT * FROM ' || assoc_fun_name || '($1)'
+        USING NEW
+        INTO new_assoc, new_assoc_id;
+      END IF;
+
+      assoc_changed :=
+        (old_assoc IS NOT NULL) AND
+        (new_assoc IS NOT NULL) AND
+        ((old_assoc != new_assoc) OR (old_assoc_id != new_assoc_id));
+
+      IF TG_OP = 'INSERT' OR assoc_changed THEN
+        PERFORM counter_cache_incr(new_assoc, new_assoc_id, counter_name, 1);
+      END IF;
+
+      IF TG_OP = 'DELETE' OR assoc_changed THEN
+        PERFORM counter_cache_incr(old_assoc, old_assoc_id, counter_name, -1);
+      END IF;
+
+      IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+        RETURN NEW;
+      ELSE
+        RETURN OLD;
+      END IF;
+   END;
+  $_$;
+
+
+--
 -- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -293,6 +382,13 @@ CREATE UNIQUE INDEX users_email_index ON users USING btree (email);
 --
 
 CREATE UNIQUE INDEX users_lowercase_name_index ON users USING btree (lower(name));
+
+
+--
+-- Name: comments comments_update_counter_cache; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER comments_update_counter_cache AFTER INSERT OR DELETE OR UPDATE ON comments FOR EACH ROW EXECUTE PROCEDURE counter_cache_update('comments_count', 'assoc_for_comment');
 
 
 --
