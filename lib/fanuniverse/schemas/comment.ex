@@ -1,12 +1,10 @@
 defmodule Fanuniverse.Comment do
-  use Fanuniverse.Schema
+  use Fanuniverse.Schema.Polymorphic, resources: [
+    image_id: Fanuniverse.Image,
+    user_profile_id: Fanuniverse.UserProfile]
 
   alias Fanuniverse.User
-  alias Fanuniverse.UserProfile
-  alias Fanuniverse.Image
   alias Fanuniverse.Comment
-
-  @resources [image_id: Image, user_profile_id: UserProfile]
 
   schema "comments" do
     field :body, :string
@@ -28,26 +26,5 @@ defmodule Fanuniverse.Comment do
     |> foreign_key_constraint(:user_profile_id)
     |> check_constraint(:id, name: :belongs_to_integrity,
         message: "A comment must belong to a single resource.")
-  end
-
-  def query_for_resource(resource) do
-    from c in Comment, where: ^[resource_key_and_id(resource)]
-  end
-
-  for {resource_key, resource} <- @resources do
-    resource_string_key = Atom.to_string(resource_key)
-
-    @doc """
-    Extracts a tuple of `{resource_key_atom, resource_id}` (e.g. {:image_id, 1})
-    from a given map/struct that
-    a) has the resource_key as string or an atom (e.g. %{"image_id" => 1})
-    b) belongs to the resource_struct type (e.g. %Image{id: 1})
-    """
-    def resource_key_and_id(%{unquote(resource_string_key) => id})
-      when not is_nil(id), do: {unquote(resource_key), id}
-    def resource_key_and_id(%{unquote(resource_key) => id})
-      when not is_nil(id), do: {unquote(resource_key), id}
-    def resource_key_and_id(%unquote(resource){id: id}),
-      do: {unquote(resource_key), id}
   end
 end
