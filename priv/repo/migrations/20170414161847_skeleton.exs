@@ -8,6 +8,7 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
     users()
     images()
     comments()
+    stars()
   end
 
   def users do
@@ -67,7 +68,6 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
       add :stars_count, :integer, null: false, default: 0
 
       # Polymorphic resources
-      # NOTE: See the SQL script referenced below
       add :image_id, references(:images)
       add :user_profile_id, references(:user_profiles)
 
@@ -83,6 +83,8 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
     """)
 
     # Add a trigger for counter cache updates
+    # NOTE: You need to manually edit the assoc function
+    #       when adding new resource types.
     add_by_sql_script "functions/assoc_for_comment.sql"
     add_by_sql_script "triggers/comments_update_counter_cache.sql"
 
@@ -90,6 +92,35 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
       where: "image_id IS NOT NULL")
     create index(:comments, [:user_profile_id],
       where: "user_profile_id IS NOT NULL")
+  end
+
+  def stars do
+    create table(:stars) do
+      add :user_id, references(:users)
+
+      # Polymorphic resources
+      add :image_id, references(:images)
+      add :comment_id, references(:comments)
+    end
+
+    # Ensure that any given star belongs to exactly one resource
+    create constraint(:stars, :belongs_to_integrity, check: """
+    (
+      (image_id IS NOT NULL)::integer +
+      (comment_id IS NOT NULL)::integer
+    ) = 1
+    """)
+
+    # Add a trigger for counter cache updates
+    # NOTE: You need to manually edit the assoc function
+    #       when adding new resource types.
+    add_by_sql_script "functions/assoc_for_star.sql"
+    add_by_sql_script "triggers/stars_update_counter_cache.sql"
+
+    create index(:stars, [:image_id],
+      where: "image_id IS NOT NULL")
+    create index(:stars, [:comment_id],
+      where: "comment_id IS NOT NULL")
   end
 
   defp add_by_sql_script(path_relative_to_repo) do

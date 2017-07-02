@@ -71,6 +71,38 @@ CREATE FUNCTION assoc_for_comment(comment comments, OUT assoc_name text, OUT ass
 
 
 --
+-- Name: stars; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE stars (
+    id integer NOT NULL,
+    user_id integer,
+    image_id integer,
+    comment_id integer,
+    CONSTRAINT belongs_to_integrity CHECK (((((image_id IS NOT NULL))::integer + ((comment_id IS NOT NULL))::integer) = 1))
+);
+
+
+--
+-- Name: assoc_for_star(stars); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION assoc_for_star(star stars, OUT assoc_name text, OUT assoc_id integer) RETURNS record
+    LANGUAGE plpgsql
+    AS $$
+  BEGIN
+    IF star.image_id IS NOT NULL THEN
+      assoc_name := 'images';
+      assoc_id := star.image_id;
+    ELSIF star.comment_id IS NOT NULL THEN
+      assoc_name := 'comments';
+      assoc_id := star.comment_id;
+    END IF;
+  END
+  $$;
+
+
+--
 -- Name: counter_cache_incr(text, integer, text, integer); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -211,6 +243,25 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: stars_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE stars_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: stars_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE stars_id_seq OWNED BY stars.id;
+
+
+--
 -- Name: user_profiles; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -289,6 +340,13 @@ ALTER TABLE ONLY images ALTER COLUMN id SET DEFAULT nextval('images_id_seq'::reg
 
 
 --
+-- Name: stars id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY stars ALTER COLUMN id SET DEFAULT nextval('stars_id_seq'::regclass);
+
+
+--
 -- Name: user_profiles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -324,6 +382,14 @@ ALTER TABLE ONLY images
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: stars stars_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY stars
+    ADD CONSTRAINT stars_pkey PRIMARY KEY (id);
 
 
 --
@@ -364,6 +430,20 @@ CREATE INDEX images_tags_index ON images USING gin (tags);
 
 
 --
+-- Name: stars_comment_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX stars_comment_id_index ON stars USING btree (comment_id) WHERE (comment_id IS NOT NULL);
+
+
+--
+-- Name: stars_image_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX stars_image_id_index ON stars USING btree (image_id) WHERE (image_id IS NOT NULL);
+
+
+--
 -- Name: user_profiles_user_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -389,6 +469,13 @@ CREATE UNIQUE INDEX users_lowercase_name_index ON users USING btree (lower(name)
 --
 
 CREATE TRIGGER comments_update_counter_cache AFTER INSERT OR DELETE OR UPDATE ON comments FOR EACH ROW EXECUTE PROCEDURE counter_cache_update('comments_count', 'assoc_for_comment');
+
+
+--
+-- Name: stars stars_update_counter_cache; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER stars_update_counter_cache AFTER INSERT OR DELETE OR UPDATE ON stars FOR EACH ROW EXECUTE PROCEDURE counter_cache_update('stars_count', 'assoc_for_star');
 
 
 --
@@ -429,6 +516,30 @@ ALTER TABLE ONLY images
 
 ALTER TABLE ONLY images
     ADD CONSTRAINT images_suggested_by_id_fkey FOREIGN KEY (suggested_by_id) REFERENCES users(id);
+
+
+--
+-- Name: stars stars_comment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY stars
+    ADD CONSTRAINT stars_comment_id_fkey FOREIGN KEY (comment_id) REFERENCES comments(id);
+
+
+--
+-- Name: stars stars_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY stars
+    ADD CONSTRAINT stars_image_id_fkey FOREIGN KEY (image_id) REFERENCES images(id);
+
+
+--
+-- Name: stars stars_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY stars
+    ADD CONSTRAINT stars_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
