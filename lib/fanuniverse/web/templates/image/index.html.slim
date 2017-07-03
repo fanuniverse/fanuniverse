@@ -32,7 +32,7 @@ elixir:
           :show, image.id, Map.take(@conn.params, ["q", "sort"]))
       .media.block.js-grid__item
         / Meta links
-        a.meta data-starrable="Image" data-starrable-id=image.id title="Star this image!" href="#"
+        a.meta data-starrable-key="image_id" data-starrable-id=image.id title="Star this image!" href="#"
           i.fa.fa-star>
           span.meta__count= image.stars_count
         a.meta href="#{image_show_link}#comments"
@@ -59,3 +59,5 @@ elixir:
         a.meta.meta--bottom.meta--text-overflow href=image.source
           i.fa.fa-retweet>
           span= short_source(image)
+
+  = Fanuniverse.Web.StarView.js_stars(@conn, @images)

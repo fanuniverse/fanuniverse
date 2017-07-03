@@ -3,6 +3,7 @@ defmodule Fanuniverse.StarToggleAction do
   alias Fanuniverse.User
   alias Fanuniverse.Star
 
+  import Fanuniverse.Utils, only: [parse_integer: 2]
   import Ecto.Adapters.SQL, only: [query: 3]
 
   def perform(params, %User{id: user_id}) do
@@ -12,7 +13,7 @@ defmodule Fanuniverse.StarToggleAction do
     # See priv/repo/functions/star_toggle.sql
     toggle_response = query(Repo,
       "SELECT * FROM star_toggle($1, $2, $3)",
-      [user_id, to_string(resource_key), resource_id])
+      [user_id, to_string(resource_key), parse_integer(resource_id, nil)])
 
     case toggle_response do
       {:ok, %{rows: [[status, new_stars_count]]}} ->

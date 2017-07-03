@@ -29,7 +29,7 @@ defmodule Fanuniverse.StarsIntegrationTest do
     assert Repo.get!(Image, image.id).stars_count == 1
 
     assert (session
-            |> post("/stars/toggle", %{image_id: image.id})
+            |> post("/stars/toggle", %{image_id: to_string(image.id)})
             |> json_response(200)) ==
       %{"status" => "removed", "stars" => 0}
 

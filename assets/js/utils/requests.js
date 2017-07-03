@@ -1,3 +1,5 @@
+import { csrfToken } from './csrf';
+
 function post(endpoint, body) {
   return fetchJson('POST', endpoint, body);
 }
@@ -11,7 +13,7 @@ function fetchJson(verb, endpoint, body) {
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
-      'X-CSRF-Token': window.Rails.csrfToken(),
+      'X-CSRF-Token': csrfToken()
     },
   }).then((response) => response.json());
 }

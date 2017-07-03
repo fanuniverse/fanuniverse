@@ -11,7 +11,7 @@
     .image__content
       / Meta links & source
       section
-       a.meta.image__meta data-starrable="Image" data-starrable-id=@image.id title="Star this image!" href="#"
+       a.meta.image__meta data-starrable-key="image_id" data-starrable-id=@image.id title="Star this image!" href="#"
          i.fa.fa-star>
          span.meta__count= @image.stars_count
        a.meta.image__meta href="#comments" title="View comments"
@@ -67,3 +67,5 @@
         conn: @conn, resource: @image
 
   = Fanuniverse.Web.CommentView.js_comments(@conn, @image)
+
+  = Fanuniverse.Web.StarView.js_stars(@conn, @image)

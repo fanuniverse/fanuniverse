@@ -6,7 +6,7 @@ export default function() {
   loadStarrable(document);
 
   document.addEventListener('click', (e) => {
-    const star = e.target && e.target.closest('[data-starrable]');
+    const star = e.target && e.target.closest('[data-starrable-id]');
 
     star && signedIn(e) && toggleStar(star);
   });
@@ -16,20 +16,19 @@ export function loadStarrable(container) {
   const datasets = $$('[data-starrable-ids]', container);
 
   datasets.forEach((dataset) => {
-    const starrable = dataset.getAttribute('data-starrable-type'),
+    const starrableKey = dataset.getAttribute('data-starrable-key'),
           ids = JSON.parse(dataset.getAttribute('data-starrable-ids'));
 
-    ids.forEach((starrableId) => show(starElement(starrable, starrableId)));
+    ids.forEach((starrableId) => show(starElement(starrableKey, starrableId)));
   });
 }
 
 function toggleStar(star) {
-  const { starrable, starrableId } = star.dataset;
+  const { starrableKey, starrableId } = star.dataset;
 
-  post('/api/stars/toggle',
-      { starrable_type: starrable, starrable_id: starrableId })
+  post('/stars/toggle', { [starrableKey]: starrableId })
       .then((data) => {
-        const star = starElement(starrable, starrableId);
+        const star = starElement(starrableKey, starrableId);
 
         if (data['status'] === 'added') show(star);
         else remove(star);
@@ -38,16 +37,16 @@ function toggleStar(star) {
       });
 }
 
-function starElement(type, id) {
-  return $(`[data-starrable="${type}"][data-starrable-id="${id}"]`);
+function starElement(key, id) {
+  return $(`[data-starrable-key="${key}"][data-starrable-id="${id}"]`);
 }
 
 function show(star) {
-  star.classList.add('active'); 
+  star.classList.add('active');
 }
 
 function remove(star) {
-  star.classList.remove('active'); 
+  star.classList.remove('active');
 }
 
 function setStarCount(star, count) {

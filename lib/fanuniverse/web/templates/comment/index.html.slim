@@ -18,8 +18,10 @@
       = comment.body
       .comment__meta
         =<> time_tag(comment.inserted_at)
-        a.meta.meta--inline data-starrable="Comment" data-starrable-id=comment.id title="Star this comment!" href="#"
-          i.fa.fa-star
+        a.meta.meta--inline data-starrable-key="comment_id" data-starrable-id=comment.id title="Star this comment!" href="#"
+          i.fa.fa-star>
           span.meta__count
             = if comment.stars_count > 0 do
-              = comment.star_count
+              = comment.stars_count
+
+= Fanuniverse.Web.StarView.js_stars(@conn, @comments)

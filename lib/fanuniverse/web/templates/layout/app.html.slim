@@ -16,6 +16,8 @@ html lang="en"
 
     script src=static_path(@conn, "/app.js")
 
+    = csrf_meta_tag()
+
   body
     = render Fanuniverse.Web.LayoutView, "header.html", assigns
     = render Fanuniverse.Web.LayoutView, "header_mobile.html", assigns

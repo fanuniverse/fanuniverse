@@ -1,6 +1,6 @@
 import { $ } from './dom';
 
-const redirectSignedOutTo = '/users/sign_up';
+const redirectSignedOutTo = '/sign_up';
 
 export function signedIn(e) {
   e && e.preventDefault();
