@@ -1,6 +1,7 @@
 h2 Editing your profile
 
-= form_for @changeset, user_profile_path(@conn, :update), fn f ->
+= form_for @changeset, user_profile_path(@conn, :update),
+  [multipart: true, class: "js-upload"], fn f ->
 
   = render Fanuniverse.Web.LayoutView, "errors.html", changeset: @changeset
 
@@ -8,6 +9,17 @@ h2 Editing your profile
   = textarea f, :bio,
       class: 'input input--wide',
       placeholder: 'Give some information about yourself'
+
+  h3 Avatar
+  p You don't have an avatar yet!
+  img.js-upload__preview.image-preview.hidden
+  .js-upload__file
+    = file_input f, :avatar, class: "input file-upload__input"
+    = label f, :avatar, class: "button button--inline file-upload__label" do
+      i.fa.fa-upload>
+      | Choose a file…
+  p The image you choose must not contain obscene or discriminating content,
+    and should have maximum file size of 300kB.
 
   h3 Save changes
   = submit "Submit", class: "button"

@@ -3,7 +3,7 @@ h1 Suggest an image
 p Have some fan art you love? Share it with fellow fans!
 
 = form_for @changeset, image_path(@conn, :create),
-  [multipart: true, class: "js-upload"], fn f ->
+  [multipart: true, class: "js-upload js-upload--image"], fn f ->
 
   = render Fanuniverse.Web.LayoutView, "errors.html", changeset: @changeset
 
