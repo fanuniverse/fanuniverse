@@ -4,7 +4,7 @@ defmodule Fanuniverse.UserProfile do
   alias Fanuniverse.User
 
   schema "user_profiles" do
-    field :bio, :string
+    field :bio, :string, default: ""
     field :comments_count, :integer
 
     belongs_to :user, User

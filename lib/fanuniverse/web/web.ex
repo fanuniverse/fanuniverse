@@ -52,7 +52,7 @@ defmodule Fanuniverse.Web do
       import Pagination.HTML
 
       import Fanuniverse.Web.ErrorHelpers
-      import Fanuniverse.Web.HTMLHelpers
+      import Fanuniverse.Web.TimeHelpers
     end
   end
 

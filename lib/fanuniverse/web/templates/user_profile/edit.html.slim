@@ -1,0 +1,13 @@
+h2 Editing your profile
+
+= form_for @changeset, user_profile_path(@conn, :update), fn f ->
+
+  = render Fanuniverse.Web.LayoutView, "errors.html", changeset: @changeset
+
+  h3 About me
+  = textarea f, :bio,
+      class: 'input input--wide',
+      placeholder: 'Give some information about yourself'
+
+  h3 Save changes
+  = submit "Submit", class: "button"

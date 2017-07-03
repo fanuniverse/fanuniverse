@@ -22,7 +22,7 @@ header.navbar.flex
 
   .flex__right
     = if user_signed_in?(@conn) do
-      a.navbar__user-link href="/profile_path"
+      a.navbar__user-link href=user_profile_path(@conn, :show, user(@conn).name)
         .avatar.navbar__user-link__avatar
           /img.avatar__image src=current_user.avatar.url
     - else

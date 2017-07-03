@@ -33,6 +33,11 @@ defmodule Fanuniverse.Web.Router do
     post "/sign_in", UserSessionController, :create
     delete "/sign_out", UserSessionController, :delete
 
+    resources "/profiles", UserProfileController, param: "name",
+      only: [:show]
+    resources "/profile", UserProfileController, singleton: true,
+      only: [:edit, :update]
+
     get "/sign_up", UserController, :new
     post "/sign_up", UserController, :create
   end

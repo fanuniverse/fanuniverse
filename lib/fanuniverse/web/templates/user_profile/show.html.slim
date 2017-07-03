@@ -1,0 +1,28 @@
+.profile
+  .profile__avatar
+    .avatar.avatar--large
+      /img.avatar__image src=@user.avatar.url
+  .profile__info
+    h1.profile__info__name = @user.name
+    = if @user.id == user(@conn).id do
+      a.button.button--round.button--inline.profile__info__button--edit href=user_profile_path(@conn, :edit)
+        i.fa.fa-pencil
+    /- if @user.administrator?
+    /  .role.role--block Site Administrator
+    br
+    | Member for
+    =< time_ago_in_words(@user.inserted_at)
+
+= if @user.user_profile.bio != "" do
+  h1 About me
+  p = @user.user_profile.bio
+
+  br
+
+h1 Discussion
+
+.block
+  = render Fanuniverse.Web.CommentView, "form.html",
+      conn: @conn, resource: @user.user_profile
+
+= Fanuniverse.Web.CommentView.js_comments(@conn, @user.user_profile)
