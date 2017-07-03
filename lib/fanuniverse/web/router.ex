@@ -27,6 +27,8 @@ defmodule Fanuniverse.Web.Router do
     resources "/comments", CommentController,
       only: [:index, :create]
 
+    post "/stars/toggle", StarController, :toggle
+
     get "/sign_in", UserSessionController, :new
     post "/sign_in", UserSessionController, :create
     delete "/sign_out", UserSessionController, :delete

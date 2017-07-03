@@ -117,6 +117,8 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
     add_by_sql_script "functions/assoc_for_star.sql"
     add_by_sql_script "triggers/stars_update_counter_cache.sql"
 
+    add_by_sql_script "functions/star_toggle.sql"
+
     create index(:stars, [:image_id],
       where: "image_id IS NOT NULL")
     create index(:stars, [:comment_id],
