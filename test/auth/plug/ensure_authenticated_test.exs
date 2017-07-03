@@ -7,7 +7,7 @@ defmodule Auth.Plug.EnsureAuthenticatedTest do
   test "passes through when user is authenticated" do
     conn =
       build_conn()
-      |> assign(:user, %User{})
+      |> assign(:current_user, %User{})
       |> EnsureAuthenticated.call(%{})
 
     assert conn.status != 302

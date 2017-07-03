@@ -4,7 +4,7 @@ defmodule Auth.Helpers do
   convenience functions for retrieving user from the conn struct.
   """
 
-  def user(conn), do: conn.assigns[:user]
+  def user(conn), do: conn.assigns[:current_user]
 
-  def user_signed_in?(conn), do: !!conn.assigns[:user]
+  def user_signed_in?(conn), do: !!conn.assigns[:current_user]
 end

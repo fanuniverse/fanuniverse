@@ -16,7 +16,7 @@ defmodule Auth.Plug.LoadAuthenticatedUserTest do
       |> init_test_session(%{user_id: user.id})
       |> LoadAunthenticatedUser.call(%{})
 
-    assert conn.assigns[:user] == user
+    assert conn.assigns[:current_user] == user
   end
 
   test "assigns nil when user_id is not present in session" do
@@ -25,6 +25,6 @@ defmodule Auth.Plug.LoadAuthenticatedUserTest do
       |> init_test_session(%{})
       |> LoadAunthenticatedUser.call(%{})
 
-    assert conn.assigns[:user] == nil
+    assert conn.assigns[:current_user] == nil
   end
 end

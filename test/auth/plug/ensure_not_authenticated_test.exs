@@ -15,7 +15,7 @@ defmodule Auth.Plug.EnsureNotAuthenticatedTest do
   test "redirects to the home page when user is authenticated" do
     conn =
       build_conn()
-      |> assign(:user, %User{})
+      |> assign(:current_user, %User{})
       |> EnsureNotAuthenticated.call(%{})
 
     assert redirected_to(conn) == "/"

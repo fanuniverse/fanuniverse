@@ -16,7 +16,7 @@ defmodule Auth.Plug.LoadAunthenticatedUser do
       |> get_session("user_id")
       |> fetch_user
 
-    assign(conn, :user, user)
+    assign(conn, :current_user, user)
   end
 
   defp fetch_user(nil), do: nil

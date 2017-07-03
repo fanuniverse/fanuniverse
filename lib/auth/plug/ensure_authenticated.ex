@@ -19,7 +19,7 @@ defmodule Auth.Plug.EnsureAuthenticated do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    if conn.assigns[:user] do
+    if conn.assigns[:current_user] do
       conn
     else
       conn |> Phoenix.Controller.redirect(to: "/sign_up") |> halt
