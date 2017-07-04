@@ -1,5 +1,7 @@
 import './utils/polyfills';
 
+import csrf from './utils/csrf'
+
 import stars from './stars';
 import upload from './upload';
 import timeago from './timeago';
@@ -17,6 +19,8 @@ import ujsTab from './ujs/tab';
 import ga from './googleanalytics';
 
 function load() {
+  csrf();
+
   stars();
   upload();
   timeago();

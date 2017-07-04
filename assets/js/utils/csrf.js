@@ -1,5 +1,6 @@
-export function csrfToken() {
-  return document.head
-    .querySelector('meta[name="csrf-token"]')
-    .getAttribute('content');
+import { $ } from './dom';
+
+export let csrfToken;
+export default function() {
+  csrfToken = $('meta[name="csrf-token"]').content;
 }
