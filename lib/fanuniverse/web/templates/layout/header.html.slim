@@ -18,7 +18,7 @@ header.header.flex
        a.js-dropdown__toggle.header__user-toggle href=user_profile_path(@conn, :show, user(@conn).name)
          = user(@conn).name
          .avatar.header__user-toggle__avatar
-           /img.avatar__image src=current_user.avatar.url
+           img.avatar__image src=Fanuniverse.Web.UserView.avatar_url(user(@conn))
        .js-dropdown__content.header__user.hidden
          .header__user__arrow
          = link to: user_profile_path(@conn, :show, user(@conn).name) do

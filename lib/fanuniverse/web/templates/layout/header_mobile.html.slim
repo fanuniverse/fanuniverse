@@ -24,7 +24,7 @@ header.navbar.flex
     = if user_signed_in?(@conn) do
       a.navbar__user-link href=user_profile_path(@conn, :show, user(@conn).name)
         .avatar.navbar__user-link__avatar
-          /img.avatar__image src=current_user.avatar.url
+          img.avatar__image src=src=Fanuniverse.Web.UserView.avatar_url(user(@conn))
     - else
       a.navbar__link href="/sign_in"
         i.fa.fa-sign-in

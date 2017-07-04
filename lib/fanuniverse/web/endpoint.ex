@@ -7,7 +7,7 @@ defmodule Fanuniverse.Web.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/", from: :fanuniverse, gzip: false,
-    only: ~w(app.css app.js fonts uploads)
+    only: ~w(app.css app.js no-avatar.svg fonts uploads)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
