@@ -3,6 +3,7 @@ defmodule Fanuniverse.Web.UserProfileController do
 
   alias Fanuniverse.User
   alias Fanuniverse.UserProfile
+  alias Fanuniverse.AvatarUploadAction
 
   plug EnsureAuthenticated when action in [:edit, :update]
 
@@ -19,8 +20,9 @@ defmodule Fanuniverse.Web.UserProfileController do
   def edit(conn, _params) do
     profile = profile_for_current_user(conn)
 
-    render conn, "edit.html",
+    render conn, "edit.html", active_tab: :profile,
       profile_changeset: UserProfile.changeset(profile),
+      avatar_changeset: User.changeset(profile.user),
       user_changeset: User.changeset(profile.user)
   end
 
@@ -30,12 +32,31 @@ defmodule Fanuniverse.Web.UserProfileController do
 
     case Repo.update(changeset) do
       {:ok, _} ->
-        redirect conn,
-          to: user_profile_path(conn, :show, profile.user.name)
-      {:error, changeset} ->
-        render conn, "edit.html", changeset: changeset
+        redirect_to_profile conn, profile
+      {:error, error_changeset} ->
+        render conn, "edit.html", active_tab: :profile,
+          profile_changeset: error_changeset,
+          avatar_changeset: User.changeset(profile.user),
+          user_changeset: User.changeset(profile.user)
     end
   end
+
+  def update(conn, %{"user" => %{"avatar" => upload}}) do
+    profile = profile_for_current_user(conn)
+
+    case AvatarUploadAction.perform(profile.user, upload) do
+      :ok ->
+        redirect_to_profile conn, profile
+      {:error, error_changeset} ->
+        render conn, "edit.html", active_tab: :avatar,
+          profile_changeset: UserProfile.changeset(profile),
+          avatar_changeset: error_changeset,
+          user_changeset: User.changeset(profile.user)
+    end
+  end
+
+  defp redirect_to_profile(conn, profile),
+    do: redirect conn, to: user_profile_path(conn, :show, profile.user.name)
 
   defp profile_for_current_user(conn) do
     profile =

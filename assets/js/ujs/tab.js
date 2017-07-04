@@ -1,21 +1,24 @@
-import { $ } from '../utils/dom';
+import { $, $$ } from '../utils/dom';
 
 export default function() {
-  document.addEventListener('click', (e) =>
-    e.target && e.target.hasAttribute('ujs-tab') && switchTab(e.target));
-}
+  $$('[ujs-tab-links-for]').forEach((linkContainer) => {
+    const tabContainer = $(linkContainer.getAttribute('ujs-tab-links-for'));
 
-function switchTab(selectedLink) {
-  const tabContainer = $(selectedLink.getAttribute('ujs-tabs-in')),
-        linkContainer = $(selectedLink.getAttribute('ujs-links-in')),
-        selectedTab = $(selectedLink.getAttribute('ujs-tab'), tabContainer);
+    linkContainer.addEventListener('click', (e) => {
+      const tabQuery = e.target.getAttribute('ujs-tab');
+      if (!tabQuery) return;
 
-  Array.from(tabContainer.children)
-    .forEach((tab) => tab.classList.add('hidden'));
+      const selectedLink = e.target,
+            selectedTab = $(tabQuery, tabContainer);
 
-  Array.from(linkContainer.children)
-    .forEach((link) => link.classList.remove('active'));
+      Array.from(linkContainer.children)
+        .forEach((link) => link.classList.remove('active'));
 
-  selectedLink.classList.add('active');
-  selectedTab.classList.remove('hidden');
+      Array.from(tabContainer.children)
+        .forEach((tab) => tab.classList.add('hidden'));
+
+      selectedLink.classList.add('active');
+      selectedTab.classList.remove('hidden');
+    });
+  });
 }

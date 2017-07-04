@@ -1,8 +1,12 @@
+- profile_active? = @active_tab == :profile
+- avatar_active? = @active_tab == :avatar
+- user_active? = @active_tab == :user
+
 .account
   .account__main
     / Profile
     = form_for @profile_changeset, user_profile_path(@conn, :update),
-        [id: "profile", class: "block"], fn f ->
+        [id: "profile", class: "block #{unless profile_active?, do: "hidden"}"], fn f ->
 
       = render Fanuniverse.Web.LayoutView, "errors.html",
           changeset: @profile_changeset
@@ -16,11 +20,11 @@
         = submit "Save changes", class: "button account__submit__button"
 
     / Avatar
-    = form_for @user_changeset, user_profile_path(@conn, :update),
-        [multipart: true, id: "avatar", class: "block hidden"], fn f ->
+    = form_for @avatar_changeset, user_profile_path(@conn, :update),
+        [multipart: true, id: "avatar", class: "block #{unless avatar_active?, do: "hidden"}"], fn f ->
 
       = render Fanuniverse.Web.LayoutView, "errors.html",
-          changeset: @user_changeset
+          changeset: @avatar_changeset
 
       h3 Avatar
       .js-upload
@@ -39,7 +43,11 @@
 
     / Acoount & Security
     = form_for @user_changeset, user_profile_path(@conn, :update),
-        [id: "account-and-security", class: "block hidden"], fn f ->
+        [id: "user", class: "block #{unless user_active?, do: "hidden"}"], fn f ->
+
+      = render Fanuniverse.Web.LayoutView, "errors.html",
+          changeset: @user_changeset
+
       h3 Email
       = email_input f, :email, class: "input"
       p Please make sure that your email address is up to date
@@ -60,7 +68,7 @@
       .account__submit
         = submit "Save changes", class: "button account__submit__button"
 
-  .account__menu
-    a.account__link.active ujs-tab="#profile" ujs-tabs-in=".account__main" ujs-links-in=".account__menu" Profile
-    a.account__link ujs-tab="#avatar" ujs-tabs-in=".account__main" ujs-links-in=".account__menu" Avatar
-    a.account__link ujs-tab="#account-and-security" ujs-tabs-in=".account__main" ujs-links-in=".account__menu" Account & Security
+  .account__menu ujs-tab-links-for=".account__main"
+    a.account__link class=(if profile_active?, do: "active") ujs-tab="#profile" Profile
+    a.account__link class=(if avatar_active?, do: "active") ujs-tab="#avatar" Avatar
+    a.account__link class=(if user_active?, do: "active") ujs-tab="#user" Account & Security
