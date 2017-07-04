@@ -23,12 +23,15 @@ and cannot begin or end with a hyphen."
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
 
+    field :avatar_file_ext, :string
+
     has_one :user_profile, UserProfile
 
     timestamps()
   end
 
-  def changeset(struct, params \\ %{}), do: struct
+  def changeset(struct, params \\ %{}),
+    do: cast(struct, params, [:avatar_file_ext])
 
   def registration_changeset(struct, params \\ %{}) do
    struct
