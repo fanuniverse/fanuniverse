@@ -1,25 +1,66 @@
-h2 Editing your profile
+.account
+  .account__main
+    / Profile
+    = form_for @profile_changeset, user_profile_path(@conn, :update),
+        [id: "profile", class: "block"], fn f ->
 
-= form_for @changeset, user_profile_path(@conn, :update),
-  [multipart: true, class: "js-upload"], fn f ->
+      = render Fanuniverse.Web.LayoutView, "errors.html",
+          changeset: @profile_changeset
 
-  = render Fanuniverse.Web.LayoutView, "errors.html", changeset: @changeset
+      h3 About me
+      = textarea f, :bio,
+          class: 'input input--wide',
+          placeholder: 'Give some information about yourself'
 
-  h3 About me
-  = textarea f, :bio,
-      class: 'input input--wide',
-      placeholder: 'Give some information about yourself'
+      .account__submit
+        = submit "Save changes", class: "button account__submit__button"
 
-  h3 Avatar
-  p You don't have an avatar yet!
-  img.js-upload__preview.image-preview.hidden
-  .js-upload__file
-    = file_input f, :avatar, class: "input file-upload__input"
-    = label f, :avatar, class: "button button--inline file-upload__label" do
-      i.fa.fa-upload>
-      | Choose a file…
-  p The image you choose must not contain obscene or discriminating content,
-    and should have maximum file size of 300kB.
+    / Avatar
+    = form_for @user_changeset, user_profile_path(@conn, :update),
+        [multipart: true, id: "avatar", class: "block hidden"], fn f ->
 
-  h3 Save changes
-  = submit "Submit", class: "button"
+      = render Fanuniverse.Web.LayoutView, "errors.html",
+          changeset: @user_changeset
+
+      h3 Avatar
+      .js-upload
+        p You don't have an avatar yet!
+        img.js-upload__preview.image-preview.hidden
+        .js-upload__file
+          = file_input f, :avatar, class: "input file-upload__input"
+          = label f, :avatar, class: "button button--inline file-upload__label" do
+            i.fa.fa-upload>
+            | Choose a file…
+        p The image you choose must not contain obscene or discriminating content,
+          and should have maximum file size of 300kB.
+
+      .account__submit
+        = submit "Save changes", class: "button account__submit__button"
+
+    / Acoount & Security
+    = form_for @user_changeset, user_profile_path(@conn, :update),
+        [id: "account-and-security", class: "block hidden"], fn f ->
+      h3 Email
+      = email_input f, :email, class: "input"
+      p Please make sure that your email address is up to date
+        so we can help you if you lose access to the account.
+
+      h3 Password
+      = label f, :password, "New password"
+      = password_input f, :password, class: "input", autocomplete: "off"
+      = label f, :password_confirmation, "Confirm the new password"
+      = password_input f, :password_confirmation, class: "input", autocomplete: "off"
+      P Leave these fields blank if you don't want to change your password.
+
+      h3 Confirm the changes
+      = label f, :current_password, "Current password"
+      = password_input f, :current_password, class: "input", autocomplete: "off"
+      p We need your current password to confirm the changes in this section.
+
+      .account__submit
+        = submit "Save changes", class: "button account__submit__button"
+
+  .account__menu
+    a.account__link.active ujs-tab="#profile" ujs-tabs-in=".account__main" ujs-links-in=".account__menu" Profile
+    a.account__link ujs-tab="#avatar" ujs-tabs-in=".account__main" ujs-links-in=".account__menu" Avatar
+    a.account__link ujs-tab="#account-and-security" ujs-tabs-in=".account__main" ujs-links-in=".account__menu" Account & Security

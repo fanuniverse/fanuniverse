@@ -17,10 +17,11 @@ defmodule Fanuniverse.Web.UserProfileController do
   end
 
   def edit(conn, _params) do
-    changeset =
-      UserProfile.changeset(profile_for_current_user(conn))
+    profile = profile_for_current_user(conn)
 
-    render conn, "edit.html", changeset: changeset
+    render conn, "edit.html",
+      profile_changeset: UserProfile.changeset(profile),
+      user_changeset: User.changeset(profile.user)
   end
 
   def update(conn, %{"user_profile" => profile_params}) do

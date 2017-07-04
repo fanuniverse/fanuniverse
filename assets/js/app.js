@@ -12,6 +12,7 @@ import swipeto from './swipeto';
 
 import ujsEventactions from './ujs/eventactions';
 import ujsForm from './ujs/form';
+import ujsTab from './ujs/tab';
 
 import ga from './googleanalytics';
 
@@ -28,6 +29,7 @@ function load() {
 
   ujsEventactions();
   ujsForm();
+  ujsTab();
 
   ga();
 }

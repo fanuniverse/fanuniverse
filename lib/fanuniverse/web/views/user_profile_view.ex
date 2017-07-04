@@ -6,5 +6,5 @@ defmodule Fanuniverse.Web.UserProfileView do
   def render("title", %{action_name: :show, user: %User{name: name}}),
     do: "@" <> name
   def render("title", %{action_name: :edit}),
-    do: "Editing your profile"
+    do: "Account settings"
 end

@@ -80,3 +80,54 @@
     text-align: center;
   }
 }
+
+/* Account management */
+
+.account {
+  display: flex;
+}
+
+.account__main {
+  width: 100%;
+}
+
+.account__submit {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+}
+
+.account__submit__button {
+  align-self: flex-end;
+}
+
+.account__menu {
+  flex-shrink: 0;
+}
+
+.account__link {
+  display: block;
+  margin: 10px 20px 20px 20px;
+
+  font-family: $font_family_header;
+  font-size: 18px;
+  font-weight: bold;
+  color: $meta_inverted_color;
+
+  cursor: pointer;
+
+  @include color-transition;
+
+  &.active {
+    color: $black;
+
+    &:hover {
+      color: $black;
+      cursor: default;
+    }
+  }
+
+  &:hover {
+    color: $meta_hover_color;
+  }
+}
