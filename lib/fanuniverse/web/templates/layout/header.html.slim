@@ -27,7 +27,7 @@ header.header.flex
          = link to: user_profile_path(@conn, :edit) do
            i.fa.fa-fw.fa-cogs>
            | Account
-         = link to: "/sign_out", method: :delete do
+         = link to: "/sign_out", ujs_method: "delete" do
            i.fa.fa-fw.fa-sign-out>
            | Sign out
     - else

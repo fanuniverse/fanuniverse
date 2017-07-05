@@ -34,7 +34,7 @@ header.navbar.flex
     a.burger__link href="/images/new" Suggest an image
     hr.burger__divider
     = if user_signed_in?(@conn) do
-      = link to: "/sign_out", method: :delete do
+      a.burger__link href="/sign_out" ujs-method="delete"
         i.fa.fa-fw.fa-sign-out>
         | Sign out
     - else

@@ -13,6 +13,7 @@ import masonry from './masonry';
 import swipeto from './swipeto';
 
 import ujsEventactions from './ujs/eventactions';
+import ujsLinks from './ujs/links';
 import ujsForm from './ujs/form';
 import ujsTab from './ujs/tab';
 
@@ -32,6 +33,7 @@ function load() {
   swipeto();
 
   ujsEventactions();
+  ujsLinks();
   ujsForm();
   ujsTab();
 
