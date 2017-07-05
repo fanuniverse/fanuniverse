@@ -3,7 +3,7 @@ defmodule Fanuniverse.Web.UserProfileController do
 
   alias Fanuniverse.User
   alias Fanuniverse.UserProfile
-  alias Fanuniverse.AvatarUploadAction
+  alias Fanuniverse.UserAvatarService, as: UserAvatar
 
   plug EnsureAuthenticated when action in [:edit, :update]
 
@@ -40,11 +40,15 @@ defmodule Fanuniverse.Web.UserProfileController do
           user_changeset: User.changeset(profile.user)
     end
   end
+  def update(conn, %{"user" => %{"avatar" => upload}}),
+    do: update_avatar(conn, &UserAvatar.add(&1, upload))
+  def update(conn, %{"user" => %{"remove_avatar" => "true"}}),
+    do: update_avatar(conn, &UserAvatar.remove(&1))
 
-  def update(conn, %{"user" => %{"avatar" => upload}}) do
+  def update_avatar(conn, update_fun) when is_function(update_fun, 1) do
     profile = profile_for_current_user(conn)
 
-    case AvatarUploadAction.perform(profile.user, upload) do
+    case update_fun.(profile.user) do
       :ok ->
         redirect_to_profile conn, profile
       {:error, error_changeset} ->

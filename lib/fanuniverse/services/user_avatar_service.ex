@@ -1,9 +1,10 @@
-defmodule Fanuniverse.AvatarUploadAction do
+defmodule Fanuniverse.UserAvatarService do
   @moduledoc """
-  This module shares some similarities with
-  `Fanuniverse.ImageUploadAction`; it is just written
-  with more lax persistence requirements (no upload caching).
+  This service exposes two functions, `add/2` and `remove/1`,
+  for adding and removing user avatars. They handle file storage
+  and schema changes.
   """
+
   alias Fanuniverse.Repo
   alias Fanuniverse.User
 
@@ -16,15 +17,22 @@ defmodule Fanuniverse.AvatarUploadAction do
     "image/gif" => "gif"
   }
 
-  @max_file_size 300 * 1024 # 300kB (technically KiB but who cares amirite)
+  @max_file_size 300 * 1024 # 300kB
 
-  def perform(%User{} = user, %Plug.Upload{} = upload) do
-    ext = @upload_extensions[upload.content_type]
+  defp avatar_path(%User{name: name}, ext),
+    do: "priv/avatars/" <> name <> "." <> ext
 
+  def add(%User{} = user, %Plug.Upload{} = upload) do
     with {:ok, ext} <- check_type(user, upload),
          :ok        <- check_file_size(user, upload),
          :ok        <- store_upload(user, upload, ext),
          {:ok, _}   <- set_avatar(user, ext),
+      do: :ok
+  end
+
+  def remove(%User{} = user) do
+    with :ok      <- remove_stored_upload(user),
+         {:ok, _} <- set_avatar(user, nil),
       do: :ok
   end
 
@@ -49,14 +57,22 @@ defmodule Fanuniverse.AvatarUploadAction do
   end
 
   defp store_upload(user, %Plug.Upload{path: path}, ext) do
-    destination = "priv/avatars/" <> user.name <> "." <> ext
-
-    case File.cp(path, destination) do
+    case File.cp(path, avatar_path(user, ext)) do
       :ok ->
         :ok
       _ ->
         {:error, error_changeset(user,
           "could not be uploaded")}
+    end
+  end
+
+  defp remove_stored_upload(%User{avatar_file_ext: ext} = user) do
+    case File.rm(avatar_path(user, ext)) do
+      :ok ->
+        :ok
+      _ ->
+        {:error, error_changeset(user,
+          "could not be removed")}
     end
   end
 

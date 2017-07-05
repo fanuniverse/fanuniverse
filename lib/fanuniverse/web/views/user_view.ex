@@ -10,4 +10,7 @@ defmodule Fanuniverse.Web.UserView do
     root = Application.get_env(:fanuniverse, :avatar_url_root)
     root <> "/" <> name <> "." <> ext
   end
+
+  def has_avatar?(%User{avatar_file_ext: ext}) when not is_nil(ext), do: true
+  def has_avatar?(_), do: false
 end

@@ -1,12 +1,13 @@
 - profile_active? = @active_tab == :profile
 - avatar_active? = @active_tab == :avatar
 - user_active? = @active_tab == :user
+- update_path = user_profile_path(@conn, :update)
 
 .account
   .account__main
     / Profile
-    = form_for @profile_changeset, user_profile_path(@conn, :update),
-        [id: "profile", class: "block #{unless profile_active?, do: "hidden"}"], fn f ->
+    = form_for @profile_changeset, update_path, [id: "profile",
+        class: "block #{unless profile_active?, do: "hidden"}"], fn f ->
 
       = render Fanuniverse.Web.LayoutView, "errors.html",
           changeset: @profile_changeset
@@ -20,16 +21,21 @@
         = submit "Save changes", class: "button account__submit__button"
 
     / Avatar
-    = form_for @avatar_changeset, user_profile_path(@conn, :update),
-        [multipart: true, id: "avatar", class: "block #{unless avatar_active?, do: "hidden"}"], fn f ->
+    = form_for @avatar_changeset, update_path, [multipart: true,
+        id: "avatar", class: "block #{unless avatar_active?, do: "hidden"}"], fn f ->
 
       = render Fanuniverse.Web.LayoutView, "errors.html",
           changeset: @avatar_changeset
 
       h3 Avatar
       .js-upload
-        p You don't have an avatar yet!
-        img.js-upload__preview.image-preview.hidden
+        - user = @avatar_changeset.data
+        .avatar.avatar--large
+          img.avatar__image.js-upload__preview src=Fanuniverse.Web.UserView.avatar_url(user)
+        = if Fanuniverse.Web.UserView.has_avatar?(user) do
+          p You can change your avatar by uploading a new file:
+        - else
+          p You don't have an avatar yet!
         .js-upload__file
           = file_input f, :avatar, class: "input file-upload__input"
           = label f, :avatar, class: "button button--inline file-upload__label" do
@@ -37,13 +43,18 @@
             | Choose a file…
         p The image you choose must not contain obscene or discriminating content,
           and should have maximum file size of 300kB.
+        = if Fanuniverse.Web.UserView.has_avatar?(user) do
+          p
+            ' Alternatively, you can go back to the default avatar by
+            a href=update_path ujs-method="patch" ujs-method-params='{"user[remove_avatar]":true}'
+              | removing your current picture.
 
       .account__submit
         = submit "Save changes", class: "button account__submit__button"
 
     / Acoount & Security
-    = form_for @user_changeset, user_profile_path(@conn, :update),
-        [id: "user", class: "block #{unless user_active?, do: "hidden"}"], fn f ->
+    = form_for @user_changeset, update_path, [id: "user",
+        class: "block #{unless user_active?, do: "hidden"}"], fn f ->
 
       = render Fanuniverse.Web.LayoutView, "errors.html",
           changeset: @user_changeset
