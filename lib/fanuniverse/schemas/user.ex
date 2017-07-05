@@ -36,6 +36,7 @@ and cannot begin or end with a hyphen."
   def registration_changeset(struct, params \\ %{}) do
    struct
    |> cast(params, [:name, :email, :password, :password_confirmation])
+   |> cast_assoc(:user_profile, required: true)
    |> validate_required([:name, :email, :password, :password_confirmation])
    |> validate_format(:name, @valid_name, message: @invalid_name_message)
    |> validate_format(:email, @valid_email)

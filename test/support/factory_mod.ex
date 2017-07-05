@@ -8,6 +8,7 @@ defmodule Fanuniverse.FactoryMod do
       import Fanuniverse.Factory
 
       alias Fanuniverse.User
+      alias Fanuniverse.UserProfile
       alias Fanuniverse.Repo
 
       def test_user do
@@ -21,8 +22,12 @@ defmodule Fanuniverse.FactoryMod do
       end
 
       def insert_user(fields) do
-        fields = Map.put(fields, :password_confirmation, fields[:password])
-        %User{} |> User.registration_changeset(fields) |> Repo.insert!
+        fields =
+          Map.put(fields, :password_confirmation, fields[:password])
+
+        %User{user_profile: %UserProfile{}}
+        |> User.registration_changeset(fields)
+        |> Repo.insert!
       end
     end
   end

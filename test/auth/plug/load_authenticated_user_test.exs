@@ -4,19 +4,25 @@ defmodule Auth.Plug.LoadAuthenticatedUserTest do
   import Plug.Test
 
   alias Auth.Plug.LoadAunthenticatedUser
+  alias Fanuniverse.User
 
   test "assigns a user when user_id is present in session" do
     user =
-      insert_user(%{name: "Auth", email: "auth@tld", password: "password"})
-      # reset virtual fields
-      |> Map.put(:password, nil)
-      |> Map.put(:password_confirmation, nil)
+      %{name: "Auth",
+        email: "auth@tld",
+        password: "password"}
+      |> insert_user()
+      |> (&Repo.get!(User, &1.id)).()
+
     conn =
       build_conn()
       |> init_test_session(%{user_id: user.id})
       |> LoadAunthenticatedUser.call(%{})
 
     assert conn.assigns[:current_user] == user
+
+    assert %Ecto.Association.NotLoaded{} =
+      conn.assigns[:current_user].user_profile
   end
 
   test "assigns nil when user_id is not present in session" do
