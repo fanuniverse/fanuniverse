@@ -1,14 +1,12 @@
-import { $ } from '../utils/dom';
+import { $, on } from '../utils/dom';
 
 export default function() {
-  document.addEventListener('click', (e) => {
-    Object.keys(actions).forEach((action) => {
-      const target = e.target && e.target.closest(`[ujs-click-${action}]`),
-            data   = target && target.getAttribute(`ujs-click-${action}`);
+  Object.keys(actions).forEach((action) => {
+    on('click', `[ujs-click-${action}]`, (e, target) => {
+      const data = target.getAttribute(`ujs-click-${action}`);
 
       /* preventDefault unless the action returns true */
-      target && (actions[action](target, data) ||
-                 e.preventDefault());
+      (actions[action](target, data) || e.preventDefault())
     });
   });
 }

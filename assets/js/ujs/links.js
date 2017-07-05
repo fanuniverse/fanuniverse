@@ -1,3 +1,4 @@
+import { on } from '../utils/dom';
 import { csrfToken } from '../utils/csrf';
 
 /* Handle non-GET links (`ujs-method`). This script is based
@@ -6,11 +7,9 @@ import { csrfToken } from '../utils/csrf';
  * https://github.com/jalkoby/phoenix_ujs/blob/master/LICENSE.txt. */
 
 export default function() {
-  document.addEventListener('click', (e) => {
-    if (e.target && e.target.hasAttribute('ujs-method')) {
-      e.preventDefault();
-      submit(e.target);
-    }
+  on('click', '[ujs-method]', (e, link) => {
+    e.preventDefault();
+    submit(link);
   });
 }
 
@@ -32,9 +31,9 @@ function submit(link) {
 function addParam(form, name, value) {
   const input = document.createElement('input');
 
-  input.setAttribute('type', 'hidden');
-  input.setAttribute('name', name);
-  input.setAttribute('value', value);
+  input.type = 'hidden';
+  input.name = name;
+  input.value = value;
 
   form.appendChild(input);
 }

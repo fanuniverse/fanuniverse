@@ -1,24 +1,20 @@
-import { $ } from './utils/dom';
+import { $, on } from './utils/dom';
 
 export default function() {
-  document.addEventListener('click', (e) => {
-    const toggle = e.target && e.target.closest('.js-dropdown__toggle');
+  on('click', '.js-dropdown__toggle', (e, toggle) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-    if (toggle) {
-      e.preventDefault();
-      e.stopPropagation();
+    const container = toggle.parentNode,
+          content   = $('.js-dropdown__content', container);
 
-      const container = toggle.parentNode,
-            content   = $('.js-dropdown__content', container);
+    content.classList.toggle('hidden');
+    toggle.classList.toggle('active');
 
-      content.classList.toggle('hidden');
-      toggle.classList.toggle('active');
-
-      if (toggle.classList.contains('active')) {
-        document.addEventListener('click', hideMenuOnClick);
-      }
-      else document.removeEventListener('click', hideMenuOnClick);
+    if (toggle.classList.contains('active')) {
+      document.addEventListener('click', hideMenuOnClick);
     }
+    else document.removeEventListener('click', hideMenuOnClick);
   });
 }
 

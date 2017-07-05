@@ -1,15 +1,12 @@
-import { $, $$ } from './utils/dom';
+import { $, $$, on } from './utils/dom';
 import { post } from './utils/requests';
 import { signedIn } from './utils/users';
 
 export default function() {
   loadStarrable(document);
 
-  document.addEventListener('click', (e) => {
-    const star = e.target && e.target.closest('[data-starrable-id]');
-
-    star && signedIn(e) && toggleStar(star);
-  });
+  on('click', '[data-starrable-id]', (e, star) =>
+    signedIn(e) && toggleStar(star));
 }
 
 export function loadStarrable(container) {

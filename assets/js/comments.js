@@ -1,4 +1,4 @@
-import { $ } from './utils/dom';
+import { $, on } from './utils/dom';
 import { timeago } from './timeago';
 import { loadStarrable } from './stars';
 
@@ -8,7 +8,7 @@ export default function() {
   if (commentable) {
     load(commentable, commentable.getAttribute('data-commentable-url'));
     pagination(commentable);
-    setupAjax(commentable);
+    ajaxPosting(commentable);
   }
 }
 
@@ -25,23 +25,20 @@ function display(container, comments) {
 }
 
 function pagination(container) {
-  container.addEventListener('click', (e) => {
-    if (e.target && e.target.closest('.page')) {
-      e.preventDefault();
-      load(container, e.target.getAttribute('href'));
-    }
-  });
+  on('click', '.page', (e, page) => {
+    e.preventDefault();
+    load(container, page.href);
+  }, container);
 }
 
-function setupAjax(container) {
+function ajaxPosting(container) {
   /* Form submission is handled by UJS,
    * we just need to display the comments we get as a response. */
-  document.addEventListener('ajax:success', (e) => {
-    if (e.target.id === 'js-comment-form') showPosted(container, e.data);
-  });
-  document.addEventListener('ajax:error', (e) => {
-    if (e.target.id === 'js-comment-form') showError(e.data);
-  });
+  on('ajax:success', '#js-comment-form', (e) =>
+    showPosted(container, e.data));
+
+  on('ajax:error', '#js-comment-form', (e) =>
+    showError(e.data));
 }
 
 function showPosted(container, response) {

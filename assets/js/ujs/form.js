@@ -1,13 +1,9 @@
-import { $, fireEvent } from '../utils/dom';
+import { $, on, fireEvent } from '../utils/dom';
 
 export default function() {
-  document.addEventListener('submit', (e) => {
-    const form = e.target;
-
-    if (form.hasAttribute('ujs-remote')) {
-      e.preventDefault();
-      submitRemoteForm(form);
-    }
+  on('submit', '[ujs-remote]', (e, form) => {
+    e.preventDefault();
+    submitRemoteForm(form);
   });
 }
 

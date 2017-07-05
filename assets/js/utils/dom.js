@@ -16,3 +16,10 @@ export function fireEvent(target, name, data) {
 
   return target.dispatchEvent(event);
 }
+
+export function on(event, selector, callback, container = document) {
+  container.addEventListener(event, (e) => {
+    const target = e.target.closest(selector);
+    target && callback(e, target);
+  });
+}
