@@ -16,6 +16,7 @@ export default function() {
 function submit(link) {
   const url = link.href,
         method = link.getAttribute('ujs-method'),
+        params = link.getAttribute('ujs-method-params'),
         form = document.createElement('form');
 
   form.method = 'post';
@@ -23,6 +24,13 @@ function submit(link) {
 
   addParam(form, '_csrf_token', csrfToken);
   addParam(form, '_method', method);
+
+  if (params) {
+    const paramPairs = Object.entries(JSON.parse(params));
+
+    paramPairs.forEach(([key, value]) =>
+      addParam(form, key, value));
+  }
 
   document.body.appendChild(form);
   form.submit();
