@@ -52,7 +52,7 @@
       .account__submit
         = submit "Save changes", class: "button account__submit__button"
 
-    / Acoount & Security
+    / Account & Security
     = form_for @user_changeset, update_path, [id: "user",
         class: "block #{unless user_active?, do: "hidden"}"], fn f ->
 

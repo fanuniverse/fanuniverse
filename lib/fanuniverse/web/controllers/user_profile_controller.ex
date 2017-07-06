@@ -44,6 +44,20 @@ defmodule Fanuniverse.Web.UserProfileController do
     do: update_avatar(conn, &UserAvatar.add(&1, upload))
   def update(conn, %{"user" => %{"remove_avatar" => "true"}}),
     do: update_avatar(conn, &UserAvatar.remove(&1))
+  def update(conn, %{"user" => user_params}) do
+    profile = profile_for_current_user(conn)
+    changeset = User.account_update_changeset(profile.user, user_params)
+
+    case Repo.update(changeset) do
+      {:ok, _} ->
+        redirect_to_profile conn, profile
+      {:error, error_changeset} ->
+        render conn, "edit.html", active_tab: :user,
+          profile_changeset: UserProfile.changeset(profile),
+          avatar_changeset: User.changeset(profile.user),
+          user_changeset: error_changeset
+    end
+  end
 
   def update_avatar(conn, update_fun) when is_function(update_fun, 1) do
     profile = profile_for_current_user(conn)

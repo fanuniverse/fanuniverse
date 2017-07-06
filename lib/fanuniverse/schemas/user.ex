@@ -34,22 +34,44 @@ and cannot begin or end with a hyphen."
     do: cast(struct, params, [:avatar_file_ext])
 
   def registration_changeset(struct, params \\ %{}) do
-   struct
-   |> cast(params, [:name, :email, :password, :password_confirmation])
-   |> cast_assoc(:user_profile, required: true)
-   |> validate_required([:name, :email, :password, :password_confirmation])
-   |> validate_format(:name, @valid_name, message: @invalid_name_message)
-   |> validate_format(:email, @valid_email)
-   |> validate_length(:password, min: @min_password_length)
-   |> validate_confirmation(:password)
-   |> hash_password()
-   |> unique_constraint(:email, message: @non_unique_email_message)
-   |> unique_constraint(:name, name: :users_lowercase_name_index)
- end
+    struct
+    |> cast(params, [:name, :email, :password, :password_confirmation])
+    |> cast_assoc(:user_profile, required: true)
+    |> validate_required([:name, :email, :password, :password_confirmation])
+    |> validate_format(:name, @valid_name, message: @invalid_name_message)
+    |> process_email_and_password()
+    |> unique_constraint(:name, name: :users_lowercase_name_index)
+  end
 
- defp hash_password(%{valid?: true} = changeset) do
-   password_hash = changeset |> get_field(:password) |> Bcrypt.hashpwsalt()
-   put_change(changeset, :password_hash, password_hash)
- end
- defp hash_password(invalid_changeset), do: invalid_changeset
+  def account_update_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:email, :password, :password_confirmation])
+    |> validate_current_password(params["current_password"])
+    |> process_email_and_password()
+  end
+
+  defp process_email_and_password(changeset) do
+    changeset
+    |> validate_format(:email, @valid_email)
+    |> validate_length(:password, min: @min_password_length)
+    |> validate_confirmation(:password)
+    |> hash_password()
+    |> unique_constraint(:email, message: @non_unique_email_message)
+  end
+
+  defp hash_password(%{valid?: true, changes: %{password: password}} = changeset),
+    do: put_change(changeset, :password_hash, Bcrypt.hashpwsalt(password))
+  defp hash_password(invalid_changeset),
+    do: invalid_changeset
+
+  defp validate_current_password(changeset, password) when is_binary(password) do
+    password_hash = get_field(changeset, :password_hash)
+
+    if Bcrypt.checkpw(password, password_hash),
+      do: changeset,
+      else: validate_current_password(changeset, nil)
+  end
+  defp validate_current_password(changeset, _invalid_password),
+    do: add_error(changeset,
+      :current_password, "is required to confirm the changes")
 end
