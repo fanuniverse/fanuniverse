@@ -8,73 +8,71 @@ defmodule Fanuniverse.Web.UserProfileController do
   plug EnsureAuthenticated when action in [:edit, :update]
 
   def show(conn, %{"name" => name}) do
-    user =
-      User
-      |> where(name: ^name)
-      |> preload(:user_profile)
-      |> Repo.one
+    user = Repo.one(
+      from u in User,
+      where: u.name == ^name,
+      preload: :user_profile)
 
     render conn, "show.html", user: user
   end
 
   def edit(conn, _params) do
-    profile = profile_for_current_user(conn)
-
-    render conn, "edit.html", active_tab: :profile,
-      profile_changeset: UserProfile.changeset(profile),
-      avatar_changeset: User.changeset(profile.user),
-      user_changeset: User.changeset(profile.user)
+    render_edit conn, :profile,
+      (conn |> profile_for_current_user() |> tab_changesets())
   end
 
   def update(conn, %{"user_profile" => profile_params}) do
-    profile = profile_for_current_user(conn)
-    changeset = UserProfile.changeset(profile, profile_params)
-
-    case Repo.update(changeset) do
-      {:ok, _} ->
-        redirect_to_profile conn, profile
-      {:error, error_changeset} ->
-        render conn, "edit.html", active_tab: :profile,
-          profile_changeset: error_changeset,
-          avatar_changeset: User.changeset(profile.user),
-          user_changeset: User.changeset(profile.user)
+    update_profile conn, :profile, fn(profile) ->
+      profile
+      |> UserProfile.changeset(profile_params)
+      |> Repo.update()
     end
   end
-  def update(conn, %{"user" => %{"avatar" => upload}}),
-    do: update_avatar(conn, &UserAvatar.add(&1, upload))
-  def update(conn, %{"user" => %{"remove_avatar" => "true"}}),
-    do: update_avatar(conn, &UserAvatar.remove(&1))
+  def update(conn, %{"user" => %{"avatar" => upload}}) do
+    update_profile conn, :avatar, &UserAvatar.add(&1.user, upload)
+  end
+  def update(conn, %{"user" => %{"remove_avatar" => "true"}}) do
+    update_profile conn, :avatar, &UserAvatar.remove(&1.user)
+  end
   def update(conn, %{"user" => user_params}) do
-    profile = profile_for_current_user(conn)
-    changeset = User.account_update_changeset(profile.user, user_params)
-
-    case Repo.update(changeset) do
-      {:ok, _} ->
-        redirect_to_profile conn, profile
-      {:error, error_changeset} ->
-        render conn, "edit.html", active_tab: :user,
-          profile_changeset: UserProfile.changeset(profile),
-          avatar_changeset: User.changeset(profile.user),
-          user_changeset: error_changeset
+    update_profile conn, :user, fn(profile) ->
+      profile.user
+      |> User.account_update_changeset(user_params)
+      |> Repo.update()
     end
   end
 
-  def update_avatar(conn, update_fun) when is_function(update_fun, 1) do
-    profile = profile_for_current_user(conn)
+  defp update_profile(conn, active_tab, profile_update_fun)
+      when is_function(profile_update_fun, 1) do
+    profile =
+      profile_for_current_user(conn)
 
-    case update_fun.(profile.user) do
+    case profile_update_fun.(profile) do
       :ok ->
-        redirect_to_profile conn, profile
+        redirect conn,
+          to: user_profile_path(conn, :show, profile.user.name)
+      {:ok, _} ->
+        redirect conn,
+          to: user_profile_path(conn, :show, profile.user.name)
       {:error, error_changeset} ->
-        render conn, "edit.html", active_tab: :avatar,
-          profile_changeset: UserProfile.changeset(profile),
-          avatar_changeset: error_changeset,
-          user_changeset: User.changeset(profile.user)
+        render_edit conn,
+          active_tab, tab_changesets(profile, %{active_tab => error_changeset})
     end
   end
 
-  defp redirect_to_profile(conn, profile),
-    do: redirect conn, to: user_profile_path(conn, :show, profile.user.name)
+  def tab_changesets(profile, initial \\ %{}) do
+    initial
+    |> Map.put_new(:profile, UserProfile.changeset(profile))
+    |> Map.put_new(:avatar, User.changeset(profile.user))
+    |> Map.put_new(:user, User.changeset(profile.user))
+  end
+
+  def render_edit(conn, active_tab, tab_changesets) do
+    render conn, "edit.html", active_tab: active_tab,
+      profile_changeset: tab_changesets[:profile],
+      avatar_changeset: tab_changesets[:avatar],
+      user_changeset: tab_changesets[:user]
+  end
 
   defp profile_for_current_user(conn) do
     profile =
