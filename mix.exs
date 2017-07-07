@@ -51,6 +51,7 @@ defmodule Fanuniverse.Mixfile do
       {:elastix, "~> 0.4.0"},
       {:elasticfusion, github: "fanuniverse/elasticfusion"},
       {:calendar, "~> 0.17.2"},
+      {:paper_trail, "~> 0.7.5"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:ex_machina, "~> 2.0", only: :test}
    ]

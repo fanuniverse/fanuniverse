@@ -371,6 +371,42 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE versions (
+    id integer NOT NULL,
+    event text NOT NULL,
+    item_type text NOT NULL,
+    item_id integer,
+    item_changes jsonb NOT NULL,
+    originator_id integer,
+    origin text,
+    meta jsonb,
+    inserted_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
+
+
+--
 -- Name: comments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -403,6 +439,13 @@ ALTER TABLE ONLY user_profiles ALTER COLUMN id SET DEFAULT nextval('user_profile
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
 
 
 --
@@ -451,6 +494,14 @@ ALTER TABLE ONLY user_profiles
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: versions versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY versions
+    ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
 
 
 --
@@ -507,6 +558,20 @@ CREATE UNIQUE INDEX users_email_index ON users USING btree (email);
 --
 
 CREATE UNIQUE INDEX users_lowercase_name_index ON users USING btree (lower(name));
+
+
+--
+-- Name: versions_item_id_item_type_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX versions_item_id_item_type_index ON versions USING btree (item_id, item_type);
+
+
+--
+-- Name: versions_originator_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX versions_originator_id_index ON versions USING btree (originator_id);
 
 
 --
@@ -596,8 +661,16 @@ ALTER TABLE ONLY user_profiles
 
 
 --
+-- Name: versions versions_originator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY versions
+    ADD CONSTRAINT versions_originator_id_fkey FOREIGN KEY (originator_id) REFERENCES users(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO "schema_migrations" (version) VALUES (20170414161847);
+INSERT INTO "schema_migrations" (version) VALUES (20170414161847), (20170707095249);
 
