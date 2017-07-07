@@ -3,7 +3,7 @@
 import gulp from 'gulp';
 
 import sourcemaps from 'gulp-sourcemaps';
-import stream from 'event-stream';
+import streamqueue from 'streamqueue';
 import concat from 'gulp-concat';
 
 import sass from 'gulp-sass';
@@ -13,8 +13,9 @@ import cleancss from 'gulp-clean-css';
 import { production, development, dest, stylesheets } from './gulp_manifest.babel';
 
 export default function() {
-  return stream.merge(application(),
-                      fontawesome());
+  return streamqueue({ objectMode: true },
+                     application(),
+                     fontawesome());
 }
 
 function fontawesome() {
@@ -23,8 +24,9 @@ function fontawesome() {
 }
 
 function application() {
-  return stream.merge(gulp.src(stylesheets.vendor),
-                      gulp.src(stylesheets.application))
+  return streamqueue({ objectMode: true },
+                     gulp.src(stylesheets.vendor),
+                     gulp.src(stylesheets.application))
       .pipe(concat('app.css'))
       .pipe(development(sourcemaps.init()))
       .pipe(sass({

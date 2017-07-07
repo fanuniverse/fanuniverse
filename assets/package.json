@@ -25,6 +25,7 @@
     "promise-polyfill": "^6.0.2",
     "rollup-plugin-buble": "^0.15.0",
     "rollup-stream": "^1.19.0",
+    "streamqueue": "^1.1.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "whatwg-fetch": "^2.0.2"
