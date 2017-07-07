@@ -12,10 +12,12 @@ defmodule Fanuniverse.Web.ImageView do
     most_discussed: {"Most discussed", "comments",   :desc}
   ]
 
-  def render("title", %{action_name: :new}), do: "Suggest an image"
-  def render("title", %{action_name: :show, image: image}) do
-    "#{image.id} ∙ #{image.tags}"
-  end
+  def render("title", %{action_name: :new}),
+    do: "Suggest an image"
+  def render("title", %{action_name: :show, image: image}),
+    do: "#{image.id} ∙ #{image.tags}"
+  def render("title", %{action_name: :edit, image: image}),
+    do: "#{image.id} ∙ Updating image metadata"
 
   def render("layout", %{action_name: :index}), do: :wide
   def render("layout", %{action_name: :show}), do: :custom

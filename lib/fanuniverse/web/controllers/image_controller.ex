@@ -19,6 +19,12 @@ defmodule Fanuniverse.Web.ImageController do
     render conn, "new.html", changeset: changeset
   end
 
+  def edit(conn, %{"id" => id}) do
+    image = Repo.get!(Image, id)
+    changeset = Image.changeset(image)
+    render conn, "edit.html", image: image, changeset: changeset
+  end
+
   def create(conn, %{"image" => image_params}) do
     case ImageUpload.perform(image_params) do
       {:ok, image} ->

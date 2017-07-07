@@ -1,0 +1,26 @@
+h1 Updating image metadata
+
+img.image-preview src=version_url(@image, "source")
+
+= form_for @changeset, image_path(@conn, :update, @image), fn f ->
+
+  = render Fanuniverse.Web.LayoutView, "errors.html", changeset: @changeset
+
+  h2 Tags
+
+  p Tags reflect the most important aspects of the image -
+    think characters and themes it depicts, its creator, and so on.
+  = hidden_input f, :tag_cache, value: @image.tags
+  = textarea f, :tags,
+    class: "input input--wide"
+
+  h2 Source
+
+  = url_input f, :source,
+    class: "input input--wide",
+    placeholder: "http://blog.tumblr.com/post/1"
+
+  br
+
+  = submit "Update image", class: 'button button--inline'
+  a.button.button--inline.button--secondary.button--spacing-left href=image_path(@conn, :show, @image) Cancel
