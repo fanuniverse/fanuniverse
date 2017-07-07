@@ -21,7 +21,7 @@
     "imagesloaded": "^4.1.1",
     "masonry-layout": "^4.1.1",
     "normalize.css": "^5.0.0",
-    "phoenix_html": "https://github.com/phoenixframework/phoenix_html/tarball/master",
+    "phoenix_html": "https://github.com/phoenixframework/phoenix_html/tarball/3016219",
     "promise-polyfill": "^6.0.2",
     "rollup-plugin-buble": "^0.15.0",
     "rollup-stream": "^1.19.0",

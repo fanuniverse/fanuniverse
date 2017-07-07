@@ -30,6 +30,11 @@ services:
     ports:
       - "localhost:9200:9200"
 
+  redis:
+    image: redis:3.0
+    ports:
+      - "localhost:6379:6379"
+
   nginx:
     image: nginx
     volumes:
