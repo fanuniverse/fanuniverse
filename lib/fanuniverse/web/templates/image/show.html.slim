@@ -58,10 +58,17 @@
         Refresh the page to see if we're done!
 
 .layout.layout--narrow
-  .block.flex: .flex__grow: section
-    = for tag <- @image.tags do
-      a.tag href=image_path(@conn, :index, q: tag)
-        = tag
+
+  .block.flex
+    .flex__grow: section
+      = for tag <- @image.tags do
+        a.tag href=image_path(@conn, :index, q: tag)
+          = tag
+    .flex__fixed.flex__right
+      = if user_signed_in?(@conn) do
+        a.button.button--round title="Edit tags and source" href=image_path(@conn, :edit, @image)
+          i.fa.fa-pencil
+
   .block
     = render Fanuniverse.Web.CommentView, "form.html",
         conn: @conn, resource: @image
