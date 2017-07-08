@@ -38,6 +38,17 @@ defmodule Fanuniverse.Web.ImageController do
     end
   end
 
+  def update(conn, %{"id" => id, "image" => image_params}) do
+    image = Repo.get!(Image, id)
+
+    case Image.update(image, image_params) do
+      {:ok, _} ->
+        redirect conn, to: image_path(conn, :show, image)
+      {:error, error_changeset} ->
+        render conn, "edit.html", image: image, changeset: error_changeset
+    end
+  end
+
   def next(conn, params),
     do: navigate(conn, params, &Elasticfusion.Peek.next_id/3)
   def previous(conn, params),

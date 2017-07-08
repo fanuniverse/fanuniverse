@@ -33,6 +33,8 @@ defmodule Fanuniverse.Image.Tags do
 
   def cast(tag_string) when is_binary(tag_string),
     do: {:ok, %Wrapper{list: parse(tag_string)}}
+  def cast(tags) when is_list(tags),
+    do: {:ok, %Wrapper{list: tags}}
 
   def load(tags) when is_list(tags),
     do: {:ok, %Wrapper{list: tags}}
@@ -51,6 +53,18 @@ defmodule Fanuniverse.Image.Tags do
         |> validate_prefix(tags, "(fandom) ",
             "should include the fandom, e.g. (fandom) some show")
       end)
+  end
+
+  def update(%Wrapper{list: current}, new_tag_string, compare_against) do
+    new_tags = parse(new_tag_string)
+    old_tags = parse(compare_against)
+
+    added = new_tags -- old_tags
+    removed = old_tags -- new_tags
+
+    new = (current ++ added) -- removed
+
+    {new, added, removed}
   end
 
   defp validate_length(errors, tags) when length(tags) < 3,

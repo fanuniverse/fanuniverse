@@ -1,6 +1,7 @@
 defmodule Fanuniverse.Image do
   use Fanuniverse.Schema
 
+  alias Fanuniverse.Image
   alias Fanuniverse.Image.Tags
 
   schema "images" do
@@ -21,6 +22,26 @@ defmodule Fanuniverse.Image do
 
     timestamps()
   end
+
+  # Public interface
+  def update(%Image{} = image, params) do
+    {new_tags, added_tags, removed_tags} =
+      Tags.update(image.tags, params["tags"], params["tag_cache"])
+    params =
+      Map.put(params, "tags", new_tags)
+    update =
+      image |> changeset(params) |> PaperTrail.update()
+
+    case update do
+      {:ok, %{model: image}} ->
+        # TODO: reindex the Elasticsearch document
+        {:ok, image}
+      {:error, changeset} ->
+        {:error, changeset}
+    end
+  end
+
+  # Changesets
 
   def changeset(struct, params \\ %{}) do
     struct
