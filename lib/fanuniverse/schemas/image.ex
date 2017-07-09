@@ -3,6 +3,7 @@ defmodule Fanuniverse.Image do
 
   alias Fanuniverse.Image
   alias Fanuniverse.Image.Tags
+  alias Fanuniverse.User
 
   schema "images" do
     field :tags, Tags
@@ -24,13 +25,14 @@ defmodule Fanuniverse.Image do
   end
 
   # Public interface
-  def update(%Image{} = image, params) do
+
+  def update(%Image{} = image, %User{} = user, params) do
     {new_tags, added_tags, removed_tags} =
       Tags.update(image.tags, params["tags"], params["tag_cache"])
     params =
       Map.put(params, "tags", new_tags)
     update =
-      image |> changeset(params) |> PaperTrail.update()
+      image |> changeset(params) |> PaperTrail.update(user: user)
 
     case update do
       {:ok, %{model: image}} ->

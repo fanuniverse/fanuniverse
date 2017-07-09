@@ -41,7 +41,7 @@ defmodule Fanuniverse.Web.ImageController do
   def update(conn, %{"id" => id, "image" => image_params}) do
     image = Repo.get!(Image, id)
 
-    case Image.update(image, image_params) do
+    case Image.update(image, user(conn), image_params) do
       {:ok, _} ->
         redirect conn, to: image_path(conn, :show, image)
       {:error, error_changeset} ->

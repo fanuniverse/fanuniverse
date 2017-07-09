@@ -34,9 +34,12 @@ defmodule Fanuniverse.Web.ConnCase do
       @endpoint Fanuniverse.Web.Endpoint
 
       def test_user_session do
-        build_conn() |> post("/sign_in", %{"session" => %{
-          "email" => test_user().email, "password" => test_user().password
-        }})
+        build_conn()
+        |> post("/sign_in", %{"session" => %{
+             "email" => test_user().email,
+             "password" => test_user().password
+           }})
+        |> get("/")
       end
 
       def refresh_index(elasticfusion_index),

@@ -55,7 +55,8 @@ defmodule Fanuniverse.Image.Tags do
       end)
   end
 
-  def update(%Wrapper{list: current}, new_tag_string, compare_against) do
+  def update(%Wrapper{list: current}, new_tag_string, compare_against)
+      when is_binary(new_tag_string) and is_binary(compare_against) do
     new_tags = parse(new_tag_string)
     old_tags = parse(compare_against)
 
@@ -66,6 +67,8 @@ defmodule Fanuniverse.Image.Tags do
 
     {new, added, removed}
   end
+  def update(%Wrapper{list: current}, _, _),
+    do: {current, [], []}
 
   defp validate_length(errors, tags) when length(tags) < 3,
     do: [{:tags, "should include the artist and the fandom,\
