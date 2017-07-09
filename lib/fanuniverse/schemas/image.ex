@@ -60,7 +60,9 @@ defmodule Fanuniverse.Image do
 
     case status do
       {:ok, %{model: image}} ->
-        # TODO: reindex the Elasticsearch document
+        Job.perform fn ->
+          Elasticfusion.Document.index(image, ImageIndex)
+        end
         {:ok, image}
       {:error, changeset} ->
         {:error, changeset}

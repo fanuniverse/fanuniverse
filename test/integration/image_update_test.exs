@@ -8,7 +8,26 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
     {:ok, %{session: test_user_session()}}
   end
 
-  test "updating image tags", %{session: session} do
+  test "metadata updates trigger an ES document reindex", %{session: session} do
+    image = insert(:image,
+      %{tags: "(artist) art, (fandom) su, ruby"})
+
+    new_tags =
+      "(artist) art, (fandom) su, ruby, sapphire"
+    patch(session, "/images/#{image.id}", %{"image" =>
+      %{"tags" => new_tags, "tag_cache" => to_string(image.tags)}})
+
+    refresh_index(Fanuniverse.ImageIndex)
+
+    assert {:ok, [to_string(image.id)], 1} ==
+      Elasticfusion.Search.find_ids(
+        %{query: %{bool: %{must: [
+          %{term: %{tags: "sapphire"}},
+          %{term: %{id: image.id}}
+        ]}}}, Fanuniverse.ImageIndex)
+  end
+
+  test "tag updates are based on a new-vs-cached comparison", %{session: session} do
     image = insert(:image,
       %{tags: "(artist) a, (fandom) su, ruby"})
 
