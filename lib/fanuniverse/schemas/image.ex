@@ -3,6 +3,8 @@ defmodule Fanuniverse.Image do
 
   alias Fanuniverse.Image
   alias Fanuniverse.Image.Tags
+  alias Fanuniverse.ImageIndex
+  alias Fanuniverse.ImageUploader
   alias Fanuniverse.User
 
   schema "images" do
@@ -26,15 +28,37 @@ defmodule Fanuniverse.Image do
 
   # Public interface
 
-  def update(%Image{} = image, %User{} = user, params) do
+  def insert(params, %User{} = user) do
+    ImageUploader.upload(params, fn ->
+      status =
+        %Image{}
+        |> changeset(params)
+        |> PaperTrail.insert(user: user)
+
+      case status do
+        {:ok, %{model: image}} ->
+          Job.perform fn ->
+            Elasticfusion.Document.index(image, ImageIndex)
+          end
+          {:ok, image}
+        {:error, changeset} ->
+          {:error, changeset}
+      end
+    end)
+  end
+
+  def update(params, %Image{} = image, %User{} = user) do
     {new_tags, added_tags, removed_tags} =
-      Tags.update(image.tags, params["tags"], params["tag_cache"])
+      Tags.update(image.tags,
+        params["tags"], params["tag_cache"])
     params =
       Map.put(params, "tags", new_tags)
-    update =
-      image |> changeset(params) |> PaperTrail.update(user: user)
+    status =
+      image
+      |> changeset(params)
+      |> PaperTrail.update(user: user)
 
-    case update do
+    case status do
       {:ok, %{model: image}} ->
         # TODO: reindex the Elasticsearch document
         {:ok, image}

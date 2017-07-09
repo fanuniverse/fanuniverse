@@ -2,7 +2,6 @@ defmodule Fanuniverse.Web.ImageController do
   use Fanuniverse.Web, :controller
 
   alias Fanuniverse.Image
-  alias Fanuniverse.ImageUploadAction, as: ImageUpload
 
   def index(conn, params) do
     {:ok, pagination, images} = find_images(params)
@@ -26,7 +25,7 @@ defmodule Fanuniverse.Web.ImageController do
   end
 
   def create(conn, %{"image" => image_params}) do
-    case ImageUpload.perform(image_params) do
+    case Image.insert(image_params, user(conn)) do
       {:ok, image} ->
         conn
         |> put_flash(:info, "Image created successfully.")
@@ -41,7 +40,7 @@ defmodule Fanuniverse.Web.ImageController do
   def update(conn, %{"id" => id, "image" => image_params}) do
     image = Repo.get!(Image, id)
 
-    case Image.update(image, user(conn), image_params) do
+    case Image.update(image_params, image, user(conn)) do
       {:ok, _} ->
         redirect conn, to: image_path(conn, :show, image)
       {:error, error_changeset} ->

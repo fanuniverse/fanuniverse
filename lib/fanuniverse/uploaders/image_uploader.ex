@@ -1,11 +1,12 @@
-defmodule Fanuniverse.ImageUploadAction do
-  alias Fanuniverse.Repo
-  alias Fanuniverse.Image
+defmodule Fanuniverse.ImageUploader do
+  import Dispatcher.Image, only: [request_processing: 2]
 
   require Logger
 
-  def perform(image) do
-    image |> cache_upload |> persist
+  def upload(params, insert_fun) when is_function(insert_fun, 0) do
+    params
+    |> cache_upload()
+    |> persist(insert_fun)
   end
 
   @doc """
@@ -14,10 +15,10 @@ defmodule Fanuniverse.ImageUploadAction do
   allow the user to resubmit a form multiple times without having to
   reattach the file (see `cached_url/1`)
   """
-  defp cache_upload(%{"cache" => already_cached} = image) do
-    {:ok, image, already_cached}
+  def cache_upload(%{"cache" => already_cached} = params) do
+    {:ok, params, already_cached}
   end
-  defp cache_upload(%{"image" => %Plug.Upload{path: path}} = image) do
+  def cache_upload(%{"image" => %Plug.Upload{path: path}} = params) do
     cache_string =
       :crypto.strong_rand_bytes(32)
       |> Base.encode64     # Base64 strings may contain path separators,
@@ -26,30 +27,26 @@ defmodule Fanuniverse.ImageUploadAction do
     cache_path = "priv/vidalia/cache/" <> cache_string
 
     case File.cp(path, cache_path) do
-      :ok -> {:ok, image, cache_string}
-      {:error, reason} -> {:error, image, reason}
+      :ok -> {:ok, params, cache_string}
+      {:error, reason} -> {:error, params, reason}
     end
   end
 
-  defp persist({:ok, image, cache_string}) do
-    # A malicious user may inject path separators into cache_string,
-    # `sanitize_filename` strips them away.
+  def persist({:ok, _params, cache_string}, insert_fun) do
+    # A malicious user may inject path separators into the
+    # cache string; `sanitize_filename` strips them away.
     cached_file = sanitize_filename(cache_string)
-    changeset = Image.changeset(%Image{}, image)
 
-    case Repo.insert(changeset) do
-      {:ok, record} ->
-        spawn fn ->
-          Dispatcher.Image.request_processing(record.id, cached_file)
-          Elasticfusion.Document.index(record, Fanuniverse.ImageIndex)
-        end
+    case insert_fun.() do
+      {:ok, %{id: id} = record} ->
+        request_processing(id, cached_file)
         {:ok, record}
       {:error, changeset} ->
         {:error, changeset, cached_file, cache_url(cached_file)}
     end
   end
-  defp persist({:error, image, reason}) do
-    Logger.error("Error while peristing #{inspect(image)}, reason: #{reason}")
+  def persist({:error, params, reason}, _) do
+    Logger.error("Error while peristing #{inspect(params)}, reason: #{reason}")
     :error
   end
 
