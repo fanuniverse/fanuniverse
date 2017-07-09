@@ -23,6 +23,7 @@ defmodule Fanuniverse.Web.Router do
       only: [:show, :new, :create, :edit, :update]
     get "/images/:id/next", ImageController, :next
     get "/images/:id/previous", ImageController, :previous
+    get "/images/:id/history", ImageController, :history
 
     resources "/comments", CommentController,
       only: [:index, :create]

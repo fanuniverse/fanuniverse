@@ -2,6 +2,9 @@ defmodule Fanuniverse.Web.ImageView do
   use Fanuniverse.Web, :view
 
   alias Fanuniverse.Image
+  alias Fanuniverse.Repo
+
+  import Ecto.Query
 
   @image_sort_keys ~w(newest oldest popular undiscovered most_discussed)
   @image_sorts [
@@ -46,6 +49,16 @@ defmodule Fanuniverse.Web.ImageView do
   def version_url(%Image{id: id}, version, ext) do
     root = Application.get_env(:fanuniverse, :image_url_root)
     "#{root}/#{id}/#{version}.#{ext}"
+  end
+
+  def has_paper_trail_versions?(%Image{id: id}) do
+    Repo.one(
+      from v in PaperTrail.Version,
+      where: v.item_type == "Image",
+      where: v.item_id == ^id,
+      where: v.event == "update",
+      limit: 1,
+    select: fragment("true"))
   end
 
   def short_source(image) do
