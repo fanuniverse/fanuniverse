@@ -65,6 +65,11 @@ defmodule Fanuniverse.Web.ImageController do
       Map.take(params, ["q", "sort"]))
   end
 
+  def history(conn, %{"id" => id}) do
+    image = Repo.get!(Image, id)
+    render conn, "history.html", image: image
+  end
+
   defp find_images(params) do
     Repo.paginate_es(
       image_search_query(params),
