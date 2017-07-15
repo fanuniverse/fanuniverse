@@ -7,12 +7,12 @@ use Mix.Config
 
 config :fanuniverse,
   ecto_repos: [Fanuniverse.Repo],
-  image_url_root: "http://localhost:4001/images",
-  image_cache_root: "http://localhost:4001/upload",
-  avatar_url_root: "http://localhost:4001/avatars"
+  image_url_root: "http://static.lvh.me/images",
+  image_cache_root: "http://static.lvh.me/upload",
+  avatar_url_root: "http://static.lvh.me/avatars"
 
 config :fanuniverse, Fanuniverse.Web.Endpoint,
-  url: [host: "localhost"],
+  url: [host: "lvh.me"],
   secret_key_base: "replace-this-string-with-an-actual-preferrably-not-hardcoded-key", # FIXME:
   render_errors: [view: Fanuniverse.Web.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Fanuniverse.PubSub,
