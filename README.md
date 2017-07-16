@@ -28,3 +28,7 @@ mix test
 
 # (You shouldn't have both running at the same time.)
 ```
+
+Note that you may need to change the `vm_max_map_count`
+kernel setting for Elasticsearch to run. Refer to [this article](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/vm-max-map-count.html)
+for more information.
