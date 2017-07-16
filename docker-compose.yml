@@ -37,6 +37,9 @@ services:
 
   nginx:
     image: nginx:1.13-alpine
+    depends_on:
+      - malachite
+      - camo
     volumes:
      - ./priv/vidalia/images:/srv/static/images
      - ./priv/vidalia/cache:/srv/static/upload
@@ -49,8 +52,14 @@ services:
     # Exposed through NGINX
     image: littlebobbytables/malachite:latest
     environment:
-      - CAMO_HOST=https://camo.lvh.me
-      - CAMO_KEY=0
+      - CAMO_HOST=http://client.lvh.me/camo
+      - CAMO_KEY=dev-camo-key
+
+  camo:
+    # Exposed through NGINX
+    image: littlebobbytables/camo:latest
+    environment:
+      - CAMO_KEY=dev-camo-key
 
   vidalia:
     image: littlebobbytables/vidalia:latest

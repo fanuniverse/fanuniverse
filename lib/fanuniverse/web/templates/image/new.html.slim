@@ -21,6 +21,7 @@ p Have some fan art you love? Share it with fellow fans!
       class: "input input--wide js-upload__url",
       placeholder: "http://artist.tumblr.com/post/1",
       autofocus: true
+    = hidden_input f, :remote_image
     p.js-upload__fetch-error.hidden
       | Oops! There doesn't seem to be any images at the URL you provided.
     a.button.button--inline.js-upload__fetch data-toggle-text="Loading…" Fetch

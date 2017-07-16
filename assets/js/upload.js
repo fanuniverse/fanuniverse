@@ -42,11 +42,7 @@ function scrapeUrl(e) {
   if (url) {
     toggleFetchButton();
 
-    fetch(`https://scraper.fanuniverse.org/?url=${url}`)
-        .then((response) => {
-          if (!response.ok) throw Error();
-          return response;
-        })
+    fetch(`//client.lvh.me/scrape?url=${url}`)
         .then((response) => response.json())
         .then((data) => insertScraped(data) && proceedToNextStep())
         .catch(() => {
@@ -65,7 +61,7 @@ function toggleFetchButton() {
 }
 
 function insertScraped(data) {
-  data.imageUrl && ($('#image_remote_image_url').value = data.imageUrl);
+  data.imageUrl && ($('#image_remote_image').value = data.imageUrl);
 
   data.pageUrl && ($('#image_source').value = data.pageUrl);
 
