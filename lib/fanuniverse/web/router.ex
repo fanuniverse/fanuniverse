@@ -17,6 +17,12 @@ defmodule Fanuniverse.Web.Router do
   scope "/", Fanuniverse.Web do
     pipe_through :browser
 
+    scope "/admin", Admin, as: :admin do
+      get "/dashboard", DashboardController, :index
+      get "/images/merge", ImageController, :merge
+      get "/images/commit_merge", ImageController, :commit_merge
+    end
+
     get "/", ImageController, :index
 
     resources "/images", ImageController,

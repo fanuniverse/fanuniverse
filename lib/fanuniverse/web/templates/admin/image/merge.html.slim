@@ -1,0 +1,15 @@
+h1 Merging ##{@source.id} into ##{@target.id}
+
+.image-comparison
+  .image-comparison__item
+    img src=version_url(@source, "source")
+  .image-comparison__item
+    img src=version_url(@target, "source")
+
+p The image on the left will be hidden. All comments and stars
+  associated with it will be moved to the image on the right.
+
+p: strong This action is irreversible.
+
+a.button.button--inline href=admin_image_path(@conn, :commit_merge, source: @source, target: @target) data-method="post"
+  | Proceed

@@ -1,0 +1,24 @@
+h1 Administration dashboard
+
+h2
+  a href="/admin/reports" Reports
+
+p
+  = if @unresolved_reports == 0 do
+    | No unresolved reports.
+  - else
+    strong= Inflex.inflect("unresolved report", @unresolved_reports)
+
+h2
+  a href=image_path(@conn, :index) Images
+
+h4 Merging
+
+= form_tag admin_image_path(@conn, :merge), [method: :get, enforce_utf8: false] do
+  = tag :input, type: :number,
+    name: "source", class: "input input--inline",
+    placeholder: "Source image #"
+  = tag :input, type: :number,
+    name: "target", class: "input input--inline input--spacing-left",
+    placeholder: "Target image #"
+  = submit "Merge", class: "button button--inline button--spacing-left"
