@@ -8,8 +8,8 @@ use Mix.Config
 config :fanuniverse,
   ecto_repos: [Fanuniverse.Repo],
   image_url_root: "http://static.lvh.me/images",
-  image_cache_root: "http://static.lvh.me/upload",
-  avatar_url_root: "http://static.lvh.me/avatars"
+  avatar_url_root: "http://static.lvh.me/avatars",
+  cache_url_root: "http://static.lvh.me/upload"
 
 config :fanuniverse, Fanuniverse.Web.Endpoint,
   url: [host: "lvh.me"],

@@ -41,8 +41,8 @@ services:
       - malachite
       - camo
     volumes:
-     - ./priv/vidalia/images:/srv/static/images
-     - ./priv/vidalia/cache:/srv/static/upload
+     - ./priv/images:/srv/static/images
+     - ./priv/cache:/srv/static/upload
      - ./priv/avatars:/srv/static/avatars
      - ./priv/devserver.nginx.conf:/etc/nginx/nginx.conf
     ports:
@@ -69,7 +69,7 @@ services:
       - VIDALIA_PATH=/home/vidalia
       - AMQP_URI=amqp://guest:guest@rabbitmq:5672
     volumes:
-      - ./priv/vidalia:/home/vidalia
+      - ./priv:/home/vidalia
     cap_drop:
       - DAC_OVERRIDE
       - FOWNER

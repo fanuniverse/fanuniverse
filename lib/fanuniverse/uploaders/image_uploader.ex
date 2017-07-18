@@ -1,7 +1,11 @@
 defmodule Fanuniverse.ImageUploader do
+  use Fanuniverse.Uploader
+
   import Dispatcher.Image, only: [request_processing: 2]
 
   require Logger
+
+  @remote_image_max_size 30 * 1024 * 1024
 
   def upload(params, insert_fun) when is_function(insert_fun, 0) do
     params
@@ -18,15 +22,20 @@ defmodule Fanuniverse.ImageUploader do
   def cache_upload(%{"cache" => already_cached} = params) do
     {:ok, params, already_cached}
   end
+  def cache_upload(%{"remote_image" => remote_url} = params) do
+    cache_string = random_cache_string()
+    download_opts = [path: cache_path(cache_string),
+      max_file_size: @remote_image_max_size, timeout: 15_000]
+
+    case Download.from(remote_url, download_opts) do
+      {:ok, _} -> {:ok, params, cache_string}
+      {:error, reason} -> {:error, params, reason}
+     end
+  end
   def cache_upload(%{"image" => %Plug.Upload{path: path}} = params) do
-    cache_string =
-      :crypto.strong_rand_bytes(32)
-      |> Base.encode64     # Base64 strings may contain path separators,
-      |> sanitize_filename # `sanitize_filename` strips them away.
+    cache_string = random_cache_string()
 
-    cache_path = "priv/vidalia/cache/" <> cache_string
-
-    case File.cp(path, cache_path) do
+    case File.cp(path, cache_path(cache_string)) do
       :ok -> {:ok, params, cache_string}
       {:error, reason} -> {:error, params, reason}
     end
@@ -46,14 +55,7 @@ defmodule Fanuniverse.ImageUploader do
     end
   end
   def persist({:error, params, reason}, _) do
-    Logger.error("Error while peristing #{inspect(params)}, reason: #{reason}")
+    Logger.error("#{reason} while peristing #{inspect(params)}")
     :error
   end
-
-  defp sanitize_filename(cache_string) do
-    String.replace(cache_string, ~r/[^0-9A-Z+]/i, "")
-  end
-
-  defp cache_url(cache_string), do:
-    Application.get_env(:fanuniverse, :image_cache_root) <> "/" <> cache_string
 end

@@ -52,6 +52,7 @@ defmodule Fanuniverse.Mixfile do
       {:elasticfusion, github: "fanuniverse/elasticfusion"},
       {:calendar, "~> 0.17.2"},
       {:paper_trail, "~> 0.7.5"},
+      {:download, github: "little-bobby-tables/download", branch: "fix-process-communication"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:ex_machina, "~> 2.0", only: :test}
    ]
