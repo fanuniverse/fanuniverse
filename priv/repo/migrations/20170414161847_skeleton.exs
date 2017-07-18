@@ -17,6 +17,7 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
       add :email, :text
       add :password_hash, :text
 
+      add :role, :text
       add :avatar_file_ext, :text
 
       timestamps()

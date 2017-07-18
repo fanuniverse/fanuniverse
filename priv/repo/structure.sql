@@ -345,6 +345,7 @@ CREATE TABLE users (
     name text,
     email text,
     password_hash text,
+    role text,
     avatar_file_ext text,
     inserted_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL

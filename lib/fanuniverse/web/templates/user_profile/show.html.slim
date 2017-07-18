@@ -7,8 +7,8 @@
     = if @user.id == user(@conn).id do
       a.button.button--round.button--inline.profile__info__button--edit href=user_profile_path(@conn, :edit)
         i.fa.fa-pencil
-    /- if @user.administrator?
-    /  .role.role--block Site Administrator
+    = if @user.role == "administrator" do
+      .role.role--block Site Administrator
     br
     | Member for
     =< time_ago_in_words(@user.inserted_at)

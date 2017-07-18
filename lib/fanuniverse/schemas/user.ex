@@ -23,6 +23,7 @@ and cannot begin or end with a hyphen."
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
 
+    field :role, :string
     field :avatar_file_ext, :string
 
     has_one :user_profile, UserProfile

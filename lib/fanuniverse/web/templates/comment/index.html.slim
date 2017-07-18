@@ -10,11 +10,10 @@
       img.avatar__image src=src=Fanuniverse.Web.UserView.avatar_url(comment.user)
     .flex__grow.comment__body
       .comment__author
-        a.comment__author-link href="#"
-        = comment.user.name
-        /profile_path(comment.author.name) =comment.author.name
-        /= if comment.author.administrator? do
-        /  span.role Site Administrator
+        a.comment__author-link href=user_profile_path(@conn, :show, comment.user.name)
+          = comment.user.name
+        = if comment.user.role == "administrator" do
+          span.role Site Administrator
       = comment.body
       .comment__meta
         =<> time_tag(comment.inserted_at)
