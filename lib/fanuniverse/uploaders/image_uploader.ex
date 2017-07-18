@@ -22,6 +22,14 @@ defmodule Fanuniverse.ImageUploader do
   def cache_upload(%{"cache" => already_cached} = params) do
     {:ok, params, already_cached}
   end
+  def cache_upload(%{"image" => %Plug.Upload{path: path}} = params) do
+    cache_string = random_cache_string()
+
+    case File.cp(path, cache_path(cache_string)) do
+      :ok -> {:ok, params, cache_string}
+      {:error, reason} -> {:error, params, reason}
+    end
+  end
   def cache_upload(%{"remote_image" => remote_url} = params) do
     cache_string = random_cache_string()
     download_opts = [path: cache_path(cache_string),
@@ -31,14 +39,6 @@ defmodule Fanuniverse.ImageUploader do
       {:ok, _} -> {:ok, params, cache_string}
       {:error, reason} -> {:error, params, reason}
      end
-  end
-  def cache_upload(%{"image" => %Plug.Upload{path: path}} = params) do
-    cache_string = random_cache_string()
-
-    case File.cp(path, cache_path(cache_string)) do
-      :ok -> {:ok, params, cache_string}
-      {:error, reason} -> {:error, params, reason}
-    end
   end
 
   def persist({:ok, _params, cache_string}, insert_fun) do
