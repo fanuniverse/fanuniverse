@@ -30,6 +30,7 @@ defmodule Fanuniverse.Web do
       import Fanuniverse.Web.Router.Helpers
       import Fanuniverse.Web.Gettext
       import Auth.Helpers
+      import Auth.Authorization
     end
   end
 

@@ -1,6 +1,6 @@
 defmodule Auth.UserSession do
   @moduledoc """
-  Convenience methods for manipulating user session state
+  Convenience functions for manipulating user session state
   (signed in/signed out).
 
   A single variable, `user_id`, is kept in the session. This, of

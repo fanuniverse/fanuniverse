@@ -33,12 +33,13 @@ defmodule Fanuniverse.Web.ConnCase do
       # The default endpoint for testing
       @endpoint Fanuniverse.Web.Endpoint
 
-      def test_user_session do
+      def test_user_session,
+        do: test_user() |> signed_in_session()
+
+      def signed_in_session(user) do
         build_conn()
         |> post("/sign_in", %{"session" => %{
-             "email" => test_user().email,
-             "password" => test_user().password
-           }})
+             "email" => user.email, "password" => user.password}})
         |> get("/")
       end
 
