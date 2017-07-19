@@ -9,6 +9,7 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
     images()
     comments()
     stars()
+    reports()
   end
 
   def users do
@@ -126,6 +127,30 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
       where: "image_id IS NOT NULL")
     create index(:stars, [:comment_id],
       where: "comment_id IS NOT NULL")
+  end
+
+  def reports do
+    create table(:reports) do
+      add :creator_id, references(:users)
+      add :resolver_id, references(:users)
+
+      add :body, :text, null: false
+      add :resolved, :boolean, default: false
+
+      # Polymorphic resources
+      add :image_id, references(:images)
+      add :comment_id, references(:comments)
+
+      timestamps()
+    end
+
+    # Ensure that any given report belongs to exactly one resource
+    create constraint(:reports, :belongs_to_integrity, check: """
+    (
+      (image_id IS NOT NULL)::integer +
+      (comment_id IS NOT NULL)::integer
+    ) = 1
+    """)
   end
 
   defp add_by_sql_script(path_relative_to_repo) do

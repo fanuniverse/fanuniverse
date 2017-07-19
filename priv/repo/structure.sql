@@ -277,6 +277,43 @@ ALTER SEQUENCE images_id_seq OWNED BY images.id;
 
 
 --
+-- Name: reports; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE reports (
+    id integer NOT NULL,
+    creator_id integer,
+    resolver_id integer,
+    body text NOT NULL,
+    resolved boolean DEFAULT false,
+    image_id integer,
+    comment_id integer,
+    inserted_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT belongs_to_integrity CHECK (((((image_id IS NOT NULL))::integer + ((comment_id IS NOT NULL))::integer) = 1))
+);
+
+
+--
+-- Name: reports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE reports_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: reports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE reports_id_seq OWNED BY reports.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -422,6 +459,13 @@ ALTER TABLE ONLY images ALTER COLUMN id SET DEFAULT nextval('images_id_seq'::reg
 
 
 --
+-- Name: reports id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY reports ALTER COLUMN id SET DEFAULT nextval('reports_id_seq'::regclass);
+
+
+--
 -- Name: stars id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -463,6 +507,14 @@ ALTER TABLE ONLY comments
 
 ALTER TABLE ONLY images
     ADD CONSTRAINT images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: reports reports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY reports
+    ADD CONSTRAINT reports_pkey PRIMARY KEY (id);
 
 
 --
@@ -627,6 +679,38 @@ ALTER TABLE ONLY images
 
 ALTER TABLE ONLY images
     ADD CONSTRAINT images_suggested_by_id_fkey FOREIGN KEY (suggested_by_id) REFERENCES users(id);
+
+
+--
+-- Name: reports reports_comment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY reports
+    ADD CONSTRAINT reports_comment_id_fkey FOREIGN KEY (comment_id) REFERENCES comments(id);
+
+
+--
+-- Name: reports reports_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY reports
+    ADD CONSTRAINT reports_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES users(id);
+
+
+--
+-- Name: reports reports_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY reports
+    ADD CONSTRAINT reports_image_id_fkey FOREIGN KEY (image_id) REFERENCES images(id);
+
+
+--
+-- Name: reports reports_resolver_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY reports
+    ADD CONSTRAINT reports_resolver_id_fkey FOREIGN KEY (resolver_id) REFERENCES users(id);
 
 
 --
