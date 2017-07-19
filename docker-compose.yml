@@ -3,7 +3,7 @@ version: '3'
 services:
 
   postgres:
-    image: postgres:9.6-alpine
+    image: littlebobbytables/postgres-pg_similarity
     environment:
       - POSTGRES_USER=fanuniverse
       - POSTGRES_PASSWORD=fanuniverse

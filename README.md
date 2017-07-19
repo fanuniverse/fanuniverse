@@ -9,26 +9,42 @@
 
 ## Getting up and running
 
-```bash
-mix deps.get
-cd assets
-yarn install
-cd ..
-```
+#### Start containerized services:
 
 ```bash
 docker-compose up
-mix ecto.create && mix ecto.migrate
+```
 
+#### Prepare your environment (you only need to this once):
+
+* Increase the `vm_max_map_count` kernel setting to at least `262144`
+(refer to [this article][1] for more information)
+
+[1]:https://www.elastic.co/guide/en/elasticsearch/reference/5.5/vm-max-map-count.html
+
+```bash
+# Install dependencies
+mix deps.get
+( cd assets && yarn install )
+
+# Set up the database
+mix ecto.create && mix ecto.migrate
+bin/psql fanuniverse_dev -c "CREATE EXTENSION pg_similarity;"
+bin/psql fanuniverse_test -c "CREATE EXTENSION pg_similarity;"
+
+# Create Elasticsearch indexes
+mix run -e "Fanuniverse.ImageIndex \
+|> Elasticfusion.IndexAPI.create_index() \
+|> IO.inspect()"
+```
+
+#### Finally:
+```bash
 # Either boot up the server (bound to localhost:4000)...
 mix phx.server
 
 # ...or run the test suite.
 mix test
 
-# (You shouldn't have both running at the same time.)
+# You should _not_ have both running at the same time!
 ```
-
-Note that you may need to change the `vm_max_map_count`
-kernel setting for Elasticsearch to run. Refer to [this article](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/vm-max-map-count.html)
-for more information.
