@@ -2,9 +2,9 @@ header.header.flex
   .flex__main
     a.header__link.header__link--spacing-right href="/" Fan Universe
     a.header__link.header__link--spacing-right href="/images/new" Suggest an image
-    /= if user_signed_in? && current_user.administrator?
-    /  a.header__link.header__link--spacing-right href=admin_dashboard_path
-    /    i.fa.fa-diamond
+    = if user_signed_in?(@conn) && user(@conn).role == "administrator" do
+      a.header__link.header__link--spacing-right href=admin_dashboard_path(@conn, :index)
+        i.fa.fa-diamond
     = form_tag image_path(@conn, :index),
       [method: :get, accept_charset: "UTF-8", enforce_utf8: false,
         class: "inline-form"] do
