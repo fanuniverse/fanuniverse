@@ -48,10 +48,10 @@ defmodule Fanuniverse.Image.Tags do
       fn(:tags, %Wrapper{list: tags}) ->
         []
         |> validate_length(tags)
-        |> validate_prefix(tags, "(artist) ",
-            "should include the artist, e.g. (artist) somebody")
-        |> validate_prefix(tags, "(fandom) ",
-            "should include the fandom, e.g. (fandom) some show")
+        |> validate_prefix(tags, "artist: ",
+            "should include the artist, e.g. artist: somebody")
+        |> validate_prefix(tags, "fandom: ",
+            "should include the fandom, e.g. fandom: some show")
       end)
   end
 

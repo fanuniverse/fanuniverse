@@ -3,7 +3,7 @@ defmodule Fanuniverse.Factory do
 
   def image_factory do
     %Fanuniverse.Image{
-      tags: "(artist) someone, (fandom) steven universe, pearl, amethyst, opal",
+      tags: "artist: someone, fandom: steven universe, pearl, amethyst, opal",
       source: "https://someone.tumblr.com/awesome-post"
     }
   end

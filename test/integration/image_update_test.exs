@@ -10,10 +10,10 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
 
   test "metadata updates trigger an ES document reindex", %{session: session} do
     image = insert(:image,
-      %{tags: "(artist) art, (fandom) su, ruby"})
+      %{tags: "artist: art, fandom: su, ruby"})
 
     new_tags =
-      "(artist) art, (fandom) su, ruby, sapphire"
+      "artist: art, fandom: su, ruby, sapphire"
     patch(session, "/images/#{image.id}", %{"image" =>
       %{"tags" => new_tags, "tag_cache" => to_string(image.tags)}})
 
@@ -29,11 +29,11 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
 
   test "tag updates are based on a new-vs-cached comparison", %{session: session} do
     image = insert(:image,
-      %{tags: "(artist) a, (fandom) su, ruby"})
+      %{tags: "artist: a, fandom: su, ruby"})
 
     # Tags are compared against tag_cache,
     new_tags =
-      "(artist) a, (fandom) su, ruby, sapphire"
+      "artist: a, fandom: su, ruby, sapphire"
     patch(session, "/images/#{image.id}", %{"image" =>
       %{"tags" => new_tags, "tag_cache" => to_string(image.tags)}})
 
@@ -41,11 +41,11 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
 
     # ...which controls what tags are added
     new_tags =
-      "(artist) a, (fandom) su, ruby, sapphire, fusion, garnet"
+      "artist: a, fandom: su, ruby, sapphire, fusion, garnet"
     tag_cache =
-      "(artist) a, (fandom) su, ruby, sapphire, fusion"
+      "artist: a, fandom: su, ruby, sapphire, fusion"
     should_become =
-      "(artist) a, (fandom) su, ruby, sapphire, garnet"
+      "artist: a, fandom: su, ruby, sapphire, garnet"
     patch(session, "/images/#{image.id}", %{"image" =>
       %{"tags" => new_tags, "tag_cache" => tag_cache}})
 
@@ -53,11 +53,11 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
 
     # ...and removed
     new_tags =
-      "(artist) a, (fandom) su, ruby"
+      "artist: a, fandom: su, ruby"
     tag_cache =
-      "(artist) a, (fandom) su, ruby, garnet"
+      "artist: a, fandom: su, ruby, garnet"
     should_become =
-      "(artist) a, (fandom) su, ruby, sapphire"
+      "artist: a, fandom: su, ruby, sapphire"
     patch(session, "/images/#{image.id}", %{"image" =>
       %{"tags" => new_tags, "tag_cache" => tag_cache}})
 
@@ -65,9 +65,9 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
 
     # ...and which is required
     new_tags =
-      "(artist) a, (fandom) su, sapphire"
+      "artist: a, fandom: su, sapphire"
     should_become =
-      "(artist) a, (fandom) su, ruby, sapphire"
+      "artist: a, fandom: su, ruby, sapphire"
     patch(session, "/images/#{image.id}", %{"image" =>
       %{"tags" => new_tags}})
 
@@ -76,10 +76,10 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
 
   test "image metadata is versioned", %{session: session} do
     image = insert(:image,
-      %{tags: "(artist) a, (fandom) su, ruby"})
+      %{tags: "artist: a, fandom: su, ruby"})
 
     new_tags =
-      "(artist) a, (fandom) su, ruby, sapphire"
+      "artist: a, fandom: su, ruby, sapphire"
     patch(session, "/images/#{image.id}", %{"image" =>
       %{"tags" => new_tags, "tag_cache" => to_string(image.tags)}})
 

@@ -65,7 +65,7 @@ function insertScraped(data) {
 
   data.pageUrl && ($('#image_source').value = data.pageUrl);
 
-  data.artist && ($('#image_tags').value = `artist:${data.artist.toLowerCase()}, `);
+  data.artist && ($('#image_tags').value = `artist: ${data.artist.toLowerCase()}, `);
 
   data.thumbnailUrl && showImage(data.thumbnailUrl);
 

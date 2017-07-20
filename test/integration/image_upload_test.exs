@@ -80,7 +80,7 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
   test "creates a new image and performs background processing", %{session: session} do
     session = session |> post("/images", %{"image" => %{
       "image" => plug_upload(@tmp_path), "source" => "source.url",
-      "tags" => "(artist) msillzie, (fandom) steven universe, vidalia"
+      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
     }})
 
     "/images/" <> upload_id = redirected_to(session)
@@ -94,7 +94,7 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
 
     session = session |> post("/images", %{"image" => %{
       "image" => plug_upload(@tmp_path), "source" => "",
-      "tags" => "(artist) msillzie, (fandom) steven universe, vidalia"
+      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
     }})
 
     cache_root = Application.get_env(:fanuniverse, :cache_url_root) <> "/"
@@ -108,7 +108,7 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
 
     session = session |> post("/images", %{"image" => %{
       "remote_image" => "localhost:8279/image", "source" => "source.url",
-      "tags" => "(artist) msillzie, (fandom) steven universe, vidalia"
+      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
     }})
 
     "/images/" <> upload_id = redirected_to(session)
@@ -125,7 +125,7 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
 
       session |> post("/images", %{"image" => %{
         "image" => plug_upload(@tmp_path_2), "source" => "source.url",
-        "tags" => "(artist) msillzie, (fandom) steven universe, vidalia"
+        "tags" => "artist: msillzie, fandom: steven universe, vidalia"
       }})
     end
 
@@ -150,7 +150,7 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
 
     session |> post("/images", %{"image" => %{
       "image" => plug_upload(@tmp_path), "source" => "source.url",
-      "tags" => "(artist) msillzie, (fandom) steven universe, vidalia"
+      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
     }})
 
     receive do
