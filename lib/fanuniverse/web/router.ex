@@ -1,5 +1,16 @@
+defmodule Fanuniverse.Web.Router.StaticPages do
+  pages =
+    Enum.map(File.ls!("lib/fanuniverse/web/templates/static_page"), fn(template) ->
+      template |> String.split(".") |> List.first() |> String.to_atom()
+    end)
+
+  defmacro list, do: unquote(pages)
+end
+
 defmodule Fanuniverse.Web.Router do
   use Fanuniverse.Web, :router
+
+  require Fanuniverse.Web.Router.StaticPages, as: StaticPages
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -51,6 +62,10 @@ defmodule Fanuniverse.Web.Router do
 
     get "/sign_up", UserController, :new
     post "/sign_up", UserController, :create
+
+    for page <- StaticPages.list() do
+      get "/#{page}", StaticPageController, page
+    end
   end
 
   # Other scopes may use custom stacks.
