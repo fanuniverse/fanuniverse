@@ -24,6 +24,7 @@ defmodule Fanuniverse.Web.Router do
       get "/images/commit_merge", ImageController, :commit_merge
 
       get "/reports", ReportController, :index
+      post "/reports/:id/resolve", ReportController, :resolve
     end
 
     get "/", ImageController, :index

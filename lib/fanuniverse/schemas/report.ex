@@ -18,6 +18,14 @@ defmodule Fanuniverse.Report do
     timestamps()
   end
 
+  def resolve(%Report{} = report, %User{} = resolver) do
+    report
+    |> Repo.preload(:resolver)
+    |> change(resolved: true)
+    |> put_assoc(:resolver, resolver)
+    |> Repo.update()
+  end
+
   def unresolved do
     from r in Report,
     where: r.resolved == false,

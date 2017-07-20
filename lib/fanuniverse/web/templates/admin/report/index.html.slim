@@ -13,9 +13,8 @@ h1 Reports
             a href=image_path(@conn, :show, report.image)
               | Image ##{report.image.id}
         .flex__fixed.flex__right
-          a.button.button--round title="Resolve this report" href="#"
+          a.button.button--round title="Resolve this report" href=admin_report_path(@conn, :resolve, report) ujs-method="post"
             i.fa.fa-check
-          /admin_resolve_report_path(id: report.id) data-method="post"
 
       .flex.report__main
         .flex__fixed: .report__side

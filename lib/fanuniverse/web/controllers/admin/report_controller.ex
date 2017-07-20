@@ -12,4 +12,17 @@ defmodule Fanuniverse.Web.Admin.ReportController do
       render(conn, "index.html", reports: reports, pagination: pagination)
     end
   end
+
+  def resolve(conn, %{"id" => report_id}) do
+    with :ok <- authorize(conn, :access, :admin) do
+      {:ok, _} =
+        Report
+        |> Repo.get!(report_id)
+        |> Report.resolve(user(conn))
+
+      conn
+      |> put_flash(:info, "Report has been resolved.")
+      |> redirect(to: "/")
+    end
+  end
 end
