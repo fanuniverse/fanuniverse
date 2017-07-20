@@ -1,6 +1,8 @@
 defmodule Fanuniverse.Web.ImageController do
   use Fanuniverse.Web, :controller
 
+  plug EnsureAuthenticated when action in [:new, :edit, :create, :update]
+
   alias Fanuniverse.Image
 
   def index(conn, params) do

@@ -65,9 +65,8 @@
         a.tag href=image_path(@conn, :index, q: tag)
           = tag
     .flex__fixed.flex__right
-      = if user_signed_in?(@conn) do
-        a.button.button--round title="Edit tags and source" href=image_path(@conn, :edit, @image)
-          i.fa.fa-pencil
+      a.button.button--round title="Edit tags and source" href=image_path(@conn, :edit, @image)
+        i.fa.fa-pencil
       = if has_paper_trail_versions?(@image) do
         br
         a.button.button--round title="Image update history" href=image_path(@conn, :history, @image)
