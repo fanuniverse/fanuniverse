@@ -4,7 +4,6 @@ defmodule Fanuniverse.Report do
     comment_id: Fanuniverse.Comment]
 
   alias Fanuniverse.User
-  alias Fanuniverse.Image
   alias Fanuniverse.Report
   alias Fanuniverse.Repo
 
@@ -32,7 +31,7 @@ defmodule Fanuniverse.Report do
         message: "A report must belong to a single resource.")
   end
 
-  def insert_for_duplicate_image(%Image{id: duplicate_id}, %Image{id: original_id}) do
+  def insert_for_duplicate_image(duplicate_id, original_id) do
     %Report{image_id: duplicate_id}
     |> changeset(%{body: "This image might be a duplicate of ##{original_id}."})
     |> Repo.insert()

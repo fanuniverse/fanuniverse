@@ -7,6 +7,7 @@ defmodule Fanuniverse.ImageProcessingUpdateAction do
   alias Fanuniverse.Repo
   alias Fanuniverse.Image
   alias Fanuniverse.ImageIndex
+  alias Fanuniverse.ImageDuplicateDetectionJob
   alias Ecto.Changeset
   alias Elasticfusion.Document
 
@@ -17,5 +18,7 @@ defmodule Fanuniverse.ImageProcessingUpdateAction do
          %{width: width, height: height, phash: phash, ext: ext})
     |> Repo.update!
     |> Document.index(ImageIndex)
+
+    ImageDuplicateDetectionJob.run(id)
   end
 end
