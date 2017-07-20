@@ -4,10 +4,11 @@ h2
   a href="/admin/reports" Reports
 
 p
-  = if @unresolved_reports == 0 do
+  = if @reports == 0 do
     | No unresolved reports.
   - else
-    strong= Inflex.inflect("unresolved report", @unresolved_reports)
+    strong
+      = "#{@reports} " <> Inflex.inflect("unresolved report", @reports)
 
 h2
   a href=image_path(@conn, :index) Images

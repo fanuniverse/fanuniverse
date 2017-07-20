@@ -1,7 +1,5 @@
 defmodule Fanuniverse.Report do
-  use Fanuniverse.Schema.Polymorphic, resources: [
-    image_id: Fanuniverse.Image,
-    comment_id: Fanuniverse.Comment]
+  use Fanuniverse.Schema
 
   alias Fanuniverse.User
   alias Fanuniverse.Report
@@ -14,10 +12,16 @@ defmodule Fanuniverse.Report do
     field :body, :string
     field :resolved, :boolean, default: false
 
-    field :image_id, :integer
-    field :comment_id, :integer
+    belongs_to :image, Fanuniverse.Image
+    belongs_to :comment, Fanuniverse.Comment
 
     timestamps()
+  end
+
+  def unresolved do
+    from r in Report,
+    where: r.resolved == false,
+    preload: [:creator, :image, :comment]
   end
 
   def changeset(struct, params \\ %{}) do
