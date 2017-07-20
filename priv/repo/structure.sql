@@ -28,6 +28,20 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: pg_similarity; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_similarity WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_similarity; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_similarity IS 'support similarity queries';
+
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';

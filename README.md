@@ -29,8 +29,6 @@ mix deps.get
 
 # Set up the database
 mix ecto.create && mix ecto.migrate
-bin/psql fanuniverse_dev -c "CREATE EXTENSION pg_similarity;"
-bin/psql fanuniverse_test -c "CREATE EXTENSION pg_similarity;"
 
 # Create Elasticsearch indexes
 mix run -e "Fanuniverse.ImageIndex \
