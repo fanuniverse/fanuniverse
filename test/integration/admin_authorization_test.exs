@@ -25,6 +25,7 @@ defmodule Fanuniverse.AdminAuthorizationIntegrationTest do
     assert_admin_only "/admin/dashboard", context
     assert_admin_only "/admin/images/merge", context, %{
       "source" => insert(:image).id, "target" => insert(:image).id}
+    assert_admin_only "/admin/reports", context
   end
 
   def assert_admin_only(path, %{guest: guest, user: user, admin: admin}, params \\ %{}) do

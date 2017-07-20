@@ -1,0 +1,37 @@
+h1 Reports
+
+= if Enum.any?(@reports) do
+  = render_pagination("reports", @pagination,
+      @conn.params, &admin_report_path(@conn, :index, &1))
+
+  = for report <- @reports do
+    .report.block
+
+      .report__title.flex
+        .flex__grow
+          = if report.image do
+            a href=image_path(@conn, :show, report.image)
+              | Image ##{report.image.id}
+        .flex__fixed.flex__right
+          a.button.button--round title="Resolve this report" href="#"
+            i.fa.fa-check
+          /admin_resolve_report_path(id: report.id) data-method="post"
+
+      .flex.report__main
+        .flex__fixed: .report__side
+          = if report.image do
+            img.image-preview src=version_url(report.image, "source")
+        .flex__grow
+          .report__body
+            = report.body
+
+          .report__creator
+            = if report.creator do
+              ' Reported by
+              a href=user_profile_path(@conn, :show, report.creator.name)
+                = report.creator.name
+            - else
+              | System report
+
+- else
+  | No unresolved reports found.
