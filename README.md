@@ -42,7 +42,7 @@ docker-compose up
 ```bash
 # Install dependencies
 mix deps.get
-( cd assets && yarn install )
+( cd assets && npm install )
 
 # Set up the database
 mix ecto.create && mix ecto.migrate
