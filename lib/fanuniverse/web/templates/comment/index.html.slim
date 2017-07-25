@@ -7,7 +7,7 @@
 = for comment <- @comments do
   article.comment.block.flex
     .flex__fixed.avatar.avatar--small
-      img.avatar__image src=src=Fanuniverse.Web.UserView.avatar_url(comment.user)
+      img.avatar__image src=Fanuniverse.Web.UserView.avatar_url(comment.user)
     .flex__grow.comment__body
       .comment__author
         a.comment__author-link href=user_profile_path(@conn, :show, comment.user.name)

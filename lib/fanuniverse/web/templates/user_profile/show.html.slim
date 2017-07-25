@@ -1,7 +1,7 @@
 .profile
   .profile__avatar
     .avatar.avatar--large
-      img.avatar__image src=src=Fanuniverse.Web.UserView.avatar_url(@user)
+      img.avatar__image src=Fanuniverse.Web.UserView.avatar_url(@user)
   .profile__info
     h1.profile__info__name = @user.name
     = if @user.id == user(@conn).id do

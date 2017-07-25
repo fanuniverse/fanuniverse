@@ -13,10 +13,10 @@ header.navbar.flex
         name: "q", value: @conn.params["q"],
         class: "input navbar__search hidden",
         placeholder: "ruby, sapphire"
-    // Admin tools
-    /- if user_signed_in? && current_user.administrator?
-    /  a.navbar__link href= admin_dashboard_path
-    /    i.fa.fa-diamond
+    / Admin tools
+    = if user_signed_in?(@conn) && user(@conn).role == "administrator" do
+      a.navbar__link href=admin_dashboard_path(@conn, :index)
+        i.fa.fa-diamond
     / Home link
     a.navbar__link#navbar-home href='/' Fan Universe
 
@@ -24,7 +24,7 @@ header.navbar.flex
     = if user_signed_in?(@conn) do
       a.navbar__user-link href=user_profile_path(@conn, :show, user(@conn).name)
         .avatar.navbar__user-link__avatar
-          img.avatar__image src=src=Fanuniverse.Web.UserView.avatar_url(user(@conn))
+          img.avatar__image src=Fanuniverse.Web.UserView.avatar_url(user(@conn))
     - else
       a.navbar__link href="/sign_in"
         i.fa.fa-sign-in

@@ -46,7 +46,8 @@ defmodule Fanuniverse.Mixfile do
       {:phoenix_ecto, "~> 3.2"},
       {:postgrex, ">= 0.13.0"},
       {:phoenix_html, github: "phoenixframework/phoenix_html", override: true},
-      {:phoenix_slime, github: "fbjork/phoenix_slime"},
+      {:phoenix_slime, "~> 0.9"},
+      {:slime, github: "slime-lang/slime", override: true},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:comeonin, "~> 3.0"},
@@ -58,7 +59,7 @@ defmodule Fanuniverse.Mixfile do
       {:calendar, "~> 0.17.2"},
       {:paper_trail, "~> 0.7.5"},
       {:download, github: "little-bobby-tables/download", branch: "fix-process-communication"},
-      {:canada, github: "jarednorman/canada"},
+      {:canada, "~> 1.0.2"},
       {:inflex, "~> 1.8"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:ex_machina, "~> 2.0", only: :test}
