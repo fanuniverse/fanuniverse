@@ -9,7 +9,7 @@ defmodule Fanuniverse.Web.LayoutView do
 
     def precompiled_asset_url(asset_name) do
       root = Application.get_env(:fanuniverse, :asset_url_root)
-      root <> "/" <> @asset_manifest[asset]
+      root <> "/" <> @asset_manifest[asset_name]
     end
   else
     def precompiled_asset_url(asset_name) do

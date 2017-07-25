@@ -17,7 +17,8 @@ defmodule Fanuniverse.Uploader do
 
   def cache_path(cache_string) do
     cache_string = sanitize_filename(cache_string)
-    Path.join([:code.priv_dir(:fanuniverse), "cache", cache_string])
+    cache_root = Application.get_env(:fanuniverse, :cache_fs_path)
+    Path.join(cache_root, cache_string)
   end
 
   @doc """

@@ -19,8 +19,10 @@ defmodule Fanuniverse.UserAvatarService do
 
   @max_file_size 300 * 1024 # 300kB
 
-  defp avatar_path(%User{name: name}, ext),
-    do: "priv/avatars/" <> name <> "." <> ext
+  defp avatar_path(%User{name: name}, ext) do
+    avatar_root = Application.get_env(:fanuniverse, :avatar_fs_path)
+    Path.join(avatar_root, name <> "." <> ext)
+  end
 
   def add(%User{} = user, %Plug.Upload{} = upload) do
     with {:ok, ext} <- check_type(user, upload),

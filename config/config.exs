@@ -9,7 +9,10 @@ config :fanuniverse,
   ecto_repos: [Fanuniverse.Repo],
   image_url_root: "http://static.lvh.me/images",
   avatar_url_root: "http://static.lvh.me/avatars",
-  cache_url_root: "http://static.lvh.me/upload"
+  cache_url_root: "http://static.lvh.me/upload",
+  asset_url_root: "http://static.lvh.me/assets",
+  avatar_fs_path: "priv/avatars",
+  cache_fs_path: "priv/cache"
 
 config :fanuniverse, Fanuniverse.Web.Endpoint,
   url: [host: "lvh.me"],
