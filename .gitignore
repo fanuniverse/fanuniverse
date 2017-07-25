@@ -19,3 +19,4 @@ erl_crash.dump
 # Release management (versioned separately)
 release.sh
 /rel
+/config/prod.secret.exs

@@ -62,7 +62,8 @@ defmodule Fanuniverse.Mixfile do
       {:canada, "~> 1.0.2"},
       {:inflex, "~> 1.8"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
-      {:ex_machina, "~> 2.0", only: :test}
+      {:ex_machina, "~> 2.0", only: :test},
+      {:distillery, "~> 1.4", runtime: false}
    ]
   end
 
