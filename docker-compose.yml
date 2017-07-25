@@ -41,10 +41,8 @@ services:
       - malachite
       - camo
     volumes:
-     - ./priv/images:/srv/static/images
-     - ./priv/cache:/srv/static/upload
-     - ./priv/avatars:/srv/static/avatars
-     - ./priv/devserver.nginx.conf:/etc/nginx/nginx.conf
+      - ./priv:/priv
+      - ./priv/devserver.nginx.conf:/etc/nginx/nginx.conf
     ports:
      - "localhost:80:80"
 

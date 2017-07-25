@@ -8,13 +8,13 @@ html lang="en"
     meta name="viewport" content="width=device-width, initial-scale=1"
 
     link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,400i,700|Sansita"
-    link rel="stylesheet" href=static_path(@conn, "/app.css")
+    link rel="stylesheet" href=precompiled_asset_url("app.css")
 
     link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v1"
     link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v1"
     meta name="theme-color" content="#ffffff"
 
-    script src=static_path(@conn, "/app.js")
+    script src=precompiled_asset_url("app.js")
 
     = csrf_meta_tag()
 

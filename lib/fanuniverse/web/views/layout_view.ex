@@ -4,6 +4,20 @@ defmodule Fanuniverse.Web.LayoutView do
   @main_title "Fan Universe"
   @app_version Mix.Project.config[:version]
 
+  if Mix.env == :prod do
+    @asset_manifest ("priv/static/manifest.json" |> File.read!() |> Poison.decode!())
+
+    def precompiled_asset_url(asset_name) do
+      root = Application.get_env(:fanuniverse, :asset_url_root)
+      root <> "/" <> @asset_manifest[asset]
+    end
+  else
+    def precompiled_asset_url(asset_name) do
+      root = Application.get_env(:fanuniverse, :asset_url_root)
+      root <> "/" <> asset_name
+    end
+  end
+
   def github_url,
     do: "https://github.com/fanuniverse/fanuniverse/tree/#{@app_version}"
 
