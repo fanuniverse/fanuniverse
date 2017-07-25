@@ -4,7 +4,7 @@ defmodule Fanuniverse.Mixfile do
   def project do
     [
       app: :fanuniverse,
-      version: "0.0.1",
+      version: git_tag_version(),
       elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -30,6 +30,11 @@ defmodule Fanuniverse.Mixfile do
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_),     do: ["lib"]
+
+  defp git_tag_version do
+    {version, 0} = System.cmd("git", ~w(describe --abbrev=0 --tags))
+    String.trim(version)
+  end
 
   # Specifies your project dependencies.
   #

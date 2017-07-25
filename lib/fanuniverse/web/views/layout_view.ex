@@ -2,6 +2,10 @@ defmodule Fanuniverse.Web.LayoutView do
   use Fanuniverse.Web, :view
 
   @main_title "Fan Universe"
+  @app_version Mix.Project.config[:version]
+
+  def github_url,
+    do: "https://github.com/fanuniverse/fanuniverse/tree/#{@app_version}"
 
   def page_title(conn, assigns) do
     custom_title = render_existing view_module(conn), "title",
