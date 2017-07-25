@@ -2,10 +2,27 @@
 
 ## Prerequisites
 
-* Docker
+Running Linux is strongly recommended. You'll likely have to jump through hoops
+to set the environment up elsewhere.
+
+#### Docker
+
+* [Docker CE](https://docker.com/community-edition#/download)
 * [Docker Compose](https://docs.docker.com/compose/install/)
-* [Yarn](https://yarnpkg.com/en/docs/install)
-* [Elixir](https://elixir-lang.org/install.html) (1.4.4)
+
+Run `docker-compose pull` in the project root to fetch all dependencies.
+
+#### Development tools
+
+* [asdf](https://github.com/asdf-vm/asdf)
+* [asdf-erlang](https://github.com/asdf-vm/asdf-erlang)
+* [asdf-elixir](https://github.com/asdf-vm/asdf-elixir)
+* [asdf-nodejs](https://github.com/asdf-vm/asdf-nodejs)
+
+Please read the documentation for each plugin; they may require additional
+dependencies to be installed.
+
+After getting asdf and plugins, run `asdf install` in the project root.
 
 ## Getting up and running
 
