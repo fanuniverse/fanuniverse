@@ -11,10 +11,13 @@ erl_crash.dump
 /assets/node_modules
 
 # Generated files & local uploads
-/priv/static
 /priv/images
 /priv/avatars
 /priv/cache
+/priv/static/**/*
+!/priv/static/app-*
+!/priv/static/manifest.json
+!/priv/static/no-avatar.svg
 
 # Release management (versioned separately)
 release.sh
