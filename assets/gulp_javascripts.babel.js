@@ -11,6 +11,7 @@ import buble from 'rollup-plugin-buble';
 
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
+import replace from 'gulp-replace';
 import uglify from 'gulp-uglify';
 
 import { production, development, dest, javascripts } from './gulp_manifest.babel';
@@ -37,5 +38,6 @@ function application() {
       .pipe(source('app.js'))
       .pipe(buffer())
       .pipe(development(sourcemaps.init({ loadMaps: true })))
-      .pipe(development(sourcemaps.write()));
+      .pipe(development(sourcemaps.write()))
+      .pipe(production(replace('lvh.me', 'fanuniverse.org')));
 }
