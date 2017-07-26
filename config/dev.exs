@@ -9,17 +9,6 @@ config :fanuniverse, Fanuniverse.Web.Endpoint,
   check_origin: false,
   watchers: [env: ["sh", "gulp-watch", cd: Path.expand("../bin", __DIR__)]]
 
-# Watch static and templates for browser reloading.
-config :fanuniverse, Fanuniverse.Web.Endpoint,
-  live_reload: [
-    patterns: [
-      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
-      ~r{priv/gettext/.*(po)$},
-      ~r{lib/fanuniverse/web/views/.*(ex)$},
-      ~r{lib/fanuniverse/web/templates/.*(eex|slim|slime)$}
-    ]
-  ]
-
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 

@@ -15,7 +15,7 @@ config :fanuniverse,
   cache_fs_path: "priv/cache"
 
 config :fanuniverse, Fanuniverse.Web.Endpoint,
-  url: [host: "lvh.me"],
+  url: [host: "www.lvh.me"],
   secret_key_base: "replace-this-string-with-an-actual-preferrably-not-hardcoded-key", # FIXME:
   render_errors: [view: Fanuniverse.Web.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Fanuniverse.PubSub,
