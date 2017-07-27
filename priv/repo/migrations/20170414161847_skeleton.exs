@@ -5,7 +5,9 @@ defmodule Fanuniverse.Repo.Migrations.Skeleton do
     add_by_sql_script "functions/counter_cache_incr.sql"
     add_by_sql_script "functions/counter_cache_update.sql"
 
-    execute "CREATE EXTENSION pg_similarity;"
+    # Ensure we're not in production (otherwise the extension is already there)
+    if Code.ensure_loaded?(Mix),
+      do: execute "CREATE EXTENSION pg_similarity;"
 
     users()
     images()
