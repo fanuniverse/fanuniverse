@@ -4,7 +4,7 @@
       img.avatar__image src=Fanuniverse.Web.UserView.avatar_url(@user)
   .profile__info
     h1.profile__info__name = @user.name
-    = if @user.id == user(@conn).id do
+    = if user_signed_in?(@conn) && @user.id == user(@conn).id do
       a.button.button--round.button--inline.profile__info__button--edit href=user_profile_path(@conn, :edit)
         i.fa.fa-pencil
     = if @user.role == "administrator" do
