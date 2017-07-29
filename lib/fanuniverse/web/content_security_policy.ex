@@ -28,5 +28,5 @@ defmodule Fanuniverse.Web.ContentSecurityPolicy do
     do: opts
 
   def call(conn, _opts),
-    do: put_resp_header(conn, "Content-Security-Policy", @csp_directives)
+    do: put_resp_header(conn, "content-security-policy", @csp_directives)
 end
