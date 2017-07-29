@@ -50,7 +50,7 @@ defmodule Dispatcher.Image do
 
     spawn fn ->
       ImageUpdate.perform!(id, width, height, phash, ext)
-      if Mix.env == :test, do: callback.(id)
+      if Code.ensure_loaded?(Mix) && Mix.env == :test, do: callback.(id)
     end
 
     Basic.ack(channel, tag)
