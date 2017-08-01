@@ -13,3 +13,7 @@
   line-height: 1.8em;
   font-size: 14px;
 }
+
+.js-autocomplete__line:hover {
+  background: $accent_light_hover_color;
+}
