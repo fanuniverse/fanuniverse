@@ -24,7 +24,8 @@ export const javascripts = {
     './node_modules/promise-polyfill/promise.js',
     './node_modules/element-closest/element-closest.js',
     './node_modules/masonry-layout/dist/masonry.pkgd.js',
-    './node_modules/imagesloaded/imagesloaded.pkgd.js'
+    './node_modules/imagesloaded/imagesloaded.pkgd.js',
+    './node_modules/textarea-caret/index.js'
   ],
   all:         `${root}/assets/js/**/*.js`,
   application: `${root}/assets/js/app.js`,
