@@ -1,6 +1,6 @@
 defmodule Dispatcher.Supervisor do
   @moduledoc """
-  Dispatchers communicate with external services over AMQP.
+  Dispatchers communicate with external services over AMQP and HTTP.
 
   This a subtree of the `Fanuniverse.Application` supervisor.
   """
@@ -13,13 +13,13 @@ defmodule Dispatcher.Supervisor do
   end
 
   def init(_) do
-    {:ok, connection} =
+    {:ok, amqp} =
       AMQP.Connection.open("amqp://guest:guest@localhost:5672")
 
     Logger.info("Established AMQP connection; initializing child dispatchers")
 
     children = [
-      worker(Dispatcher.Image, [connection])
+      worker(Dispatcher.Vidalia, [amqp])
     ]
 
     supervise(children, [strategy: :one_for_one])

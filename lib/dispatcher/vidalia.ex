@@ -1,4 +1,4 @@
-defmodule Dispatcher.Image do
+defmodule Dispatcher.Vidalia do
   @moduledoc """
   This dispatcher interacts with Vidalia, the image processing service.
   Refer to https://github.com/little-bobby-tables/vidalia for more information.
@@ -43,6 +43,13 @@ defmodule Dispatcher.Image do
     {:noreply, state}
   end
 
+  # See handle_info/2 clause for `:basic_deliver`.
+  if Mix.env == :test do
+    def handle_cast({:set_callback, fun}, {channel, _}) when is_function(fun, 1) do
+      {:noreply, {channel, fun}}
+    end
+  end
+
   # Consumes image metadata from the `@processed_queue`.
   def handle_info({:basic_deliver, payload, %{delivery_tag: tag}}, {channel, callback}) do
     %{"id" => id, "width" => width, "height" => height,
@@ -56,12 +63,6 @@ defmodule Dispatcher.Image do
     Basic.ack(channel, tag)
 
     {:noreply, {channel, callback}}
-  end
-
-  if Mix.env == :test do
-    def handle_cast({:set_callback, fun}, {channel, _}) when is_function(fun, 1) do
-      {:noreply, {channel, fun}}
-    end
   end
 
   # Sent by the broker after registering this process as a consumer.
