@@ -1,0 +1,15 @@
+@import "global";
+
+.js-autocomplete {
+  background: white;
+  border: 1px solid $border_color;
+  width: 200px;
+  border-radius: 4px;
+  padding: 8px 0;
+}
+
+.js-autocomplete__line {
+  padding: 0px 16px;
+  line-height: 1.8em;
+  font-size: 14px;
+}
