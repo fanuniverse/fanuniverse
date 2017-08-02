@@ -10,8 +10,10 @@ header.header.flex
         class: "inline-form"] do
       = tag :input, type: :text, name: "q",
         value: @conn.params["q"],
-        class: "input input--inline header__search-input",
-        placeholder: "ruby, sapphire"
+        class: "input input--inline header__search-input js-autocomplete-target",
+        placeholder: "Start typing to get search suggestions…",
+        autocomplete: "off"
+      .js-autocomplete.invisible
   .flex__right
     = if user_signed_in?(@conn) do
      .js-dropdown.js-signed-in

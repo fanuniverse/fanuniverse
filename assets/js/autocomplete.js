@@ -29,7 +29,9 @@ function setup(field) {
 }
 
 function loadSuggestions(container, field) {
-  fetch(`//client.lvh.me/autocomplete?q=${typedTag(field.value)}`)
+  const tag = typedTag(field.value);
+
+  tag && fetch(`//client.lvh.me/autocomplete?q=${tag}`)
     .then((response) => response.json())
     .then((tags) => displaySuggestions(container, field, tags));
 }
@@ -81,7 +83,17 @@ function insertSuggestion(container, field, tag) {
 }
 
 function typedTag(text) {
-  return (afterLast(text, ",") || text).trim();
+  const separators = [",", "AND", "|", "OR"];
+
+  const tag = separators
+    .map((sep) => afterLast(text, sep))
+    .concat([text]) /* in case there are no separators yet */
+    .filter((tag) => tag.length >= 2)
+    .sort((a, b) => a.length - b.length) /* shortest first */
+    .shift();
+
+  /* Remove prefix unary operators, parens, and whitespace */
+  return tag && tag.replace(/^\s*(-|NOT|[(])/, "").trim();
 }
 
 function highlightTyped(tag, typed) {

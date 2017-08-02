@@ -2,6 +2,7 @@
 
 .js-autocomplete {
   position: absolute;
+  z-index: 1;
   width: 200px;
   padding: 8px 0;
 
@@ -14,6 +15,8 @@
 .js-autocomplete__line {
   padding: 0px 16px;
   line-height: 1.8em;
+
+  font-family: $font_family_base;
   font-size: 14px;
 }
 
