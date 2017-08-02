@@ -18,6 +18,14 @@ function setup(field) {
     typingTimeout = setTimeout(() => loadSuggestions(container, field), 200);
     repositionSuggestionBox(container, field);
   });
+
+  document.addEventListener('click', (e) => {
+    const outside = e.target
+      && !e.target.closest('.js-autocomplete')
+      && !e.target.closest('.js-autocomplete-target');
+
+    if (outside) container.classList.add('invisible');
+  });
 }
 
 function loadSuggestions(container, field) {
