@@ -4,6 +4,8 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
   alias Fanuniverse.Repo
   alias Fanuniverse.User
 
+  import Fanuniverse.TagUpdates, only: [tag_counts: 1]
+
   setup do
     {:ok, %{session: test_user_session()}}
   end
@@ -25,6 +27,28 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
           %{term: %{tags: "sapphire"}},
           %{term: %{id: image.id}}
         ]}}}, Fanuniverse.ImageIndex)
+  end
+
+  test "metadata updates bump tag counters", %{session: session} do
+    image = insert(:image,
+      %{tags: "artist: a, fandom: su, ruby"})
+
+    untouched = tag_counts(["artist: a", "fandom: su", "ruby"])
+    before_addition = tag_counts(["sapphire", "smiling"])
+
+    patch(session, "/images/#{image.id}", %{"image" =>
+      %{"tags" => "artist: a, fandom: su, ruby, sapphire, smiling",
+        "tag_cache" => "artist: a, fandom: su, ruby"}})
+
+    assert tag_counts(["artist: a", "fandom: su", "ruby", "sapphire", "smiling"]) ==
+      (untouched ++ Enum.map(before_addition, &(&1 + 1)))
+
+    patch(session, "/images/#{image.id}", %{"image" =>
+      %{"tags" => "artist: a, fandom: su, ruby",
+        "tag_cache" => "artist: a, fandom: su, ruby, sapphire, smiling"}})
+
+    assert tag_counts(["artist: a", "fandom: su", "ruby", "sapphire", "smiling"]) ==
+      (untouched ++ before_addition)
   end
 
   test "tag updates are based on a new-vs-cached comparison", %{session: session} do

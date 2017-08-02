@@ -159,4 +159,25 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
       2_000 -> flunk "test callback has not been invoked."
     end
   end
+
+  # Tagging tests
+
+  test "creating an image updates tag counters", %{session: session} do
+    tag_counts_before = Fanuniverse.TagUpdates.tag_counts([
+      "artist: msillzie", "fandom: steven universe", "vidalia"])
+
+    session = session |> post("/images", %{"image" => %{
+      "image" => plug_upload(@tmp_path), "source" => "source.url",
+      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
+    }})
+
+    tag_counts_after = Fanuniverse.TagUpdates.tag_counts([
+      "artist: msillzie", "fandom: steven universe", "vidalia"])
+
+    assert tag_counts_after == tag_counts_before |> Enum.map(&(&1 + 1))
+
+    # Required to pass the test
+    "/images/" <> upload_id = redirected_to(session)
+    assert_fixture_processing(self(), upload_id)
+  end
 end

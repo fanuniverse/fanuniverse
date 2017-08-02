@@ -19,7 +19,8 @@ defmodule Dispatcher.Supervisor do
     Logger.info("Established AMQP connection; initializing child dispatchers")
 
     children = [
-      worker(Dispatcher.Vidalia, [amqp])
+      worker(Dispatcher.Vidalia, [amqp]),
+      worker(Dispatcher.Sapphire, [])
     ]
 
     supervise(children, [strategy: :one_for_one])
