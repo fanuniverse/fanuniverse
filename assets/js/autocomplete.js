@@ -41,6 +41,7 @@ function displaySuggestions(container, field, tags) {
   });
 
   if (tags.length > 0) container.classList.remove('invisible');
+  else container.classList.add('invisible');
 }
 
 function repositionSuggestionBox(container, field) {
