@@ -11,8 +11,10 @@ header.navbar.flex
         class: "inline-form"] do
       = tag :input, type: :text,
         name: "q", value: @conn.params["q"],
-        class: "input navbar__search hidden",
-        placeholder: "ruby, sapphire"
+        class: "input navbar__search js-autocomplete-target hidden",
+        placeholder: "Type to get search suggestions…",
+        autocomplete: "off"
+      .js-autocomplete.invisible
     / Admin tools
     = if user_signed_in?(@conn) && user(@conn).role == "administrator" do
       a.navbar__link href=admin_dashboard_path(@conn, :index)
