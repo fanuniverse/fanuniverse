@@ -1,7 +1,7 @@
 defmodule Fanuniverse.ImageUploader do
   use Fanuniverse.Uploader
 
-  import Dispatcher.Image, only: [request_processing: 2]
+  import Dispatcher.Vidalia, only: [request_processing: 2]
 
   require Logger
 

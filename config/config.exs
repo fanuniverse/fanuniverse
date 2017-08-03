@@ -14,6 +14,9 @@ config :fanuniverse,
   avatar_fs_path: "priv/avatars",
   cache_fs_path: "priv/cache"
 
+config :fanuniverse, :services,
+  sapphire_url_root: "localhost:3030"
+
 config :fanuniverse, Fanuniverse.Web.Endpoint,
   url: [host: "www.lvh.me"],
   secret_key_base: "replace-this-string-with-an-actual-preferrably-not-hardcoded-key", # FIXME:

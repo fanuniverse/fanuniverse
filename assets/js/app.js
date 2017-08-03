@@ -6,6 +6,7 @@ import stars from './stars';
 import upload from './upload';
 import timeago from './timeago';
 import comments from './comments';
+import autocomplete from './autocomplete';
 
 import dropdowns from './dropdowns';
 import video from './video';
@@ -26,6 +27,7 @@ function load() {
   upload();
   timeago();
   comments();
+  autocomplete();
 
   dropdowns();
   video();

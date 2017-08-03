@@ -59,6 +59,13 @@ services:
     environment:
       - CAMO_KEY=dev-camo-key
 
+  sapphire:
+    image: littlebobbytables/sapphire:latest
+    ports:
+      - "localhost:3030:3030"
+    environment:
+      - REDIS_HOST=redis
+
   vidalia:
     image: littlebobbytables/vidalia:latest
     depends_on:

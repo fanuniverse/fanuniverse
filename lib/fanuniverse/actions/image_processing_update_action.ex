@@ -1,6 +1,6 @@
 defmodule Fanuniverse.ImageProcessingUpdateAction do
   @moduledoc """
-  This action is executed by `Dispatcher.Image` when it receives
+  This action is executed by `Dispatcher.Vidalia` when it receives
   image metadata from Vidalia, the image processing service.
   """
 

@@ -23,3 +23,9 @@ export function on(event, selector, callback, container = document) {
     target && callback(e, target);
   });
 }
+
+export function removeChildren(node) {
+  while (node.firstChild) {
+    node.removeChild(node.firstChild);
+  }
+}

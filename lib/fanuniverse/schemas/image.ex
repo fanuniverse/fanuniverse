@@ -38,6 +38,7 @@ defmodule Fanuniverse.Image do
       case status do
         {:ok, %{model: image}} ->
           Job.perform fn ->
+            Dispatcher.Sapphire.update_tags(image.tags.list, [])
             Elasticfusion.Document.index(image, ImageIndex)
           end
           {:ok, image}
@@ -61,6 +62,7 @@ defmodule Fanuniverse.Image do
     case status do
       {:ok, %{model: image}} ->
         Job.perform fn ->
+          Dispatcher.Sapphire.update_tags(added_tags, removed_tags)
           Elasticfusion.Document.index(image, ImageIndex)
         end
         {:ok, image}

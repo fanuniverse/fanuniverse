@@ -50,7 +50,7 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
 
   defmacro assert_fixture_processing(test_pid, upload_id) do
     quote bind_quoted: [test_pid: test_pid, upload_id: upload_id] do
-      GenServer.cast(Dispatcher.Image, {:set_callback, fn(id) ->
+      GenServer.cast(Dispatcher.Vidalia, {:set_callback, fn(id) ->
         assert id == upload_id
 
         updated_record = Repo.get!(Image, id)
@@ -88,7 +88,7 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
   end
 
   test "displays image preview if there are submission errors", %{session: session} do
-    GenServer.cast(Dispatcher.Image, {:set_callback, fn(_id) ->
+    GenServer.cast(Dispatcher.Vidalia, {:set_callback, fn(_id) ->
       flunk "the callback shouldn't be invoked"
     end})
 
@@ -136,9 +136,9 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
           r.body == ^"This image might be a duplicate of ##{original_id}.")
     end
 
-    GenServer.cast(Dispatcher.Image, {:set_callback, fn(original_id) ->
-      GenServer.cast(Dispatcher.Image, {:set_callback, fn(duplicate_id) ->
-        GenServer.cast(Dispatcher.Image, {:set_callback, fn(_) -> :ok end})
+    GenServer.cast(Dispatcher.Vidalia, {:set_callback, fn(original_id) ->
+      GenServer.cast(Dispatcher.Vidalia, {:set_callback, fn(duplicate_id) ->
+        GenServer.cast(Dispatcher.Vidalia, {:set_callback, fn(_) -> :ok end})
 
         check_for_duplicate_report.(original_id, duplicate_id)
 
@@ -158,5 +158,26 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
     after
       2_000 -> flunk "test callback has not been invoked."
     end
+  end
+
+  # Tagging tests
+
+  test "creating an image updates tag counters", %{session: session} do
+    tag_counts_before = Fanuniverse.TagUpdates.tag_counts([
+      "artist: msillzie", "fandom: steven universe", "vidalia"])
+
+    session = session |> post("/images", %{"image" => %{
+      "image" => plug_upload(@tmp_path), "source" => "source.url",
+      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
+    }})
+
+    tag_counts_after = Fanuniverse.TagUpdates.tag_counts([
+      "artist: msillzie", "fandom: steven universe", "vidalia"])
+
+    assert tag_counts_after == tag_counts_before |> Enum.map(&(&1 + 1))
+
+    # Required to pass the test
+    "/images/" <> upload_id = redirected_to(session)
+    assert_fixture_processing(self(), upload_id)
   end
 end
