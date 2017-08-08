@@ -14,6 +14,8 @@ defmodule Fanuniverse.Image do
     field :stars_count, :integer
     field :comments_count, :integer
 
+    belongs_to :suggested_by, User
+
     field :width, :integer
     field :height, :integer
     field :phash, :string
@@ -31,7 +33,7 @@ defmodule Fanuniverse.Image do
   def insert(params, %User{} = user) do
     ImageUploader.upload(params, fn ->
       status =
-        %Image{}
+        %Image{suggested_by: user}
         |> changeset(params)
         |> PaperTrail.insert(user: user)
 

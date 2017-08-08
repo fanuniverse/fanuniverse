@@ -84,6 +84,10 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
     }})
 
     "/images/" <> upload_id = redirected_to(session)
+
+    upload = Repo.get(Image, upload_id) |> Repo.preload(:suggested_by)
+    assert upload.suggested_by.id == Auth.Helpers.user(session).id
+
     assert_fixture_processing(self(), upload_id)
   end
 
