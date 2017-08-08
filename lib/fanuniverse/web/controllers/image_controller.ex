@@ -11,7 +11,7 @@ defmodule Fanuniverse.Web.ImageController do
   end
 
   def show(conn, %{"id" => id}) do
-    image = Repo.get!(Image, id)
+    image = Image |> Repo.get!(id) |> Repo.preload(:suggested_by)
     render conn, "show.html", image: image
   end
 

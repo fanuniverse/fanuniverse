@@ -89,6 +89,17 @@
   font-size: 24px;
 }
 
+.image-suggested-by {
+  padding: 0px 8px 18px;
+  font-size: 14px;
+}
+
+.image-suggested-by__user {
+  font-weight: bold;
+  font-size: 16px;
+  color: $black;
+}
+
 .history__user {
   font-family: $font_family_header;
   font-size: 20px;
@@ -102,4 +113,3 @@
 .history__time {
   margin-top: 12px;
 }
-

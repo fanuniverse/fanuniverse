@@ -58,6 +58,13 @@
         Refresh the page to see if we're done!
 
 .layout.layout--narrow
+  .image-suggested-by
+    a.image-suggested-by__user> [
+      href=user_profile_path(@conn, :show, @image.suggested_by.name)
+    ] = @image.suggested_by.name
+
+    ' suggested this image
+    = time_tag(@image.inserted_at)
 
   .block.flex
     .flex__grow: section
