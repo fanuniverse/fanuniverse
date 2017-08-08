@@ -8,7 +8,8 @@ defmodule Fanuniverse.ImageSearchIntegrationTest do
   end
 
   test "search results only include processed images", %{session: session} do
-    image = insert(:image, %{tags: "artist: a, fandom: su, blue diamond"})
+    image = insert(:image, %{tags: "artist: a, fandom: su, blue diamond",
+      suggested_by: Auth.Helpers.user(session)})
     Elasticfusion.Document.index(image, Fanuniverse.ImageIndex)
     refresh_index(Fanuniverse.ImageIndex)
 

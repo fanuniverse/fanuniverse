@@ -12,7 +12,7 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
 
   test "metadata updates trigger an ES document reindex", %{session: session} do
     image = insert(:image,
-      %{tags: "artist: art, fandom: su, ruby"})
+      %{tags: "artist: art, fandom: su, ruby", suggested_by: Auth.Helpers.user(session)})
 
     new_tags =
       "artist: art, fandom: su, ruby, sapphire"
@@ -31,7 +31,7 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
 
   test "metadata updates bump tag counters", %{session: session} do
     image = insert(:image,
-      %{tags: "artist: a, fandom: su, ruby"})
+      %{tags: "artist: a, fandom: su, ruby", suggested_by: Auth.Helpers.user(session)})
 
     untouched = tag_counts(["artist: a", "fandom: su", "ruby"])
     before_addition = tag_counts(["sapphire", "smiling"])
@@ -53,7 +53,7 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
 
   test "tag updates are based on a new-vs-cached comparison", %{session: session} do
     image = insert(:image,
-      %{tags: "artist: a, fandom: su, ruby"})
+      %{tags: "artist: a, fandom: su, ruby", suggested_by: Auth.Helpers.user(session)})
 
     # Tags are compared against tag_cache,
     new_tags =
@@ -100,7 +100,7 @@ defmodule Fanuniverse.ImageUpdateIntegrationTest do
 
   test "image metadata is versioned", %{session: session} do
     image = insert(:image,
-      %{tags: "artist: a, fandom: su, ruby"})
+      %{tags: "artist: a, fandom: su, ruby", suggested_by: Auth.Helpers.user(session)})
 
     new_tags =
       "artist: a, fandom: su, ruby, sapphire"

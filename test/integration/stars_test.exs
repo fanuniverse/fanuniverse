@@ -8,8 +8,8 @@ defmodule Fanuniverse.StarsIntegrationTest do
     {:ok, %{session: test_user_session()}}
   end
 
-  test "logged out users cannot toggle stars" do
-    image = insert(:image)
+  test "logged out users cannot toggle stars", %{session: session} do
+    image = insert(:image, %{suggested_by: Auth.Helpers.user(session)})
 
     assert (build_conn()
             |> post("/stars/toggle", %{image_id: image.id})
@@ -19,7 +19,7 @@ defmodule Fanuniverse.StarsIntegrationTest do
   end
 
   test "users can toggle stars on a given resource", %{session: session} do
-    image = insert(:image)
+    image = insert(:image, %{suggested_by: Auth.Helpers.user(session)})
 
     assert (session
             |> post("/stars/toggle", %{image_id: image.id})
@@ -37,7 +37,7 @@ defmodule Fanuniverse.StarsIntegrationTest do
   end
 
   test "toggling a star triggers a document reindex", %{session: session} do
-    image = insert(:image)
+    image = insert(:image, %{suggested_by: Auth.Helpers.user(session)})
 
     assert (session
             |> post("/stars/toggle", %{image_id: image.id})
@@ -50,7 +50,8 @@ defmodule Fanuniverse.StarsIntegrationTest do
       Elasticfusion.Search.find_ids(
         %{query: %{bool: %{must: [
           %{term: %{stars: 1}},
-          %{term: %{id: image.id}}
+          %{term: %{id: image.id}},
+          %{term: %{starred_by_ids: Auth.Helpers.user(session).id}}
         ]}}}, Fanuniverse.ImageIndex)
   end
 end
