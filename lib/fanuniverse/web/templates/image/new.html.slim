@@ -36,15 +36,15 @@ p Have some fan art you love? Share it with fellow fans!
 
   .js-upload__meta.hidden
     h2 Tag the image
-    p Please reference the artist with an
-      <em>artist: artist name here</em> tag,
-      specify the fandom with a
-      <em>fandom: fandom name here</em> tag,
-      and describe the image with at least one additional tag —
-      for example, character name or episode reference.
+    p Please start off by referencing
+      the artist with an <u>artist: artist name</u> tag
+      and the fandom with a <u>fandom: fandom name</u> tag.
+    p When listing characters, please add the name of the fandom
+      in parentheses after the character, e.g.
+      <u>character (fandom name)</u>.
     = textarea f, :tags,
       class: "input input--wide js-autocomplete-target",
-      placeholder: "artist: somebody, fandom: steven universe, pearl, smiling"
+      placeholder: "artist: somebody, fandom: steven universe, pearl (steven universe), smiling"
     .js-autocomplete.invisible
 
     h2 Credit the artist
@@ -59,15 +59,11 @@ p Have some fan art you love? Share it with fellow fans!
 
 br
 
-h3
-  a href="#" ujs-click-toggle="#content-restrictions"
-    | What kinds of images can I suggest?
+h3 What kinds of images can be suggested?
 
-#content-restrictions.hidden
-  p We accept images that suit TV-PG.
-    Mild profanity, suggestive themes, and
-    moderate (non-graphic violence) is allowed.
+p Currently, we accept images that suit TV-PG. Mild profanity,
+  moderate (non-graphic violence), and suggestive themes are allowed.
 
-  p Submissions containing promotion of intolerance and hatred,
-    gruesome or disgusting imagery, explicit sexual themes, or
-    explicit coarse language are <strong>forbidden</strong>.
+p Submissions containing promotion of intolerance and hatred,
+  gruesome or disgusting imagery, explicit sexual themes, or
+  explicit coarse language are <u>forbidden</u>.
