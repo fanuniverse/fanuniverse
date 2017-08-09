@@ -1,4 +1,4 @@
-defmodule Fanuniverse.Web.ContentSecurityPolicy do
+defmodule Fanuniverse.Web.CSPPlug do
   alias Fanuniverse.Web.Endpoint
 
   import Application, only: [get_env: 2]

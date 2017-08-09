@@ -1,0 +1,8 @@
+= if @conn.assigns[:display_splash] do
+  header.flashy-splash
+    ' Hey, this looks like your first visit to Fan Universe.
+    a.flashy-splash__link href='/intro' Would you like a quick introduction?
+
+- error = get_flash(@conn, :error)
+= if error do
+  p.alert.alert--danger = error

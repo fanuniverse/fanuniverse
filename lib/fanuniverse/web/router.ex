@@ -19,7 +19,8 @@ defmodule Fanuniverse.Web.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug Auth.Plug.LoadAunthenticatedUser
-    plug Fanuniverse.Web.ContentSecurityPolicy
+    plug Fanuniverse.Web.CSPPlug
+    plug Fanuniverse.Web.IntroSplashPlug
   end
 
   pipeline :api do

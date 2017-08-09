@@ -1,0 +1,68 @@
+.intro
+  section.intro__splash
+    span.intro__title Welcome to Fan Universe
+    p Share and discuss Western Animation fan content
+      from all over the Internet, in one place
+
+  section.intro__section
+    h1 Discover
+    p.intro__text
+      | Discovering inspiring art on Fan Universe is <em>a breeze</em>.
+
+    p.intro__text
+      | Every image featured on the site has <em>tags</em> —
+        little bits of information — associated with it.
+        Here's just a few of them:
+
+    .intro__tag-row-title Fandoms
+    section.intro__tag-row
+      = for tag <- ["fandom: adventure time",
+                    "fandom: gravity falls",
+                    "fandom: steven universe"] do
+        a.tag href=image_path(@conn, :index, q: tag) = tag
+
+    .intro__tag-row-title Actions and emotions
+    section.intro__tag-row
+      = for tag <- ["smiling", "crying", "signing", "holding hands"] do
+        a.tag href=image_path(@conn, :index, q: tag) = tag
+
+    .intro__tag-row-title Settings
+    section.intro__tag-row
+      = for tag <- ["forest", "room", "sky", "night"] do
+        a.tag href=image_path(@conn, :index, q: tag) = tag
+
+    .intro__tag-row-title Mediums
+    section.intro__tag-row
+      = for tag <- ["traditional art", "watercolor"] do
+        a.tag href=image_path(@conn, :index, q: tag) = tag
+
+    p.intro__text
+      | The best thing about tags? They are a community effort.
+        Anyone, including you, can create new tags and add them to any pictures.
+
+  section.intro__section
+    h1 Socialize
+    p.intro__text
+      | We aim at fostering an open, welcoming fan community around
+        Western Animation shows, and we're looking forward to seeing you among us!
+
+    p.intro__text
+      | Just drop by a comment section for you favorite image
+        and compliment the artist's outstanding work or
+        share your fan theories — see if anyone strikes up a conversation with you!
+
+  section.intro__section
+    h1 Contribute
+    p.intro__text
+      | We rely on community members for new content — you can
+        <a href=#{image_path(@conn, :new)}>suggest</a> something fresh :)
+
+    p.intro__text
+      | If you want to share your impressions about the site, leave a comment
+        <a href=#{user_profile_path(@conn, :show, "little-bobby-tables")}>
+        on the administrator's page</a>.
+
+    p.intro__text
+      | Lastly, if you have some programming experience
+        and want to help the site grow, check out our
+        <a href="https://github.com/fanuniverse">source repositories</a>!

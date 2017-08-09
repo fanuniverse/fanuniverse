@@ -21,10 +21,7 @@ html lang="en"
   body
     = render Fanuniverse.Web.LayoutView, "header.html", assigns
     = render Fanuniverse.Web.LayoutView, "header_mobile.html", assigns
-
-    - error = get_flash(@conn, :error)
-    = if error do
-      p.alert.alert--danger = error
+    = render Fanuniverse.Web.LayoutView, "header_flash.html", assigns
 
     main.layout class=layout_class(@conn, assigns)
       = render @view_module, @view_template, assigns
