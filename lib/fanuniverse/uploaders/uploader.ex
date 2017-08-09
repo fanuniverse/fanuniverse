@@ -1,4 +1,9 @@
 defmodule Fanuniverse.Uploader do
+  @moduledoc """
+  A mixin for uploader modules, which handle file storage,
+  schema changes, and optionally file processing.
+  """
+
   defmacro __using__(_) do
     quote do
       import Fanuniverse.Uploader
@@ -30,4 +35,36 @@ defmodule Fanuniverse.Uploader do
 
   def cache_url(cache_string),
     do: Application.get_env(:fanuniverse, :cache_url_root) <> "/" <> cache_string
+
+  @doc """
+  Given a `Plug.Upload` struct and a map of
+  `%{content_type_binary => extension_binary}`, returns:
+
+  * `{:ok, extension_binary}` if upload content type is found in the map,
+  * `{:error, :unsupported_content_type}` otherwise.
+  """
+  def check_type(%Plug.Upload{content_type: upload_type}, supported_types) do
+    case supported_types do
+      %{^upload_type => ext} ->
+        {:ok, ext}
+      _ ->
+        {:error, :unsupported_content_type}
+    end
+  end
+
+  @doc """
+  Given a `Plug.Upload` struct and an integer specifying maximum
+  allowed file size in bytes, returns:
+
+  * `:ok` if upload size is less than the specified maximum size,
+  * `{:error, :file_too_large}` otherwise.
+  """
+  def check_file_size(%Plug.Upload{path: path}, max_size) do
+    case File.stat(path) do
+      {:ok, %{size: size}} when size < max_size ->
+        :ok
+      _ ->
+        {:error, :file_too_large}
+    end
+  end
 end
