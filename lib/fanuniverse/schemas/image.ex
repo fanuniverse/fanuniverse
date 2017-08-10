@@ -1,10 +1,12 @@
 defmodule Fanuniverse.Image do
   use Fanuniverse.Schema
 
+  alias Fanuniverse.Repo
   alias Fanuniverse.Image
   alias Fanuniverse.Image.Tags
   alias Fanuniverse.ImageIndex
   alias Fanuniverse.ImageUploader
+  alias Fanuniverse.ImageDuplicateDetectionJob
   alias Fanuniverse.User
 
   schema "images" do
@@ -70,6 +72,26 @@ defmodule Fanuniverse.Image do
         {:ok, image}
       {:error, changeset} ->
         {:error, changeset}
+    end
+  end
+
+  def update_after_processing(%{"id" => id} = params) do
+    status =
+      with %Image{} = image <- Repo.get(Image, id),
+           changeset        <- processed_changeset(image, params),
+        do: Repo.update(changeset)
+
+    case status do
+      {:ok, image} ->
+        Job.perform fn ->
+          Elasticfusion.Document.index(image, ImageIndex)
+          ImageDuplicateDetectionJob.run(image.id)
+        end
+        {:ok, image}
+      nil ->
+        {:error, :not_found}
+      error ->
+        error
     end
   end
 

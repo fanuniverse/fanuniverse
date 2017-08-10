@@ -7,7 +7,7 @@ defmodule Dispatcher.Vidalia do
   use GenServer
   use AMQP
 
-  alias Fanuniverse.ImageProcessingUpdateAction, as: ImageUpdate
+  alias Fanuniverse.Image
 
   @processing_queue "image.process"
   @processed_queue "image.processed"
@@ -52,12 +52,16 @@ defmodule Dispatcher.Vidalia do
 
   # Consumes image metadata from the `@processed_queue`.
   def handle_info({:basic_deliver, payload, %{delivery_tag: tag}}, {channel, callback}) do
-    %{"id" => id, "width" => width, "height" => height,
-      "phash" => phash, "ext" => ext} = Poison.decode!(payload)
-
     spawn fn ->
-      ImageUpdate.perform!(id, width, height, phash, ext)
-      if Code.ensure_loaded?(Mix) && Mix.env == :test, do: callback.(id)
+      {:ok, _} =
+        payload
+        |> Poison.decode!()
+        |> Image.update_after_processing()
+
+      if Code.ensure_loaded?(Mix) && Mix.env == :test do
+        %{"id" => id} = Poison.decode!(payload)
+        callback.(id)
+      end
     end
 
     Basic.ack(channel, tag)
