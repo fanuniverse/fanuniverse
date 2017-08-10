@@ -1,7 +1,7 @@
 defmodule Fanuniverse.Web.UserSessionController do
   use Fanuniverse.Web, :controller
 
-  alias Fanuniverse.UserAuthenticationAction, as: Authentication
+  import Auth.Authentication, only: [authenticate: 2]
 
   plug EnsureNotAuthenticated when action in [:new, :create]
   plug EnsureAuthenticated when action in [:delete]
@@ -9,7 +9,7 @@ defmodule Fanuniverse.Web.UserSessionController do
   def new(conn, _params), do: render(conn, "new.html")
 
   def create(conn, %{"session" => %{"email" => email, "password" => password}}) do
-    case Authentication.perform(email, password) do
+    case authenticate(email, password) do
       {:ok, user} ->
         conn
         |> Auth.UserSession.init(user)
