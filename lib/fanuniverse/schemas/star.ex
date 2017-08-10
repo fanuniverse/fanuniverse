@@ -3,6 +3,9 @@ defmodule Fanuniverse.Star do
     image_id: Fanuniverse.Image,
     comment_id: Fanuniverse.Comment]
 
+  import Fanuniverse.Utils, only: [parse_integer: 2]
+  import Ecto.Adapters.SQL, only: [query: 3]
+
   alias Fanuniverse.User
   alias Fanuniverse.Star
   alias Fanuniverse.Repo
@@ -12,6 +15,31 @@ defmodule Fanuniverse.Star do
 
     field :image_id, :integer
     field :comment_id, :integer
+  end
+
+  # Public interface
+
+  def toggle(%User{id: user_id}, params) do
+    {resource_key, resource_id} = resource_key_and_id(params)
+
+    # See priv/repo/functions/star_toggle.sql
+    toggle_response = query(Repo, "SELECT * FROM star_toggle($1, $2, $3)",
+      [user_id, to_string(resource_key), parse_integer(resource_id, nil)])
+
+    case toggle_response do
+      {:ok, %{rows: [[status, new_stars_count]]}} ->
+        Job.perform fn ->
+          # FIXME: schemas should have indexes associated with them somehow;
+          # this way, we'll be able to easily determine if they need reindexing.
+          if resource_key == :image_id do
+            image = Repo.get!(Fanuniverse.Image, resource_id)
+            :ok = Elasticfusion.Document.index(image, Fanuniverse.ImageIndex)
+          end
+        end
+        {:ok, status, new_stars_count}
+      error ->
+        error
+    end
   end
 
   def changeset(struct, params \\ %{}) do
