@@ -6,21 +6,18 @@ header.navbar.flex
     / Search
     a.navbar__link href="#" ujs-click-toggle='{"#navbar-home":"hidden",".navbar__search":"hidden"}' ujs-click-focus=".navbar__search"
       i.fa.fa-search
+    - show_search = is_binary(@conn.params["q"]) && @conn.params["q"] != ""
     = form_tag image_path(@conn, :index),
       [method: :get, accept_charset: "UTF-8", enforce_utf8: false,
         class: "inline-form"] do
       = tag :input, type: :text,
         name: "q", value: @conn.params["q"],
-        class: "input navbar__search js-autocomplete-target hidden",
+        class: "input navbar__search js-autocomplete-target #{unless show_search, do: "hidden"}",
         placeholder: "Type to get search suggestions…",
         autocomplete: "off"
       .js-autocomplete.invisible
-    / Admin tools
-    = if user_signed_in?(@conn) && user(@conn).role == "administrator" do
-      a.navbar__link href=admin_dashboard_path(@conn, :index)
-        i.fa.fa-diamond
     / Home link
-    a.navbar__link#navbar-home href='/' Fan Universe
+    a.navbar__link#navbar-home class=(if show_search, do: "hidden") href='/' Fan Universe
 
   .flex__right
     = if user_signed_in?(@conn) do
@@ -36,6 +33,19 @@ header.navbar.flex
     a.burger__link href="/images/new" Suggest an image
     hr.burger__divider
     = if user_signed_in?(@conn) do
+      / Admin tools
+      = if user(@conn).role == "administrator" do
+        a.navbar__link href=admin_dashboard_path(@conn, :index)
+          i.fa.fa-fw.fa-diamond>
+          | Admin
+      / User links
+      a.burger__link href=image_path(@conn, :index, q: "in: my stars")
+        i.fa.fa-fw.fa-star>
+        | Stars
+      a.burger__link href=user_profile_path(@conn, :edit)
+        i.fa.fa-fw.fa-cogs>
+        | Account
+      hr.burger__divider
       a.burger__link href="/sign_out" ujs-method="delete"
         i.fa.fa-fw.fa-sign-out>
         | Sign out

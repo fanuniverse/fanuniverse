@@ -23,6 +23,9 @@ header.header.flex
            img.avatar__image src=Fanuniverse.Web.UserView.avatar_url(user(@conn))
        .js-dropdown__content.header__user.hidden
          .header__user__arrow
+         = link to: image_path(@conn, :index, q: "in: my stars") do
+           i.fa.fa-fw.fa-star>
+           | Stars
          = link to: user_profile_path(@conn, :show, user(@conn).name) do
            i.fa.fa-fw.fa-user>
            | Profile
