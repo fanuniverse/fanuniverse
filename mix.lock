@@ -12,7 +12,7 @@
   "distillery": {:hex, :distillery, "1.4.1", "546d851bf27ae8fe0727e10e4fc4e146ad836eecee138263a60431e688044ed3", [:mix], [], "hexpm"},
   "download": {:git, "https://github.com/little-bobby-tables/download.git", "62ceef5f9b9b10cd5a3b6b269827ba0637d7c9f7", [branch: "fix-process-communication"]},
   "ecto": {:hex, :ecto, "2.1.4", "d1ba932813ec0e0d9db481ef2c17777f1cefb11fc90fa7c142ff354972dfba7e", [:mix], [{:db_connection, "~> 1.1", [hex: :db_connection, repo: "hexpm", optional: true]}, {:decimal, "~> 1.2", [hex: :decimal, repo: "hexpm", optional: false]}, {:mariaex, "~> 0.8.0", [hex: :mariaex, repo: "hexpm", optional: true]}, {:poison, "~> 2.2 or ~> 3.0", [hex: :poison, repo: "hexpm", optional: true]}, {:poolboy, "~> 1.5", [hex: :poolboy, repo: "hexpm", optional: false]}, {:postgrex, "~> 0.13.0", [hex: :postgrex, repo: "hexpm", optional: true]}, {:sbroker, "~> 1.0", [hex: :sbroker, repo: "hexpm", optional: true]}], "hexpm"},
-  "elasticfusion": {:git, "https://github.com/fanuniverse/elasticfusion.git", "d9d74fc7eb5ca09d9236b6969ff0f84ae599e365", []},
+  "elasticfusion": {:git, "https://github.com/fanuniverse/elasticfusion.git", "565d5b67d7f05e48c903c2c4b3918b14c60f6b8a", [tag: "1.0.0"]},
   "elastix": {:hex, :elastix, "0.4.0", "aa53f2fe0c7e78242cd0891ff93b5b1b2452a9a6bf9010dbc34c9896217daf57", [:mix], [{:httpoison, ">= 0.7.0", [hex: :httpoison, repo: "hexpm", optional: false]}, {:poison, "~> 3.1", [hex: :poison, repo: "hexpm", optional: false]}], "hexpm"},
   "elixir_make": {:hex, :elixir_make, "0.4.0", "992f38fabe705bb45821a728f20914c554b276838433349d4f2341f7a687cddf", [:mix], [], "hexpm"},
   "eredis": {:hex, :eredis, "1.0.8", "ab4fda1c4ba7fbe6c19c26c249dc13da916d762502c4b4fa2df401a8d51c5364", [:rebar], [], "hexpm"},

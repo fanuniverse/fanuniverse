@@ -8,11 +8,11 @@ defmodule Fanuniverse.Web.ImageView do
 
   @image_sort_keys ~w(newest oldest popular undiscovered most_discussed)
   @image_sorts [
-    newest:         {"Newest first",   "created_at", :desc},
-    oldest:         {"Oldest first",   "created_at", :asc},
-    popular:        {"Popular",        "stars",      :desc},
-    undiscovered:   {"Undiscovered",   "stars",      :asc},
-    most_discussed: {"Most discussed", "comments",   :desc}
+    newest:         {"Newest first",   :created_at, :desc},
+    oldest:         {"Oldest first",   :created_at, :asc},
+    popular:        {"Popular",        :stars,      :desc},
+    undiscovered:   {"Undiscovered",   :stars,      :asc},
+    most_discussed: {"Most discussed", :comments,   :desc}
   ]
 
   def render("title", %{action_name: :new}),

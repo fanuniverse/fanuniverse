@@ -6,7 +6,12 @@ defmodule Fanuniverse.Web.ImageController do
   alias Fanuniverse.Image
 
   def index(conn, params) do
-    {:ok, pagination, images} = find_images(params)
+    {:ok, pagination, images} =
+      Repo.paginate_es(
+        image_search_query(params, user(conn)),
+        Fanuniverse.ImageIndex, Image, params,
+        [default_per_page: 10, max_per_page: 50])
+
     render conn, "index.html", images: images, pagination: pagination
   end
 
@@ -56,7 +61,7 @@ defmodule Fanuniverse.Web.ImageController do
     do: navigate(conn, params, &Elasticfusion.Peek.previous_id/3)
   def navigate(conn, %{"id" => id} = params, peeker_fun) do
     current = Repo.get!(Image, id)
-    query = image_search_query(params)
+    query = image_search_query(params, user(conn))
 
     target = case peeker_fun.(current, query, Fanuniverse.ImageIndex) do
       {:ok, target} when is_binary(target) -> target
@@ -72,33 +77,21 @@ defmodule Fanuniverse.Web.ImageController do
     render conn, "history.html", image: image
   end
 
-  defp find_images(params) do
-    Repo.paginate_es(
-      image_search_query(params),
-      Fanuniverse.ImageIndex,
-      Image,
-      params,
-      [default_per_page: 10, max_per_page: 50]
-    )
-  end
-
   # TODO: generalize & move to a separate module
 
-  alias Elasticfusion.Search.Builder
+  defp image_search_query(params, context) do
+    import Elasticfusion.Search.Builder
+    import Fanuniverse.Web.ImageView, only: [image_sort_field_direction: 1]
 
-  defp image_search_query(params) do
-    query = if is_binary(params["q"]) && params["q"] != "" do
-      Builder.parse_search_string(params["q"], Fanuniverse.ImageIndex)
+    {sort_field, sort_direction} = image_sort_field_direction(params)
+
+    (if is_binary(params["q"]) && params["q"] != "" do
+      parse_search_string(params["q"], Fanuniverse.ImageIndex, context)
     else
       %{}
-    end
-
-    {sort_field, sort_direction} =
-      Fanuniverse.Web.ImageView.image_sort_field_direction(params)
-
-    query
-    |> Builder.add_sort(sort_field, sort_direction)
-    |> Builder.add_sort("id", :desc)
-    |> Builder.add_filter_clause(%{term: %{visible: true}})
+    end)
+    |> add_sort(sort_field, sort_direction)
+    |> add_sort(:id, :desc)
+    |> add_filter_clause(%{term: %{visible: true}})
   end
 end

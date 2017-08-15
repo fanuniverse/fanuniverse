@@ -1,5 +1,5 @@
 defmodule Fanuniverse.ImageIndex do
-  @behaviour Elasticfusion.Index
+  use Elasticfusion.Index
 
   import Ecto.Query
 
@@ -8,42 +8,49 @@ defmodule Fanuniverse.ImageIndex do
   alias Fanuniverse.User
   alias Fanuniverse.Star
 
-  def index_name() do
-    "image_index"
+  index_name "image_index"
+
+  document_type "image"
+
+  index_settings %{number_of_shards: 1}
+
+  mapping %{
+    id: %{type: :integer},
+    tags: %{type: :keyword},
+    stars: %{type: :integer},
+    comments: %{type: :integer},
+    width: %{type: :integer},
+    height: %{type: :integer},
+    suggested_by: %{type: :keyword},
+    starred_by_ids: %{type: :keyword},
+    created_at: %{type: :date},
+    visible: %{type: :boolean}
+  }
+
+  keyword_field :tags
+
+  queryable_fields [
+    id: "id",
+    stars: "stars",
+    comments: "comments",
+    width: "width",
+    height: "height",
+    created_at: "created at"
+  ]
+
+  def_transform "suggested by", fn(_, name, _) ->
+    indexed_name = String.downcase(name)
+    %{term: %{suggested_by: indexed_name}}
   end
 
-  def document_type() do
-    "image"
+  def_transform "in", fn
+    (_, "my stars", %User{id: user_id}) ->
+      %{term: %{starred_by_ids: user_id}}
+    (_, _, _) ->
+      %{}
   end
 
-  def settings() do
-    %{number_of_shards: 1}
-  end
-
-  def mapping() do
-    %{
-      "id" => %{type: :integer},
-      "tags" => %{type: :keyword},
-      "stars" => %{type: :integer},
-      "comments" => %{type: :integer},
-      "width" => %{type: :integer},
-      "height" => %{type: :integer},
-      "suggested_by" => %{type: :keyword},
-      "starred_by_ids" => %{type: :keyword},
-      "created_at" => %{type: :date},
-      "visible" => %{type: :boolean}
-    }
-  end
-
-  def keyword_field() do
-    "tags"
-  end
-
-  def queryable_fields() do
-    ["id", "stars", "comments", "width", "height", "suggested_by", "created_at"]
-  end
-
-  def serialize(%Image{} = record) do
+  serialize fn(%Image{} = record) ->
     suggested_by_name = from(u in User,
       select: u.name, where: u.id == ^record.suggested_by_id)
       |> Repo.one()
@@ -54,16 +61,16 @@ defmodule Fanuniverse.ImageIndex do
       |> Repo.all()
 
     %{
-      "id" => record.id,
-      "tags" => record.tags.list,
-      "stars" => record.stars_count,
-      "comments" => record.comments_count,
-      "width" => record.width,
-      "height" => record.height,
-      "created_at" => record.inserted_at,
-      "visible" => record.processed,
-      "suggested_by" => suggested_by_name,
-      "starred_by_ids" => starred_by_ids
+      id: record.id,
+      tags: record.tags.list,
+      stars: record.stars_count,
+      comments: record.comments_count,
+      width: record.width,
+      height: record.height,
+      created_at: record.inserted_at,
+      visible: record.processed,
+      suggested_by: suggested_by_name,
+      starred_by_ids: starred_by_ids
     }
   end
 end

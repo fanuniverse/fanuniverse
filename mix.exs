@@ -55,7 +55,7 @@ defmodule Fanuniverse.Mixfile do
       {:amqp, "~> 0.2.2"},
       {:poison, "~> 3.1"},
       {:elastix, "~> 0.4.0"},
-      {:elasticfusion, github: "fanuniverse/elasticfusion"},
+      {:elasticfusion, github: "fanuniverse/elasticfusion", tag: "1.0.0"},
       {:calendar, "~> 0.17.2"},
       {:paper_trail, "~> 0.7.5"},
       {:download, github: "little-bobby-tables/download", branch: "fix-process-communication"},
