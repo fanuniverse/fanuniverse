@@ -14,10 +14,7 @@ erl_crash.dump
 /priv/images
 /priv/avatars
 /priv/cache
-/priv/static/**/*
-!/priv/static/app-*
-!/priv/static/manifest.json
-!/priv/static/no-avatar.svg
+/priv/static
 
 # Release management (versioned separately)
 release.sh
