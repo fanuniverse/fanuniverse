@@ -7,7 +7,10 @@ config :fanuniverse, Fanuniverse.Web.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [env: ["sh", "gulp-watch", cd: Path.expand("../bin", __DIR__)]]
+  watchers: [
+    npm: ["run", "postcss:watch", cd: Path.expand("../assets", __DIR__)],
+    npm: ["run", "rollup-app:watch", cd: Path.expand("../assets", __DIR__)]
+  ]
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

@@ -14,7 +14,8 @@ html lang="en"
     link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v1"
     meta name="theme-color" content="#ffffff"
 
-    script src=precompiled_asset_url("app.js")
+    script src=precompiled_asset_url("vendor.js")
+    script src=precompiled_asset_url("app.js") async=true
 
     = csrf_meta_tag()
 
