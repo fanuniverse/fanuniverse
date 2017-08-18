@@ -1,5 +1,3 @@
-@import "global";
-
 body {
   display: flex;
   flex-direction: column;
@@ -7,15 +5,15 @@ body {
   min-height: 100vh;
   height: 100%;
 
-  background: $page_background;
+  background: var(--page-background);
 }
 
 body, button, input, optgroup, select, textarea {
-  font-family: $font_family_base;
+  font-family: var(--font-family-base);
 }
 
 h1, h2, h3 {
-  font-family: $font_family_header;
+  font-family: var(--font-family-header);
 }
 
 .layout {
@@ -24,7 +22,7 @@ h1, h2, h3 {
   flex: 1 0 auto;
   clear: both;
 
-  > h1 {
+  & > h1 {
     margin: 0 0 12px;
   }
 }
@@ -44,17 +42,17 @@ h1, h2, h3 {
 }
 
 .layout--narrow {
-  max-width: $limited_layout_width;
+  max-width: var(--limited-layout-width);
 }
 
 .layout--medium {
-  max-width: $medium_layout_width;
+  max-width: var(--medium-layout-width);
 }
 
 .layout--wide {
   width: 100%;
-  padding-left: $layout_side_margin;
-  padding-right: $layout_side_margin;
+  padding-left: var(--layout-side-margin);
+  padding-right: var(--layout-side-margin);
 }
 
 .flex {
@@ -79,15 +77,15 @@ h1, h2, h3 {
 }
 
 .footer {
-  border-top: 1px solid $border_color;
-  padding: $header_spacing;
+  border-top: 1px solid var(--border-color);
+  padding: var(--header-spacing);
 
   font-size: 12px;
 
   background: white;
-  color: $footer_color;
+  color: var(--footer-color);
 }
 
 .footer__link {
-  color: $footer_color;
+  color: var(--footer-color);
 }

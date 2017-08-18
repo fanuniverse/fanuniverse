@@ -1,0 +1,67 @@
+/* Colors */
+
+:root {
+  --black: #121212;
+
+  --accent-color: #7b518e;
+  --accent-hover-color: #703a88;
+
+  --accent-focus-color: #c3a1d2;
+  --accent-light-hover-color: #ece7ef;
+
+  --meta-color: #8e8e8e;
+  --meta-hover-color: #525252;
+  --meta-inverted-color: #b8b8b8;
+  --meta-inverted-hover-color: #e0e0e0;
+
+  --border-color: #e6e6e6;
+  --page-background: #fcfcfc;
+
+  --burger-color: #282828;
+
+  --footer-color: #545454;
+
+  --pagination-hover-color: #eaeaea;
+
+  --input-text-color: #292929;
+}
+
+/* Fonts */
+
+:root {
+  --font-family-base: "Raleway", sans-serif;
+  --font-family-header: "Sansita", sans-serif;
+}
+
+/* Dimensions */
+
+@custom-media --mobile (width <= 959px);
+@custom-media --desktop (width >= 960px);
+
+:root {
+  --header-height: 48px;
+  --header-spacing: 12px;
+  --header-font-size: 18px;
+
+  --block-spacing: 8px;
+  --block-header-height: 32px;
+
+  --limited-layout-width: 980px;
+  --medium-layout-width: 1330px;
+  --layout-side-margin: 24px;
+
+  --desktop-width: 960px;
+}
+
+/* Applied properties */
+
+:root {
+  --color-transition: {
+    transition: color 0.1s ease-in-out;
+  };
+
+  --bg-color-transition: {
+    transition: background 0.1s ease-in-out,
+      color 0.1s ease-in-out;
+  };
+}

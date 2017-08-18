@@ -1,22 +1,20 @@
-@import "global";
-
-@include mobile {
+@media (--mobile) {
   .header { display: none !important; }
 }
 
-@include desktop {
+@media (--desktop) {
   .navbar { display: none !important; }
 }
 
 .header,
 .navbar,
 .burger {
-  font-family: $font_family_header;
+  font-family: var(--font-family-header);
 }
 
 .header,
 .navbar {
-  border-bottom: 1px solid $border_color;
+  border-bottom: 1px solid var(--border-color);
   background: white;
 }
 
@@ -32,19 +30,19 @@
 .header__link, .header__user-toggle,
 .navbar__link,
 .burger__link {
-  padding: 0 $header_spacing;
-  font-size: $header_font_size;
+  padding: 0 var(--header-spacing);
+  font-size: var(--header-font-size);
   text-decoration: none;
 
-  line-height: $header_height;
-  color: $black;
+  line-height: var(--header-height);
+  color: var(--black);
 }
 
 .header__link {
   border-bottom: 3px solid white;
 
   &:hover {
-    border-bottom: 3px solid $black;
+    border-bottom: 3px solid var(--black);
   }
 }
 
@@ -60,7 +58,7 @@
 .navbar__user-link {
   display: inline-flex;
   align-items: center;
-  height: $header_height;
+  height: var(--header-height);
 }
 
 .navbar__user-link {
@@ -72,7 +70,7 @@
   padding-bottom: 3px;
 
   background-size: 100% 200%;
-  background-image: linear-gradient(to bottom, white 50%, $black 50%);
+  background-image: linear-gradient(to bottom, white 50%, var(--black) 50%);
   transition: background-position ease 0.2s,
               color ease 0.2s;
 }
@@ -100,7 +98,7 @@
   line-height: 28px;
   text-align: left;
 
-  background: $black;
+  background: var(--black);
   color: white;
 }
 
@@ -112,7 +110,7 @@
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 12px solid $black;
+  border-bottom: 12px solid var(--black);
 }
 
 .navbar__search {
@@ -122,7 +120,7 @@
 
   &:focus {
     border: 0;
-    border-bottom: 1px solid $border_color;
+    border-bottom: 1px solid var(--border-color);
   }
 }
 
@@ -132,8 +130,8 @@
   visibility: hidden;
 
   left: 0;
-  top: $header_height;
-  height: calc(100% - #{$header_height});
+  top: var(--header-height);
+  height: calc(100% - var(--header-height));
   width: 100%;
   z-index: 1;
 
@@ -150,7 +148,7 @@
   height: 100%;
   width: 200px;
 
-  border-top: 1px solid $border_color;
+  border-top: 1px solid var(--border-color);
   background: white;
 
   transform: translateX(-100%);
@@ -171,16 +169,16 @@
 .flash {
   padding: 8px 12px;
   background: white;
-  border-bottom: 1px solid $border_color;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .flashy-splash {
   padding: 12px;
 
-  font-family: $font_family_header;
+  font-family: var(--font-family-header);
   font-size: 18px;
 
-  background: $black;
+  background: var(--black);
   color: white;
 }
 

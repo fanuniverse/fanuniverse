@@ -1,6 +1,7 @@
-@import "common/global";
-
+@import "normalize.css";
 @import "font-awesome";
+
+@import "root";
 
 @import "common/misc";
 @import "common/blocks";

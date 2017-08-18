@@ -1,11 +1,9 @@
-@import "common/global";
-
 /* Reports */
 
 .report__title {
   align-items: center;
 
-  font-family: $font_family_header;
+  font-family: var(--font-family-header);
   font-weight: bold;
   font-size: 20px;
   margin: 0 0 8px;
@@ -41,7 +39,7 @@
     margin-right: 16px;
   }
 
-  > img {
+  & > img {
     max-width: 100%;
   }
 }
