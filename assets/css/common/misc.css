@@ -1,5 +1,3 @@
-@import "global";
-
 /* Pagination */
 
 .pagination {
@@ -14,28 +12,28 @@
 }
 
 .page {
-  color: $meta_color;
+  color: var(--meta-color);
 
-  @include bg-color-transition;
+  @apply --bg-color-transition;
 
   &:hover {
-    background: $pagination_hover_color;
-    color: $meta_hover_color;
+    background: var(--pagination-hover-color);
+    color: var(--meta-hover-color);
   }
 }
 
 .current-page {
-  background: $accent_color;
+  background: var(--accent-color);
   color: white;
 }
 
 .page-gap {
-  color: $meta_color;
+  color: var(--meta-color);
 }
 
 /* JS link styles */
 
 .js-dropdown__toggle {
-  color: $black;
+  color: var(--black);
   text-decoration: none;
 }

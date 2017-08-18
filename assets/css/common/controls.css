@@ -1,0 +1,15 @@
+/* File upload */
+
+.file-upload__input {
+  position: absolute;
+  overflow: hidden;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  z-index: -1;
+}
+
+.file-upload__label {
+  display: inline-block;
+  cursor: pointer;
+}

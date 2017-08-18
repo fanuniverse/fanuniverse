@@ -1,23 +1,21 @@
-@import "global";
-
 .meta {
   display: inline-block;
   padding: 4px;
   margin: 0 8px 8px 0;
   text-decoration: none;
 
-  color: $meta_color;
+  color: var(--meta-color);
 
-  @include color-transition;
+  @apply --color-transition;
 
   &:hover {
     cursor: pointer;
-    color: $meta_hover_color;
+    color: var(--meta-hover-color);
   }
 
   &.active {
     font-weight: bold;
-    color: $black;
+    color: var(--black);
   }
 }
 

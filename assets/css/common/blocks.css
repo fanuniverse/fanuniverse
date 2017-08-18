@@ -1,0 +1,23 @@
+.block {
+  background: white;
+  border: 1px solid var(--border-color);
+
+  margin-bottom: var(--block-spacing);
+  border-radius: 4px;
+
+  padding: var(--block-spacing);
+}
+
+.block img {
+  max-width: 100%;
+}
+
+/* Somewhat dirty workaround for default element margins */
+
+.block > h1, .block > h2, .block > h3 {
+  margin-top: 6px;
+}
+
+.block > ul {
+  margin-bottom: 6px;
+}

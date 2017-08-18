@@ -1,9 +1,7 @@
-@import "global";
-
 /* Dropdowns in .media-grid-header */
 
 .image-sort-dropdown {
-  font-family: $font_family_header;
+  font-family: var(--font-family-header);
   margin-bottom: 8px;
   padding-bottom: 4px;
 }
@@ -39,19 +37,19 @@
 .media__video {
   width: 300px;
 
-  /* Small screens — iPhone 5/SE */
-  @media (max-width: 340px) {
+  /* Small screens (iPhone 5/SE) */
+  @media (width <= 340px) {
     width: calc(100vw - 66px);
     max-width: 300px;
   }
 
   /* Landscape orientation */
-  @media (min-width: 620px) and (max-width: 659px) {
+  @media (width >= 620px) and (width <= 659px) {
     width: 260px;
   }
 
-  /* Landscape orientation — bigger screens */
-  @media (min-width: 660px) and (max-width: 700px) {
+  /* Landscape orientation (bigger screens) */
+  @media (width >= 660px) and (width <= 700px) {
     width: 280px;
   }
 }
@@ -69,7 +67,7 @@
   height: 100%;
   top: 0;
   left: 0;
-  background: $black;
+  background: var(--black);
   opacity: 0;
   transition: opacity 0.2s;
 }

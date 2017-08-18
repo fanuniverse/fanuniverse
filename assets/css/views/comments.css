@@ -1,5 +1,3 @@
-@import "common/global";
-
 /* TODO: merge with inline-form? */
 .comment-form {
   display: flex;
@@ -17,13 +15,13 @@
   display: flex;
   align-items: center;
 
-  font-family: $font_family_header;
+  font-family: var(--font-family-header);
   font-size: 18px;
   margin-bottom: 6px;
 }
 
 .comment__author-link {
-  color: $black;
+  color: var(--black);
 }
 
 .comment__meta {
