@@ -8,7 +8,7 @@ services:
       - POSTGRES_USER=fanuniverse
       - POSTGRES_PASSWORD=fanuniverse
     volumes:
-    - /var/lib/fanuniverse/postgresql/data/:/var/lib/postgresql/data
+    - ./tmp/postgresql/data/:/var/lib/postgresql/data
     ports:
       - "localhost:5434:5432"
 
@@ -26,7 +26,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - /var/lib/fanuniverse/elasticsearch/data:/usr/share/elasticsearch/data
+      - ./tmp/elasticsearch/data:/usr/share/elasticsearch/data
     ports:
       - "localhost:9200:9200"
 
@@ -68,29 +68,7 @@ services:
 
   vidalia:
     image: littlebobbytables/vidalia:latest
-    depends_on:
-      - rabbitmq
-    environment:
-      - VIDALIA_PATH=/home/vidalia
-      - AMQP_URI=amqp://guest:guest@rabbitmq:5672
-    volumes:
-      - ./priv:/home/vidalia
-    cap_drop:
-      - DAC_OVERRIDE
-      - FOWNER
-      - CHOWN
-      - SETGID
-      - SETUID
-      - SETPCAP
-      - NET_BIND_SERVICE
-      - SYS_CHROOT
-      - MKNOD
-
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    hostname: rabbit
-    volumes:
-      - /var/lib/fanuniverse/rabbitmq/data:/var/lib/rabbitmq
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      - "localhost:3040:3030"
+    cap_drop: [DAC_OVERRIDE, FOWNER, CHOWN, SETGID, SETUID,
+               SETPCAP, NET_BIND_SERVICE, SYS_CHROOT, MKNOD]

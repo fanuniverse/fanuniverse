@@ -4,6 +4,9 @@
 /deps
 /*.ez
 
+# Used by containerized services in development
+/tmp
+
 # Generated on crash by the VM
 erl_crash.dump
 

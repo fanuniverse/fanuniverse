@@ -12,10 +12,12 @@ config :fanuniverse,
   cache_url_root: "http://static.lvh.me/upload",
   asset_url_root: "http://static.lvh.me/assets",
   avatar_fs_path: "priv/avatars",
+  image_fs_path: "priv/images",
   cache_fs_path: "priv/cache"
 
 config :fanuniverse, :services,
-  sapphire_url_root: "localhost:3030"
+  sapphire_url_root: "localhost:3030",
+  vidalia_url_root: "localhost:3040"
 
 config :fanuniverse, Fanuniverse.Web.Endpoint,
   url: [host: "www.lvh.me"],
