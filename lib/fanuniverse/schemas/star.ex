@@ -10,6 +10,8 @@ defmodule Fanuniverse.Star do
   alias Fanuniverse.Star
   alias Fanuniverse.Repo
 
+  alias Fanuniverse.Workers.ImageIndexUpdate
+
   schema "stars" do
     belongs_to :user, User
 
@@ -28,13 +30,10 @@ defmodule Fanuniverse.Star do
 
     case toggle_response do
       {:ok, %{rows: [[status, new_stars_count]]}} ->
-        Job.perform fn ->
-          # FIXME: schemas should have indexes associated with them somehow;
-          # this way, we'll be able to easily determine if they need reindexing.
-          if resource_key == :image_id do
-            image = Repo.get!(Fanuniverse.Image, resource_id)
-            :ok = Elasticfusion.Document.index(image, Fanuniverse.ImageIndex)
-          end
+        # TODO: schemas should have indexes associated with them somehow;
+        # this way, we'll be able to easily determine if they need reindexing.
+        if resource_key == :image_id do
+          Job.run(ImageIndexUpdate, id: resource_id)
         end
         {:ok, status, new_stars_count}
       error ->

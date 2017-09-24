@@ -4,10 +4,10 @@ defmodule Fanuniverse.Image do
   alias Fanuniverse.Repo
   alias Fanuniverse.Image
   alias Fanuniverse.Image.Tags
-  alias Fanuniverse.ImageIndex
   alias Fanuniverse.ImageUploader
-  alias Fanuniverse.ImageDuplicateDetectionJob
   alias Fanuniverse.User
+  alias Fanuniverse.Workers.ImageIndexUpdate
+  alias Fanuniverse.Workers.ImageDuplicateDetection
 
   schema "images" do
     field :tags, Tags
@@ -40,11 +40,8 @@ defmodule Fanuniverse.Image do
         |> PaperTrail.insert(user: user)
 
       case status do
-        {:ok, %{model: image}} ->
-          Job.perform fn ->
-            Dispatcher.Sapphire.update_tags(image.tags.list, [])
-            Elasticfusion.Document.index(image, ImageIndex)
-          end
+        {:ok, %{model: %{id: id, tags: tags} = image}} ->
+          Job.run(ImageIndexUpdate, id: id, added_tags: tags.list)
           {:ok, image}
         {:error, changeset} ->
           {:error, changeset}
@@ -64,18 +61,17 @@ defmodule Fanuniverse.Image do
       |> PaperTrail.update(user: user)
 
     case status do
-      {:ok, %{model: image}} ->
-        Job.perform fn ->
-          Dispatcher.Sapphire.update_tags(added_tags, removed_tags)
-          Elasticfusion.Document.index(image, ImageIndex)
-        end
+      {:ok, %{model: %{id: id} = image}} ->
+        Job.run(ImageIndexUpdate, id: id,
+          added_tags: added_tags, removed_tags: removed_tags)
+
         {:ok, image}
       {:error, changeset} ->
         {:error, changeset}
     end
   end
 
-  def update_after_processing(%{"id" => id} = params) do
+  def update_after_processing(id, params) do
     status =
       with %Image{} = image <- Repo.get(Image, id),
            changeset        <- processed_changeset(image, params),
@@ -83,10 +79,8 @@ defmodule Fanuniverse.Image do
 
     case status do
       {:ok, image} ->
-        Job.perform fn ->
-          Elasticfusion.Document.index(image, ImageIndex)
-          ImageDuplicateDetectionJob.run(image.id)
-        end
+        Job.run(ImageIndexUpdate, id: id)
+        Job.run(ImageDuplicateDetection, id: id)
         {:ok, image}
       nil ->
         {:error, :not_found}
