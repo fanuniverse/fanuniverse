@@ -48,33 +48,55 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
   def plug_upload(path),
     do: %Plug.Upload{content_type: "image/png", filename: "file.png", path: path}
 
-  defmacro assert_fixture_processing(test_pid, upload_id) do
-    quote bind_quoted: [test_pid: test_pid, upload_id: upload_id] do
-      GenServer.cast(Dispatcher.Vidalia, {:set_callback, fn(id) ->
-        assert id == upload_id
+  test "creates a new image from a remote file", %{session: session} do
+    {:ok, _} = Plug.Adapters.Cowboy.http(FixtureServer, [], port: 8279)
 
-        updated_record = Repo.get!(Image, id)
+    session = session |> post("/images", %{"image" => %{
+      "remote_image" => "localhost:8279/image", "source" => "source.url",
+      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
+    }})
 
-        assert updated_record.width == 564
-        assert updated_record.height == 720
-        assert updated_record.phash != ""
-        assert updated_record.ext == "png"
-        assert updated_record.processed
+    "/images/" <> upload_id = redirected_to(session)
+    assert_fixture_processing(upload_id)
+  end
 
-        assert File.exists?("priv/images/#{id}/thumbnail.png")
-        assert File.exists?("priv/images/#{id}/preview.png")
+  test "detects duplicate uploads and reports them", %{session: session} do
+    session = session |> post("/images", %{"image" => %{
+      "image" => plug_upload(@tmp_path), "source" => "source.url",
+      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
+    }})
+    "/images/" <> original_id = redirected_to(session)
 
-        File.rm_rf!("priv/images/#{id}")
+    # Upload the thumbnail of an already existent image
+    File.cp("priv/images/#{original_id}/thumbnail.png", @tmp_path_2)
 
-        send test_pid, :testing_finished
-      end})
+    session = session |> post("/images", %{"image" => %{
+      "image" => plug_upload(@tmp_path_2), "source" => "source.url",
+      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
+    }})
+    "/images/" <> duplicate_id = redirected_to(session)
 
-      receive do
-        :testing_finished -> :ok
-      after
-        2_000 -> flunk "test callback has not been invoked."
-      end
-    end
+    # Ensure there's a duplicate report for it
+    assert %Report{} = Repo.one(from r in Report,
+        where: r.image_id == ^duplicate_id and
+               r.body == ^"This image might be a duplicate of ##{original_id}.")
+  end
+
+  # Tagging tests
+
+  test "creating an image updates tag counters", %{session: session} do
+    tag_counts_before = Fanuniverse.TagUpdates.tag_counts([
+      "artist: msillzie", "fandom: steven universe", "vidalia"])
+
+    session |> post("/images", %{"image" => %{
+      "image" => plug_upload(@tmp_path), "source" => "source.url",
+      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
+    }})
+
+    tag_counts_after = Fanuniverse.TagUpdates.tag_counts([
+      "artist: msillzie", "fandom: steven universe", "vidalia"])
+
+    assert tag_counts_after == tag_counts_before |> Enum.map(&(&1 + 1))
   end
 
   test "creates a new image and performs background processing", %{session: session} do
@@ -88,14 +110,10 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
     upload = Repo.get(Image, upload_id) |> Repo.preload(:suggested_by)
     assert upload.suggested_by.id == Auth.Helpers.user(session).id
 
-    assert_fixture_processing(self(), upload_id)
+    assert_fixture_processing(upload_id)
   end
 
   test "displays image preview if there are submission errors", %{session: session} do
-    GenServer.cast(Dispatcher.Vidalia, {:set_callback, fn(_id) ->
-      flunk "the callback shouldn't be invoked"
-    end})
-
     session = session |> post("/images", %{"image" => %{
       "image" => plug_upload(@tmp_path), "source" => "",
       "tags" => "artist: msillzie, fandom: steven universe, vidalia"
@@ -103,85 +121,23 @@ defmodule Fanuniverse.ImageUploadIntegrationTest do
 
     cache_root = Application.get_env(:fanuniverse, :cache_url_root) <> "/"
     cache_string = session.assigns.image_cache
+
     assert cache_root <> cache_string == session.assigns.image_preview_url
     assert [source: {"can't be blank", _}] = session.assigns.changeset.errors
   end
 
-  test "creates a new image from a remote file", %{session: session} do
-    {:ok, _} = Plug.Adapters.Cowboy.http(FixtureServer, [], port: 8279)
+  def assert_fixture_processing(id) do
+    updated_record = Repo.get!(Image, id)
 
-    session = session |> post("/images", %{"image" => %{
-      "remote_image" => "localhost:8279/image", "source" => "source.url",
-      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
-    }})
+    assert updated_record.width == 564
+    assert updated_record.height == 720
+    assert updated_record.hash != ""
+    assert updated_record.ext == "png"
+    assert updated_record.processed
 
-    "/images/" <> upload_id = redirected_to(session)
-    assert_fixture_processing(self(), upload_id)
-  end
+    assert File.exists?("priv/images/#{id}/thumbnail.png")
+    assert File.exists?("priv/images/#{id}/preview.png")
 
-  # This test uploads the thumbnail of an already existent image
-  # and ensures the system reports it as a duplicate.
-  test "detects duplicate uploads and reports them", %{session: session} do
-    parent_pid = self()
-
-    upload_duplicate = fn(original_id) ->
-      File.cp("priv/images/#{original_id}/thumbnail.png", @tmp_path_2)
-
-      session |> post("/images", %{"image" => %{
-        "image" => plug_upload(@tmp_path_2), "source" => "source.url",
-        "tags" => "artist: msillzie, fandom: steven universe, vidalia"
-      }})
-    end
-
-    check_for_duplicate_report = fn(original_id, duplicate_id) ->
-      assert %Report{} = Repo.one(
-        from r in Report,
-        where: r.image_id == ^duplicate_id and
-          r.body == ^"This image might be a duplicate of ##{original_id}.")
-    end
-
-    GenServer.cast(Dispatcher.Vidalia, {:set_callback, fn(original_id) ->
-      GenServer.cast(Dispatcher.Vidalia, {:set_callback, fn(duplicate_id) ->
-        GenServer.cast(Dispatcher.Vidalia, {:set_callback, fn(_) -> :ok end})
-
-        check_for_duplicate_report.(original_id, duplicate_id)
-
-        send parent_pid, :testing_finished
-      end})
-
-      upload_duplicate.(original_id)
-    end})
-
-    session |> post("/images", %{"image" => %{
-      "image" => plug_upload(@tmp_path), "source" => "source.url",
-      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
-    }})
-
-    receive do
-      :testing_finished -> :ok
-    after
-      2_000 -> flunk "test callback has not been invoked."
-    end
-  end
-
-  # Tagging tests
-
-  test "creating an image updates tag counters", %{session: session} do
-    tag_counts_before = Fanuniverse.TagUpdates.tag_counts([
-      "artist: msillzie", "fandom: steven universe", "vidalia"])
-
-    session = session |> post("/images", %{"image" => %{
-      "image" => plug_upload(@tmp_path), "source" => "source.url",
-      "tags" => "artist: msillzie, fandom: steven universe, vidalia"
-    }})
-
-    tag_counts_after = Fanuniverse.TagUpdates.tag_counts([
-      "artist: msillzie", "fandom: steven universe", "vidalia"])
-
-    assert tag_counts_after == tag_counts_before |> Enum.map(&(&1 + 1))
-
-    # Required to pass the test
-    "/images/" <> upload_id = redirected_to(session)
-    assert_fixture_processing(self(), upload_id)
+    File.rm_rf!("priv/images/#{id}")
   end
 end
