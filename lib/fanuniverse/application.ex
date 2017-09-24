@@ -8,8 +8,7 @@ defmodule Fanuniverse.Application do
 
     children = [
       supervisor(Fanuniverse.Repo, []),
-      supervisor(Fanuniverse.Web.Endpoint, []),
-      supervisor(Dispatcher.Supervisor, [])
+      supervisor(Fanuniverse.Web.Endpoint, [])
     ]
 
     opts = [strategy: :one_for_one, name: Fanuniverse.Supervisor]
