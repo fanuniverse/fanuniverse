@@ -52,7 +52,7 @@ defmodule Fanuniverse.Mixfile do
       {:cowboy, "~> 1.0"},
       {:comeonin, "~> 3.0"},
       {:redbird, "~> 0.4.0"},
-      {:amqp, "~> 0.2.2"},
+      {:toniq, "~> 1.0"},
       {:poison, "~> 3.1"},
       {:elastix, "~> 0.4.0"},
       {:elasticfusion, github: "fanuniverse/elasticfusion", tag: "1.0.0"},

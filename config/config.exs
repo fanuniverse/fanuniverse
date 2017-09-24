@@ -37,6 +37,9 @@ config :phoenix, :template_engines,
 config :redbird,
   key_namespace: "s_"
 
+config :toniq,
+  redis_url: "redis://localhost:6379"
+
 config :comeonin,
   :bcrypt_log_rounds, 14
 
