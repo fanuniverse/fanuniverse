@@ -262,7 +262,7 @@ CREATE TABLE images (
     comments_count integer DEFAULT 0 NOT NULL,
     width integer,
     height integer,
-    phash text,
+    hash text,
     ext text,
     processed boolean DEFAULT false,
     merged_into_id integer,
@@ -771,5 +771,5 @@ ALTER TABLE ONLY versions
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO "schema_migrations" (version) VALUES (20170414161847), (20170707095249);
+INSERT INTO "schema_migrations" (version) VALUES (20170414161847), (20170707095249), (20170924053801);
 

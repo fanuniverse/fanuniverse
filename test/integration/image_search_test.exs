@@ -16,8 +16,8 @@ defmodule Fanuniverse.ImageSearchIntegrationTest do
     session = get(session, "/", %{"q" => "blue diamond"})
     assert session.assigns.images == []
 
-    Fanuniverse.Image.update_after_processing(%{"id" => image.id,
-      "width" => 300, "height" => 600, "phash" => "1001001", "ext" => "png"})
+    Fanuniverse.Image.update_after_processing(image.id,
+      %{"width" => 300, "height" => 600, "hash" => "1001001", "ext" => "png"})
     refresh_index(Fanuniverse.ImageIndex)
 
     session = get(session, "/", %{"q" => "blue diamond, width: 300, height: 600"})
