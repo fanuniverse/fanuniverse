@@ -52,11 +52,15 @@ defmodule Fanuniverse.Workers.Vidalia do
   @gif_manifest Poison.encode!(%{transforms: [
     %{
       kind: :gif_to_h264,
-      name: "mp4"
+      name: "mp4",
+      crf: 22,
+      preset: "slow"
     },
     %{
       kind: :gif_to_webm,
-      name: "webm"
+      name: "webm",
+      crf: 22,
+      bitrate: 1200
     },
     %{
       kind: :gif_first_frame_jpeg,
@@ -76,7 +80,7 @@ defmodule Fanuniverse.Workers.Vidalia do
   end
 
   defp process!(ext, storage_dir, source_name) when ext in ~w(jpg png) do
-    response =
+    {:ok, response} =
       @vidalia_url
       |> post_multipart([{"manifest", @image_manifest}],
                         [{"image", join(storage_dir, source_name)}])
@@ -98,15 +102,15 @@ defmodule Fanuniverse.Workers.Vidalia do
     return_analyzed(response, ext)
   end
   defp process!(ext, storage_dir, source_name) when ext == "gif" do
-    response =
+    {:ok, response} =
       @vidalia_url
       |> post_multipart([{"manifest", @gif_manifest}],
                         [{"image", join(storage_dir, source_name)}])
       |> receive_multipart()
 
-    File.write!(response["mp4"], join(storage_dir, "source.mp4"))
-    File.write!(response["webm"], join(storage_dir, "source.webm"))
-    File.write!(response["poster"], join(storage_dir, "poster.jpg"))
+    File.write!(join(storage_dir, "rendered.mp4"), response["mp4"])
+    File.write!(join(storage_dir, "rendered.webm"), response["webm"])
+    File.write!(join(storage_dir, "poster.jpg"), response["poster"])
 
     return_analyzed(response, ext)
   end

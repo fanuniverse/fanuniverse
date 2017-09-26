@@ -12,7 +12,7 @@ defmodule Utils.HTTPMultipart do
       {:file, path, {"form-data", [{"name", ~s("#{name}")}]}, []}
     end)
 
-    :hackney.post(url, [], {:multipart, fields ++ files})
+    :hackney.post(url, [], {:multipart, fields ++ files}, recv_timeout: 4 * 60 * 1000)
   end
 
   def receive_multipart({:ok, 200, headers, client}) do
@@ -36,7 +36,7 @@ defmodule Utils.HTTPMultipart do
         part = {part_name, Enum.reverse(part_acc)}
         receive_multipart(stream, nil, nil, [part | parts])
       :eof ->
-        Enum.into(parts, %{})
+        {:ok, Enum.into(parts, %{})}
     end
   end
 
