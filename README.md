@@ -42,7 +42,9 @@ docker-compose up
 ```bash
 # Install dependencies
 mix deps.get
-( cd assets && npm install )
+( cd assets && npm install && npm run rollup-vendor )
+# Temporary hack until FA 5 lands
+cp -r assets/node_modules/font-awesome/fonts priv/static
 
 # Set up the database
 mix ecto.create && mix ecto.migrate
@@ -51,6 +53,9 @@ mix ecto.create && mix ecto.migrate
 mix run -e "Fanuniverse.ImageIndex \
 |> Elasticfusion.IndexAPI.create_index() \
 |> IO.inspect()"
+
+# Create local storage dirs
+mkdir priv/avatars priv/images priv/cache
 ```
 
 #### Finally:

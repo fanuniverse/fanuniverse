@@ -1,7 +1,7 @@
 defmodule Fanuniverse.ImageUploader do
   use Fanuniverse.Uploader
 
-  import Dispatcher.Vidalia, only: [request_processing: 2]
+  alias Fanuniverse.Workers.Vidalia, as: ImageProcessing
 
   require Logger
 
@@ -48,7 +48,8 @@ defmodule Fanuniverse.ImageUploader do
 
     case insert_fun.() do
       {:ok, %{id: id} = record} ->
-        request_processing(id, cached_file)
+        Job.run(ImageProcessing,
+          id: id, cache_path: cache_path(cached_file))
         {:ok, record}
       {:error, changeset} ->
         {:error, changeset, cached_file, cache_url(cached_file)}
