@@ -7,7 +7,7 @@ defmodule Fanuniverse.TagUpdates do
       %{body: resp} = HTTPoison.get!(@tag_search_url, [], params: [q: tag])
 
       case Poison.decode!(resp) do
-        [[_, count]] -> count
+        [[_, count] | _] -> count
         _ -> 0
       end
     end)
