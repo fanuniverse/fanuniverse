@@ -5,7 +5,7 @@ defmodule Fanuniverse.Mixfile do
     [
       app: :fanuniverse,
       version: git_tag_version(),
-      elixir: "~> 1.4",
+      elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       build_embedded: Mix.env == :prod,
@@ -41,11 +41,11 @@ defmodule Fanuniverse.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.3.0-rc"},
+      {:phoenix, "~> 1.3"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
-      {:postgrex, ">= 0.13.0"},
-      {:phoenix_html, github: "phoenixframework/phoenix_html", override: true},
+      {:postgrex, "~> 0.13.0"},
+      {:phoenix_html, "~> 2.10"},
       {:phoenix_slime, "~> 0.9"},
       {:slime, github: "slime-lang/slime", override: true},
       {:gettext, "~> 0.11"},
