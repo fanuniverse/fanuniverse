@@ -1,0 +1,31 @@
+.leantabs {
+  flex-shrink: 0;
+}
+
+.leantabs--horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.leantabs__item {
+  display: block;
+
+  font-family: var(--font-family-header);
+  font-size: 18px;
+  font-weight: bold;
+
+  @apply --color-transition;
+
+  cursor: pointer;
+  color: var(--meta-inverted-color);
+
+  &:hover {
+    color: var(--meta-hover-color);
+  }
+}
+
+.leantabs__item.active,
+.leantabs__item.active:hover {
+  cursor: default;
+  color: var(--black);
+}

@@ -79,7 +79,7 @@
       .account__submit
         = submit "Save changes", class: "button account__submit__button"
 
-  .account__menu ujs-tab-links-for=".account__main"
-    a.account__link class=(if profile_active?, do: "active") ujs-tab="#profile" Profile
-    a.account__link class=(if avatar_active?, do: "active") ujs-tab="#avatar" Avatar
-    a.account__link class=(if user_active?, do: "active") ujs-tab="#user" Account & Security
+  .leantabs ujs-tab-links-for=".account__main"
+    a.leantabs__item.account-tabs__link class=(if profile_active?, do: "active") ujs-tab="#profile" Profile
+    a.leantabs__item.account-tabs__link class=(if avatar_active?, do: "active") ujs-tab="#avatar" Avatar
+    a.leantabs__item.account-tabs__link class=(if user_active?, do: "active") ujs-tab="#user" Account & Security

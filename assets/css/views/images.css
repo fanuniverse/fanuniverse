@@ -96,6 +96,14 @@
   color: var(--black);
 }
 
+.image-tabs {
+  margin: 16px 0 16px 8px;
+}
+
+.image-tabs__item {
+  margin-right: 16px;
+}
+
 .history__user {
   font-family: var(--font-family-header);
   font-size: 20px;

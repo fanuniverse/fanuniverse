@@ -99,33 +99,6 @@
   align-self: flex-end;
 }
 
-.account__menu {
-  flex-shrink: 0;
-}
-
-.account__link {
-  display: block;
+.account-tabs__link {
   margin: 10px 20px 20px 20px;
-
-  font-family: var(--font-family-header);
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--meta-inverted-color);
-
-  cursor: pointer;
-
-  @apply --color-transition;
-
-  &.active {
-    color: var(--black);
-  }
-
-  &.active:hover {
-    color: var(--black);
-    cursor: default;
-  }
-
-  &:hover {
-    color: var(--meta-hover-color);
-  }
 }
