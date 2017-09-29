@@ -1,20 +1,20 @@
 .tag {
   display: inline-block;
   font-size: 14px;
-  margin: 0 6px 4px 0;
-  padding: 4px 8px;
+  margin: 0 8px 8px 0;
+  padding: 6px 12px;
   border-radius: 4px;
 
-  text-decoration: none;
-
+  background: var(--tag-color);
   color: var(--accent-color);
-  border: 1px solid;
+
   font-weight: bold;
+  text-decoration: none;
 
   @apply --bg-color-transition;
 
   &:hover {
-    background: var(--accent-light-hover-color);
+    background: var(--tag-hover-color);
     color: var(--accent-hover-color);
 
     cursor: pointer;

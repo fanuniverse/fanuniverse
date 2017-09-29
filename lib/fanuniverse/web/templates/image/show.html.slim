@@ -66,7 +66,7 @@
     ' suggested this image
     = time_tag(@image.inserted_at)
 
-  .block.flex
+  .pane.flex
     .flex__grow: section
       = for tag <- @image.tags do
         a.tag href=image_path(@conn, :index, q: tag)

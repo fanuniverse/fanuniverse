@@ -14,6 +14,10 @@
   --meta-inverted-color: #b8b8b8;
   --meta-inverted-hover-color: #e0e0e0;
 
+  /* These are quite close to the light accent, perhaps they can be merged? */
+  --tag-color: #f0edf3;
+  --tag-hover-color: #e3d9e7;
+
   --border-color: #ebebeb;
   --page-background: #fcfcfc;
 
