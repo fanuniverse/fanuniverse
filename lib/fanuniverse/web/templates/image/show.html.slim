@@ -72,11 +72,10 @@
         a.tag href=image_path(@conn, :index, q: tag)
           = tag
     .flex__fixed.flex__right
-      a.button.button--round title="Edit tags and source" href=image_path(@conn, :edit, @image)
+      a.button.button--round.button--inline title="Edit tags and source" href=image_path(@conn, :edit, @image)
         i.fa.fa-pencil
       = if has_paper_trail_versions?(@image) do
-        br
-        a.button.button--round title="Image update history" href=image_path(@conn, :history, @image)
+        a.button.button--round.button--inline title="Image update history" href=image_path(@conn, :history, @image)
           i.fa.fa-history
 
   .block
