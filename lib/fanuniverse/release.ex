@@ -18,6 +18,8 @@ defmodule Fanuniverse.Release do
     case Elasticfusion.IndexAPI.create_index(index) do
       :ok ->
         {:ok, index}
+      {:error, %{body: %{"error" => %{"type" => "index_already_exists_exception"}}}} ->
+        {:ok, index}
       {:error, %{body: %{"error" => %{"root_cause" => [%{"reason" => reason}]}}}} ->
         {:error, index, reason}
       {:error, other_reason} ->
