@@ -7,15 +7,17 @@ const production = process.env.NODE_ENV === "production",
       development = !production;
 
 export default {
-  entry: 'js/app.js',
-  dest: '../priv/static/app.js',
+  input: 'js/app.js',
+  output: {
+    file: '../priv/static/app.js',
+    format: 'iife',
+    sourcemap: (development ? 'inline' : false)
+  },
   plugins: [
     buble(),
     when(production, [
       uglify(),
       replace({ 'lvh.me': 'fanuniverse.org' })
     ])
-  ],
-  format: 'iife',
-  sourceMap: (development ? 'inline' : false)
+  ]
 };
