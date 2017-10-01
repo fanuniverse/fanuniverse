@@ -22,6 +22,11 @@ defmodule Pagination.Repo do
         Pagination.Repo.paginate(
           __MODULE__, queryable, params, opts)
       end
+
+      def get_by_ids_sorted(queryable, ids) do
+        Pagination.Repo.get_by_ids_sorted(
+          __MODULE__, queryable, ids)
+      end
     end
   end
 
@@ -92,7 +97,7 @@ defmodule Pagination.Repo do
     end
   end
 
-  defp get_by_ids_sorted(repo, query, ids) do
+  def get_by_ids_sorted(repo, query, ids) do
     records = repo.all(from(r in query, where: r.id in ^ids))
 
     ids
