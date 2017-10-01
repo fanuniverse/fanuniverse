@@ -4,9 +4,13 @@ defmodule Fanuniverse.Web.CommentView do
   alias Fanuniverse.Comment
 
   def js_comments(conn, resource) do
-    {resource_key, resource_id} = Comment.resource_key_and_id(resource)
-    url = comment_path(conn, :index, %{resource_key => resource_id})
+    content_tag :div, "", id: "comments",
+      data_commentable_url: commentable_url(conn, resource)
+  end
 
-    content_tag :div, "", data_commentable_url: url, id: "comments"
+  def commentable_url(conn, resource) do
+    {resource_key, resource_id} = Comment.resource_key_and_id(resource)
+
+    comment_path(conn, :index, %{resource_key => resource_id})
   end
 end

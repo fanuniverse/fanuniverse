@@ -5,33 +5,36 @@ import { loadStarrable } from './stars';
 export default function() {
   const commentable = $('[data-commentable-url]');
 
-  if (commentable) {
-    load(commentable, commentable.getAttribute('data-commentable-url'));
-    pagination(commentable);
-    ajaxPosting(commentable);
-  }
+  commentable && setupComments(commentable,
+    commentable.dataset.commentableUrl);
 }
 
-function load(container, endpoint) {
+export function setupComments(container, endpoint) {
+  fetchListing(container, endpoint);
+  paginate(container);
+  setupForm(container);
+}
+
+function fetchListing(container, endpoint) {
   fetch(endpoint, { credentials: 'same-origin' })
     .then((response) => response.text())
-    .then((comments) => display(container, comments));
+    .then((comments) => displayListing(container, comments));
 }
 
-function display(container, comments) {
-  container.innerHTML = comments;
+function displayListing(container, listing) {
+  container.innerHTML = listing;
   timeago(container);
   loadStarrable(container);
 }
 
-function pagination(container) {
+function paginate(container) {
   on('click', '.page', (e, page) => {
     e.preventDefault();
-    load(container, page.href);
+    fetchListing(container, page.href);
   }, container);
 }
 
-function ajaxPosting(container) {
+function setupForm(container) {
   /* Form submission is handled by UJS,
    * we just need to display the comments we get as a response. */
   on('ajax:success', '#js-comment-form', (e) =>
@@ -44,14 +47,14 @@ function ajaxPosting(container) {
 function showPosted(container, response) {
   response
     .text()
-    .then((comments) => {
+    .then((listing) => {
       const editArea = $('#js-comment-form textarea'),
         previousError = $('.js-model-errors');
 
       editArea.value = '';
       previousError && previousError.remove();
 
-      display(container, comments);
+      displayListing(container, listing);
     });
 }
 
