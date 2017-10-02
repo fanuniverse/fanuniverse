@@ -78,14 +78,17 @@
         a.button.button--round.button--inline title="Image update history" href=image_path(@conn, :history, @image)
           i.fa.fa-history
 
-  .leantabs.leantabs--horizontal.image-tabs
-    a.leantabs__item.image-tabs__item.active Discover more
-    a.leantabs__item.image-tabs__item Comments
+  .leantabs.leantabs--horizontal.image-tabs ujs-tab-links-for=".js-image-tabs"
+    a.leantabs__item.image-tabs__item.active ujs-tab=".js-image-tabs__more" Discover more
+    a.leantabs__item.image-tabs__item ujs-tab=".js-image-tabs__comments" Comments
 
-  .pane.js-image-tabs-target
-   / = render Fanuniverse.Web.CommentView, "form.html",
-   /   conn: @conn, resource: @image
-
-  /= Fanuniverse.Web.CommentView.js_comments(@conn, @image)
+  .pane.js-image-tabs
+    .js-image-tabs__more data-url=image_path(@conn, :more, @image.id)
+    .js-image-tabs__comments.hidden
+      = render Fanuniverse.Web.CommentView, "form.html",
+        conn: @conn, resource: @image
+      br
+      .js-image-comments data-url=Fanuniverse.Web.CommentView.commentable_url(@conn, @image)
+        | Loading comments…
 
   = Fanuniverse.Web.StarView.js_stars(@conn, @image)
