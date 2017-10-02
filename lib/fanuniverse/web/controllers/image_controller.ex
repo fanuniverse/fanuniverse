@@ -2,6 +2,7 @@ defmodule Fanuniverse.Web.ImageController do
   use Fanuniverse.Web, :controller
 
   plug EnsureAuthenticated when action in [:new, :edit, :create, :update]
+  plug :put_layout, false when action in [:more]
 
   alias Fanuniverse.Image
 
@@ -72,6 +73,19 @@ defmodule Fanuniverse.Web.ImageController do
       Map.take(params, ["q", "sort"]))
   end
 
+  def more(conn, %{"id" => id}) do
+    {:ok, ids, _} =
+      id
+      |> image_more_query(count: 40)
+      |> Elasticfusion.Search.find_ids(Fanuniverse.ImageIndex)
+    images =
+      Repo.get_by_ids_sorted(Image, ids)
+    link_params =
+      %{"q" => "mlt: #{id}"}
+
+    render conn, "more.html", images: images, link_params: link_params
+  end
+
   def history(conn, %{"id" => id}) do
     image = Repo.get!(Image, id)
     render conn, "history.html", image: image
@@ -93,5 +107,15 @@ defmodule Fanuniverse.Web.ImageController do
     |> add_sort(sort_field, sort_direction)
     |> add_sort(:id, :desc)
     |> add_filter_clause(%{term: %{visible: true}})
+  end
+
+  defp image_more_query(id, [count: count]) do
+    import Elasticfusion.Search.Builder
+
+    id
+    |> more_like_this(Fanuniverse.ImageIndex)
+    |> add_sort(:stars, :desc)
+    |> add_sort(:id, :desc)
+    |> paginate(1, count)
   end
 end
