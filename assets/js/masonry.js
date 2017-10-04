@@ -1,39 +1,96 @@
-import { $ } from './utils/dom';
+import { $, $$ } from './utils/dom';
+
+/* NOTE: We assume that all items have fixed width. */
 
 export default function() {
-  const grid    = $('.js-grid'),
-        masonry = grid && masonryjs(grid),
-        imgload = grid && imagesLoaded(grid);
+  const gridExists = $('.js-grid');
 
-  /* "Unloaded images can throw off Masonry layouts
-   *  and cause item elements to overlap",
-   * see http://masonry.desandro.com/layout.html#imagesloaded. */
-
-  imgload && imgload.on('progress', () => masonry.layout());
+  if (gridExists) {
+    setupLayout();
+    window.addEventListener('resize', setupLayout);
+  }
 }
 
-function masonryjs(grid) {
-  const masonry = new Masonry(grid, {
-    itemSelector: '.js-grid__item',
-    transitionDuration: '0.2s',
-    isFitWidth: true,
-    initLayout: false, /* delay layout() to bind the layoutComplete listener */
+function setupLayout() {
+  const grid = $('.js-grid');
+
+  const imagesResized = resizeImages(grid),
+        layout = calculateLayout(grid);
+
+  (imagesResized
+    || grid.clientWidth != layout.gridWidth) && applyLayout(grid, layout);
+}
+
+function calculateLayout(grid) {
+  const itemMargin = 10; /* TODO: move to CSS */
+
+  const itemWidth = $('.js-grid__item', grid).clientWidth,
+        spaceFree = grid.closest('.js-grid-container').clientWidth;
+
+  const itemSpace = itemMargin + itemWidth,
+        columnCount = Math.max(1, Math.floor(spaceFree / itemSpace)),
+        gridWidth = columnCount * itemSpace - itemMargin;
+
+  return { itemMargin, itemSpace, columnCount, gridWidth };
+}
+
+function resizeImages(grid) {
+  const sampleImage = $('.js-grid__media', grid),
+        currentWidth = sampleImage.dataset.measuredAt;
+
+  const container = sampleImage.closest('.js-grid__item');
+  const availableWidth =
+    window.getComputedStyle(container).getPropertyValue("width");
+
+  if (currentWidth != availableWidth) {
+    sampleImage.dataset.measuredAt = availableWidth;
+
+    $$('.js-grid__media', grid).forEach((image) => {
+      const ratio = parseFloat(image.dataset.ratio),
+            width = parseInt(availableWidth, 10),
+            height = Math.floor(width / ratio);
+
+      image.style.height = `${height}px`;
+    });
+
+    return true;
+  }
+}
+
+function applyLayout(grid, layout) {
+  const items = $$('.js-grid__item', grid),
+        { columnCount, gridWidth } = layout,
+        { offsets, columnHeights } = calculateOffsets(items, layout),
+        gridHeight = Math.max(...columnHeights);
+
+  offsets.forEach(([top, left], index) => {
+    items[index].style.position = 'absolute';
+    items[index].style.top = `${top}px`;
+    items[index].style.left = `${left}px`;
+
+    items[index].classList.remove('media--unstyled');
   });
 
-  const container = $('.js-grid-container'),
-        header    = $('.js-grid-header');
+  grid.style.position = 'relative';
+  grid.style.width = `${gridWidth}px`;
+  grid.style.height = `${gridHeight}px`;
+}
 
-  masonry.on('layoutComplete', () => {
-    const gridWidth = (masonry.cols * masonry.columnWidth);
-    header.style.width = `${gridWidth}px`;
+function calculateOffsets(gridItems, layout) {
+  const { itemMargin, itemSpace, columnCount } = layout;
+
+  const offsets = [],
+        columnHeights = Array(columnCount).fill(0);
+
+  gridItems.forEach((item, index) => {
+    const column = index % columnCount,
+          top = columnHeights[column],
+          left = itemSpace * column,
+          addedHeight = item.clientHeight + itemMargin;
+
+    offsets.push([top, left]);
+    columnHeights[column] += addedHeight;
   });
 
-  masonry.layout();
-
-  /* When the header width is updated, the page visibly "jumps" (margin: auto).
-   * To hide this from user during the page load, .js-grid-container
-   * is initially set to .invisible. */
-  container.classList.remove('invisible');
-
-  return masonry;
+  return { offsets, columnHeights };
 }
