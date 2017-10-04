@@ -28,7 +28,11 @@ function calculateLayout(grid) {
         spaceFree = grid.closest('.js-grid-container').clientWidth;
 
   const itemSpace = itemMargin + itemWidth,
-        columnCount = Math.max(1, Math.floor(spaceFree / itemSpace)),
+        itemsTotal = grid.childElementCount,
+        /* We add itemMargin to spaceFree because the last item in a row
+         * doesn't have a margin but it's still included in itemSpace */
+        columnCountByWidth = Math.floor((spaceFree + itemMargin) / itemSpace),
+        columnCount = Math.min(itemsTotal, Math.max(1, columnCountByWidth)),
         gridWidth = columnCount * itemSpace - itemMargin;
 
   return { itemMargin, itemSpace, columnCount, gridWidth };
