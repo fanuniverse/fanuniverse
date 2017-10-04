@@ -40,7 +40,7 @@ elixir:
         = if animated?(image) do
           / Animated image
           .video-container.js-video
-            a.media__link href=image_show_link title=image.tags
+            a.media__link.js-grid__media data-ratio=aspect_ratio href=image_show_link title=image.tags
               .video-container__overlay.js-video__controls
                 section
                   i.fa.fa-play
@@ -52,8 +52,8 @@ elixir:
                 img src=version_url(image, "poster", "jpg")
         - else
           / Still image
-          a.media__link href=image_show_link title=image.tags
-            img.js-grid__media data-ratio=aspect_ratio src=version_url(image, "thumbnail")
+          a.media__link.js-grid__media data-ratio=aspect_ratio href=image_show_link title=image.tags
+            img src=version_url(image, "thumbnail")
         // Source
         a.meta.meta--bottom.meta--text-overflow href=image.source
           i.fa.fa-retweet>
