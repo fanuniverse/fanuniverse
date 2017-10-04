@@ -7,8 +7,6 @@
     "element-closest": "^2.0.2",
     "font-awesome": "^4.7.0",
     "gzipme": "^0.1.1",
-    "imagesloaded": "^4.1.1",
-    "masonry-layout": "^4.1.1",
     "normalize.css": "^5.0.0",
     "phoenix_html": "https://github.com/phoenixframework/phoenix_html/tarball/3016219",
     "postcss-cli": "^4.1.1",
