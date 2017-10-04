@@ -9,15 +9,21 @@ export default function() {
     setupLayout();
     window.addEventListener('resize', setupLayout);
   }
+
+  /* Fonts that have not been loaded yet may throw off layout calculations.
+   * FontFaceSet provides a neat way to account for that, but it's not
+   * supported in Edge yet, so we have to check if it's present. */
+  document.fonts && document.fonts.ready.then(() => setupLayout(true));
 }
 
-function setupLayout() {
+function setupLayout(force) {
   const grid = $('.js-grid');
 
   const imagesResized = resizeImages(grid),
         layout = calculateLayout(grid);
 
-  (imagesResized
+  (force
+    || imagesResized
     || grid.clientWidth != layout.gridWidth) && applyLayout(grid, layout);
 }
 
