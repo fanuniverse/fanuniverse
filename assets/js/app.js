@@ -10,7 +10,7 @@ import autocomplete from './autocomplete';
 
 import dropdowns from './dropdowns';
 import video from './video';
-import masonry from './masonry';
+import mediagrid from './mediagrid';
 import swipeto from './swipeto';
 
 import ujsEventactions from './ujs/eventactions';
@@ -31,7 +31,7 @@ function load() {
 
   dropdowns();
   video();
-  masonry();
+  mediagrid();
   swipeto();
 
   ujsEventactions();
