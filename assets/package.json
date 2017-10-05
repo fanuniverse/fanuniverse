@@ -5,6 +5,7 @@
   "dependencies": {
     "cssnano": "^4.0.0-rc.2",
     "element-closest": "^2.0.2",
+    "eslint": "^4.8.0",
     "font-awesome": "^4.7.0",
     "gzipme": "^0.1.1",
     "normalize.css": "^5.0.0",
@@ -29,6 +30,7 @@
     "rollup-app": "rollup -c rollup-app.js",
     "rollup-app:watch": "npm run rollup-app -- -w",
     "rollup-vendor": "rollup -c rollup-vendor.js",
-    "build": "node production.js"
+    "build": "node production.js",
+    "eslint": "eslint"
   }
 }

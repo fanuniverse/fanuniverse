@@ -1,0 +1,159 @@
+env:
+  browser: true
+  es6: true
+
+parserOptions:
+  sourceType: module
+
+rules:
+  # --- Important restrictions
+
+  no-bitwise: error
+  no-ternary: error
+  no-var: error
+
+  no-restricted-syntax: [error,
+    { selector: 'ClassDeclaration',
+      message: 'Avoid classes and other pseudo-OOP features' },
+    { selector: 'ThisExpression',
+      message: 'Do not rely on implicit execution context' }]
+
+  eqeqeq: [error, always]
+
+  # --- General code style
+
+  no-tabs: error
+  indent: [error, 2]
+  linebreak-style: [error, unix]
+  eol-last: [error, always]
+
+  semi: [error, always]
+  semi-spacing: error
+  semi-style: [error, last]
+
+  camelcase: error
+  brace-style: [error, stroustrup, { allowSingleLine: true }]
+  block-spacing: [error, always]
+  comma-dangle: [error, always-multiline]
+  comma-style: [error, last]
+  dot-location: [error, property]
+  dot-notation: error
+  func-style: [error, declaration]
+  func-names: [error, never]
+  line-comment-position: [error, { position: above }]
+  nonblock-statement-body-position: [error, beside]
+  one-var-declaration-per-line: [error, initializations]
+  operator-assignment: [error, always]
+  padded-blocks: [error, never]
+  quotes: [error, single]
+
+  yoda: [error, never]
+
+  # --- ES6 features
+
+  arrow-body-style: [error, as-needed]
+  arrow-parens: [error, always]
+  arrow-spacing: [error, { before: true, after: true }]
+
+  prefer-arrow-callback: error
+  prefer-const: error
+  prefer-destructuring: [error, { object: true, array: false }]
+  prefer-numeric-literals: error
+  prefer-promise-reject-errors: error
+  prefer-rest-params: error
+  prefer-spread: error
+  prefer-template: error
+
+  # --- Code quality
+
+  # TODO: complexity
+  # TODO: max-depth
+  # TODO: max-len
+  # TODO: max-nested-callbacks
+  # TODO: max-params
+  # TODO: max-statements-per-line
+  guard-for-in: error
+  radix: [error, always]
+  require-await: error
+
+  # --- Spacing
+
+  newline-after-var: [error, always]
+  newline-before-return: error
+  newline-per-chained-call: error
+
+  array-bracket-newline: [error, { multiline: true }]
+  array-bracket-spacing: [error, never]
+  computed-property-spacing: [error, never]
+  func-call-spacing: [error, never]
+  key-spacing: [error, { beforeColon: false, afterColon: true, mode: strict }]
+  keyword-spacing: [error, { before: true, after: true }]
+  object-curly-newline: [error, { multiline: true }]
+  object-curly-spacing: [error, always]
+  rest-spread-spacing: [error, never]
+  space-before-blocks: [error, always]
+  space-before-function-paren: [error, { anonymous: never, named: never, asyncArrow: always }]
+  space-in-parens: [error, never]
+  space-infix-ops: error
+  space-unary-ops: error
+  spaced-comment: [error, always]
+  template-curly-spacing: [error, never]
+  template-tag-spacing: error
+
+  # --- Specific restrictions
+  # --- (Can be relaxed if needed)
+
+  no-alert: error
+  no-array-constructor: error
+  no-await-in-loop: error
+  no-buffer-constructor: error
+  no-caller: error
+  no-catch-shadow: error
+  no-confusing-arrow: error
+  no-continue: error
+  no-duplicate-imports: error
+  no-empty-function: error
+  no-eq-null: error
+  no-eval: error
+  no-extend-native: error
+  no-extra-bind: error
+  no-extra-label: error
+  no-floating-decimal: error
+  no-implicit-globals: error
+  no-implied-eval: error
+  no-iterator: error
+  no-label-var: error
+  no-labels: error
+  no-lone-blocks: error
+  no-lonely-if: error
+  no-loop-func: error
+  no-mixed-requires: error
+  no-multi-spaces: error
+  no-multi-str: error
+  no-multiple-empty-lines: error
+  no-native-reassign: error
+  no-new-func: error
+  no-new-object: error
+  no-new-wrappers: error
+  no-octal-escape: error
+  no-param-reassign: error
+  no-proto: error
+  no-return-assign: error
+  no-return-await: error
+  no-script-url: error
+  no-self-compare: error
+  no-sequences: error
+  no-shadow-restricted-names: error
+  no-template-curly-in-string: error
+  no-throw-literal: error
+  no-trailing-spaces: error
+  no-unmodified-loop-condition: error
+  no-unsafe-negation: error
+  no-useless-call: error
+  no-useless-computed-key: error
+  no-useless-concat: error
+  no-useless-rename: error
+  no-useless-return: error
+  no-void: error
+  no-whitespace-before-property: error
+  no-with: error
