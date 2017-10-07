@@ -6,7 +6,7 @@ export default function() {
     e.stopPropagation();
 
     const container = toggle.parentNode,
-          content   = $('.js-dropdown__content', container);
+      content = $('.js-dropdown__content', container);
 
     content.classList.toggle('hidden');
     toggle.classList.toggle('active');

@@ -9,7 +9,7 @@ export default function() {
 
 function swipe(direction) {
   const data = $('[data-swipe-to]').getAttribute('data-swipe-to'),
-        urls = JSON.parse(data);
+    urls = JSON.parse(data);
 
   window.location.href = urls[direction];
 }
@@ -22,7 +22,7 @@ function setupSwipeEvent() {
 const minSwipeDelta = 9;
 
 let startX,
-    startY;
+  startY;
 
 function touchStart(e) {
   const movement = e.touches[0];
@@ -38,10 +38,10 @@ function touchMove(e) {
 
   if (!hasSwipeActions(movement)) return;
 
-  const endX   = movement.clientX,
-        endY   = movement.clientY,
-        deltaX = startX - endX,
-        deltaY = startY - endY;
+  const endX = movement.clientX,
+    endY = movement.clientY,
+    deltaX = startX - endX,
+    deltaY = startY - endY;
 
   /* Is it a horizontal swipe? If no, return. */
   if (Math.abs(deltaX) < Math.abs(deltaY)) return;

@@ -14,8 +14,8 @@ export default function() {
 
 function load(container, endpoint) {
   fetch(endpoint, { credentials: 'same-origin' })
-      .then((response) => response.text())
-      .then((comments) => display(container, comments));
+    .then((response) => response.text())
+    .then((comments) => display(container, comments));
 }
 
 function display(container, comments) {
@@ -45,8 +45,8 @@ function showPosted(container, response) {
   response
     .text()
     .then((comments) => {
-      const editArea      = $('#js-comment-form textarea'),
-            previousError = $('.js-model-errors');
+      const editArea = $('#js-comment-form textarea'),
+        previousError = $('.js-model-errors');
 
       editArea.value = '';
       previousError && previousError.remove();
@@ -59,11 +59,11 @@ function showError(response) {
   response
     .text()
     .then((errors) => {
-        const container     = $('#js-comment-form').parentNode,
-              previousError = $('.js-model-errors', container);
+      const container = $('#js-comment-form').parentNode,
+        previousError = $('.js-model-errors', container);
 
-        previousError && previousError.remove();
+      previousError && previousError.remove();
 
-        container.insertAdjacentHTML('afterbegin', errors);
+      container.insertAdjacentHTML('afterbegin', errors);
     });
 }

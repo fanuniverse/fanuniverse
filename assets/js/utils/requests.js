@@ -13,7 +13,7 @@ function fetchJson(verb, endpoint, body) {
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
-      'X-CSRF-Token': csrfToken
+      'X-CSRF-Token': csrfToken,
     },
   }).then((response) => response.json());
 }

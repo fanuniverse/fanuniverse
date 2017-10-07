@@ -1,6 +1,6 @@
 import './utils/polyfills';
 
-import csrf from './utils/csrf'
+import csrf from './utils/csrf';
 
 import stars from './stars';
 import upload from './upload';

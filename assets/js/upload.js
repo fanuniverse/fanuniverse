@@ -2,7 +2,7 @@ import { $ } from './utils/dom';
 
 export default function() {
   const form = $('.js-upload'),
-        fancy = form && form.classList.contains('js-upload--image');
+    fancy = form && form.classList.contains('js-upload--image');
 
   if (form && fancy) restoreForm() || setupForm(true);
   else if (form) setupForm(false);
@@ -30,6 +30,7 @@ function setupForm(fancy) {
 
 function showImage(src) {
   const image = $('.js-upload__preview');
+
   image.classList.remove('hidden');
   image.src = src;
 
@@ -43,19 +44,20 @@ function scrapeUrl(e) {
     toggleFetchButton();
 
     fetch(`//client.lvh.me/scrape?url=${url}`)
-        .then((response) => response.json())
-        .then((data) => insertScraped(data) && proceedToNextStep())
-        .catch(() => {
-          toggleFetchButton();
-          $('.js-upload__fetch-error').classList.remove('hidden');
-        });
+      .then((response) => response.json())
+      .then((data) => insertScraped(data) && proceedToNextStep())
+      .catch(() => {
+        toggleFetchButton();
+        $('.js-upload__fetch-error').classList.remove('hidden');
+      });
   }
   else e.stopPropagation();
 }
 
 function toggleFetchButton() {
   const button = $('.js-upload__fetch'),
-        oldState = button.textContent;
+    oldState = button.textContent;
+
   button.textContent = button.getAttribute('data-toggle-text');
   button.setAttribute('data-toggle-text', oldState);
 }

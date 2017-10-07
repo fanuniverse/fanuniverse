@@ -6,7 +6,7 @@ export default function() {
       const data = target.getAttribute(`ujs-click-${action}`);
 
       /* preventDefault unless the action returns true */
-      (actions[action](target, data) || e.preventDefault())
+      (actions[action](target, data) || e.preventDefault());
     });
   });
 }
