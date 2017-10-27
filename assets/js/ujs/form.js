@@ -11,10 +11,10 @@ function submitRemoteForm(form) {
   fetch(form.action, {
     method: form.method,
     credentials: 'same-origin',
-    body: new FormData(form)
+    body: new FormData(form),
   })
-  .then((response) => {
-    if (response.ok) fireEvent(form, 'ajax:success', response);
-    else fireEvent(form, 'ajax:error', response);
-  });
+    .then((response) => {
+      if (response.ok) fireEvent(form, 'ajax:success', response);
+      else fireEvent(form, 'ajax:error', response);
+    });
 }

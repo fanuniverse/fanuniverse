@@ -6,10 +6,11 @@ export default function() {
 
     linkContainer.addEventListener('click', (e) => {
       const tabQuery = e.target.getAttribute('ujs-tab');
+
       if (!tabQuery) return;
 
       const selectedLink = e.target,
-            selectedTab = $(tabQuery, tabContainer);
+        selectedTab = $(tabQuery, tabContainer);
 
       Array.from(linkContainer.children)
         .forEach((link) => link.classList.remove('active'));

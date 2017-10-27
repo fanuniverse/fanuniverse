@@ -14,7 +14,7 @@ export function loadStarrable(container) {
 
   datasets.forEach((dataset) => {
     const starrableKey = dataset.getAttribute('data-starrable-key'),
-          ids = JSON.parse(dataset.getAttribute('data-starrable-ids'));
+      ids = JSON.parse(dataset.getAttribute('data-starrable-ids'));
 
     ids.forEach((starrableId) => show(starElement(starrableKey, starrableId)));
   });
@@ -24,14 +24,14 @@ function toggleStar(star) {
   const { starrableKey, starrableId } = star.dataset;
 
   post('/stars/toggle', { [starrableKey]: starrableId })
-      .then((data) => {
-        const star = starElement(starrableKey, starrableId);
+    .then((data) => {
+      const star = starElement(starrableKey, starrableId);
 
-        if (data['status'] === 'added') show(star);
-        else remove(star);
+      if (data.status === 'added') show(star);
+      else remove(star);
 
-        setStarCount(star, data['stars']);
-      });
+      setStarCount(star, data.stars);
+    });
 }
 
 function starElement(key, id) {

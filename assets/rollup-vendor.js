@@ -10,9 +10,7 @@ export default {
     './node_modules/promise-polyfill/promise.js',
     './node_modules/element-closest/element-closest.js',
     './node_modules/textarea-caret/index.js',
-    './node_modules/phoenix_html/priv/static/phoenix_html.js',
-    './node_modules/masonry-layout/dist/masonry.pkgd.js',
-    './node_modules/imagesloaded/imagesloaded.pkgd.js'
+    './node_modules/phoenix_html/priv/static/phoenix_html.js'
   ],
   output: {
     file: '../priv/static/vendor.js',

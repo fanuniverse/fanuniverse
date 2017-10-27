@@ -1,4 +1,4 @@
-/* Dropdowns in .media-grid-header */
+/* Image grid dropdowns */
 
 .image-sort-dropdown {
   font-family: var(--font-family-header);
@@ -12,25 +12,19 @@
 }
 
 /*
- * .media-grid-header
  * .media-grid
  *   .media
  */
 
-.media-grid,
-.media-grid-header {
+.media-grid {
   margin: 0 auto;
 }
 
-.media-grid-header {
-  box-sizing: border-box;
-
-  /* Compensate for .media's side margin. */
-  padding-right: 8px;
-}
-
-.media {
-  margin: 8px 8px 0 0;
+/* A fallback for no-JS scenarios (centered single-column grid).
+ * This class is removed by JS. */
+.media--unstyled {
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .media,
@@ -44,12 +38,22 @@
   }
 
   /* Landscape orientation */
-  @media (width >= 620px) and (width <= 659px) {
+  @media (width >= 625px) and (width <= 664px) {
     width: 260px;
   }
 
   /* Landscape orientation (bigger screens) */
-  @media (width >= 660px) and (width <= 700px) {
+  @media (width >= 665px) and (width <= 705px) {
+    width: 280px;
+  }
+
+  /* Landscape orientation (tablets) */
+  @media (width > 970px) and (width <= 1015px) {
+    width: 280px;
+  }
+
+  /* Landscape orientation (laptops) */
+  @media (width >= 1265px) and (width <= 1345px) {
     width: 280px;
   }
 }

@@ -15,9 +15,9 @@ export default function() {
 
 function submit(link) {
   const url = link.href,
-        method = link.getAttribute('ujs-method'),
-        params = link.getAttribute('ujs-method-params'),
-        form = document.createElement('form');
+    method = link.getAttribute('ujs-method'),
+    params = link.getAttribute('ujs-method-params'),
+    form = document.createElement('form');
 
   form.method = 'post';
   form.action = url;
