@@ -18,7 +18,8 @@ defmodule Fanuniverse.Web.Endpoint do
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Poison
+    json_decoder: Poison,
+    length: 30 * 1024 * 1024
 
   plug Plug.MethodOverride
   plug Plug.Head
