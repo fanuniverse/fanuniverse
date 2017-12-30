@@ -10,20 +10,19 @@
 
     .image__content
       / Meta links & source
-      section
-       a.meta.image__meta data-starrable-key="image_id" data-starrable-id=@image.id title="Star this image!" href="#"
+      section.meta-line.meta-line--top
+       a.meta.image__meta.meta--no-wrap data-starrable-key="image_id" data-starrable-id=@image.id title="Star this image!" href="#"
          i.fa.fa-star>
          span.meta__count= @image.stars_count
-       a.meta.image__meta href="#comments" title="View comments"
+       a.meta.image__meta.meta--no-wrap href="#comments" title="View comments"
          i.fa.fa-comments>
          span.meta__count= @image.comments_count
-       a.meta.image__meta href=version_url(@image, "source") title="View full-sized image"
+       a.meta.image__meta.meta--no-wrap href=version_url(@image, "source") title="View full-sized image"
          i.fa.fa-eye>
          = @image.width
          | x
          = @image.height
-       a.meta.image__meta.meta--text-overflow href=@image.source
-         i.fa.fa-retweet>
+       a.meta.image__meta.meta--wrap href=@image.source
          = short_source(@image)
       = if animated?(@image) do
         / Animated image

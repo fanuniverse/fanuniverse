@@ -1,7 +1,6 @@
 .meta {
   display: inline-block;
   padding: 4px;
-  margin: 0 8px 8px 0;
   text-decoration: none;
 
   color: var(--meta-color);
@@ -23,13 +22,25 @@
   margin: 0;
 }
 
-.meta--bottom {
-  margin: 4px 0 0;
+.meta--no-wrap {
+  white-space: nowrap;
 }
 
-.meta--text-overflow {
+.meta--wrap {
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  display: block;
+}
+
+.meta-line {
+  display: flex;
+  justify-content: center;
+}
+
+.meta-line--top {
+  margin-bottom: 8px;
+}
+
+.meta-line--bottom {
+  margin-top: 4px;
 }
