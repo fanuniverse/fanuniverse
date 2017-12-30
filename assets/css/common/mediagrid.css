@@ -56,6 +56,17 @@
   @media (width >= 1265px) and (width <= 1345px) {
     width: 280px;
   }
+
+  overflow: hidden;
+
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+
+  background: white;
+}
+
+.media__link > img {
+  max-width: 100%;
 }
 
 .media__link {

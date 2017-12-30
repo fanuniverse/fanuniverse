@@ -1,6 +1,7 @@
 .meta {
   display: inline-block;
   padding: 4px;
+  margin-left: 4px;
   text-decoration: none;
 
   color: var(--meta-color);
@@ -35,12 +36,7 @@
 .meta-line {
   display: flex;
   justify-content: center;
-}
 
-.meta-line--top {
-  margin-bottom: 8px;
-}
-
-.meta-line--bottom {
   margin-top: 4px;
+  margin-bottom: 6px;
 }

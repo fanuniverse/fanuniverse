@@ -26,6 +26,10 @@
   }
 }
 
+.image__meta {
+  margin-bottom: 6px;
+}
+
 .image__navigation {
   flex-grow: 1;
 

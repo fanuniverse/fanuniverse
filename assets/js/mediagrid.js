@@ -28,7 +28,7 @@ function setupLayout(force) {
 }
 
 function calculateLayout(grid) {
-  const itemMargin = 10; /* TODO: move to CSS */
+  const itemMargin = 16; /* TODO: move to CSS */
 
   const itemWidth = $('.js-grid__item', grid).clientWidth,
     spaceFree = grid.closest('.js-grid-container').clientWidth;
