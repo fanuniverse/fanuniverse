@@ -76,12 +76,12 @@ defmodule Fanuniverse.Web.ImageController do
   def more(conn, %{"id" => id}) do
     {:ok, ids, _} =
       id
-      |> image_more_query(count: 40)
+      |> image_more_query(count: 10)
       |> Elasticfusion.Search.find_ids(Fanuniverse.ImageIndex)
     images =
       Repo.get_by_ids_sorted(Image, ids)
     link_params =
-      %{"q" => "mlt: #{id}"}
+      %{"q" => "similar to: #{id}"}
 
     render conn, "more.html", images: images, link_params: link_params
   end
@@ -92,6 +92,9 @@ defmodule Fanuniverse.Web.ImageController do
   end
 
   # TODO: generalize & move to a separate module
+
+  defp image_search_query(%{"q" => "similar to: " <> mlt_image_id}, _),
+    do: image_more_query(mlt_image_id, count: 10)
 
   defp image_search_query(params, context) do
     import Elasticfusion.Search.Builder
