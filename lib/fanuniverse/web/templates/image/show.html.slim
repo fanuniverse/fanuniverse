@@ -82,7 +82,7 @@
     a.leantabs__item.image-tabs__item ujs-tab=".js-image-tabs__comments" Comments
 
   .pane.js-image-tabs
-    .js-image-tabs__mlt data-url=image_path(@conn, :more, @image.id)
+    .js-image-tabs__mlt data-url=image_path(@conn, :mlt, @image.id)
     .js-image-tabs__comments.hidden
       = render Fanuniverse.Web.CommentView, "form.html",
         conn: @conn, resource: @image

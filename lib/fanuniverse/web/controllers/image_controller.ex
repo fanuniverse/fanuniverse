@@ -2,7 +2,7 @@ defmodule Fanuniverse.Web.ImageController do
   use Fanuniverse.Web, :controller
 
   plug EnsureAuthenticated when action in [:new, :edit, :create, :update]
-  plug :put_layout, false when action in [:more]
+  plug :put_layout, false when action in [:mlt]
 
   alias Fanuniverse.Image
 
@@ -73,17 +73,17 @@ defmodule Fanuniverse.Web.ImageController do
       Map.take(params, ["q", "sort"]))
   end
 
-  def more(conn, %{"id" => id}) do
+  def mlt(conn, %{"id" => id}) do
     {:ok, ids, _} =
       id
       |> image_more_query(count: 10)
       |> Elasticfusion.Search.find_ids(Fanuniverse.ImageIndex)
     images =
       Repo.get_by_ids_sorted(Image, ids)
-    link_params =
-      %{"q" => "similar to: #{id}"}
+    conn =
+      update_in(conn.params, &(Map.put(&1, "q", "similar to: #{id}")))
 
-    render conn, "more.html", images: images, link_params: link_params
+    render conn, "mlt.html", images: images
   end
 
   def history(conn, %{"id" => id}) do
