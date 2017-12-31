@@ -1,10 +1,6 @@
 = if Enum.empty?(@images) do
   | No related images found
 - else
-  = for image <- @images do
-    div
-      / FIXME: handle animated images
-      - image_show_link = image_path(@conn, :show, image.id, @link_params)
-
-      a href=image_show_link
-        img src=version_url(image, "thumbnail")
+  .js-grid-container
+    = render Fanuniverse.Web.ImageView, "grid.html",
+        conn: @conn, images: @images
