@@ -47,7 +47,7 @@ defmodule Fanuniverse.Mixfile do
       {:postgrex, "~> 0.13.0"},
       {:phoenix_html, "~> 2.10"},
       {:phoenix_slime, "~> 0.9"},
-      {:slime, github: "slime-lang/slime", override: true},
+      {:slime, "~> 1.1", override: true},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:comeonin, "~> 3.0"},
