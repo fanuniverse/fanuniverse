@@ -47,6 +47,7 @@ defmodule Fanuniverse.Web.Router do
     get "/images/:id/next", ImageController, :next
     get "/images/:id/previous", ImageController, :previous
     get "/images/:id/history", ImageController, :history
+    get "/images/:id/mlt", ImageController, :mlt
 
     resources "/comments", CommentController,
       only: [:index, :create]

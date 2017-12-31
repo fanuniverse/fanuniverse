@@ -1,11 +1,13 @@
-.block {
-  background: white;
-  border: 1px solid var(--border-color);
-
+.block, .pane {
   margin-bottom: var(--block-spacing);
+  padding: var(--block-spacing);
+}
+
+.block {
+  border: 1px solid var(--border-color);
   border-radius: 4px;
 
-  padding: var(--block-spacing);
+  background: white;
 }
 
 .block img {

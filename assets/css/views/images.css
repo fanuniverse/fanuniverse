@@ -26,6 +26,10 @@
   }
 }
 
+.image__meta {
+  margin-bottom: 6px;
+}
+
 .image__navigation {
   flex-grow: 1;
 
@@ -86,7 +90,7 @@
 }
 
 .image-suggested-by {
-  padding: 0px 8px 18px;
+  padding: 0px 8px 8px;
   font-size: 14px;
 }
 
@@ -94,6 +98,14 @@
   font-weight: bold;
   font-size: 16px;
   color: var(--black);
+}
+
+.image-tabs {
+  margin: 16px 0 16px 8px;
+}
+
+.image-tabs__item {
+  margin-right: 16px;
 }
 
 .history__user {

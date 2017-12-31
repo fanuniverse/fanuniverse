@@ -10,20 +10,19 @@
 
     .image__content
       / Meta links & source
-      section
-       a.meta.image__meta data-starrable-key="image_id" data-starrable-id=@image.id title="Star this image!" href="#"
+      section.meta-line
+       a.meta.image__meta.meta--no-wrap data-starrable-key="image_id" data-starrable-id=@image.id title="Star this image!" href="#"
          i.fa.fa-star>
          span.meta__count= @image.stars_count
-       a.meta.image__meta href="#comments" title="View comments"
+       a.meta.image__meta.meta--no-wrap href="#comments" title="View comments"
          i.fa.fa-comments>
          span.meta__count= @image.comments_count
-       a.meta.image__meta href=version_url(@image, "source") title="View full-sized image"
+       a.meta.image__meta.meta--no-wrap href=version_url(@image, "source") title="View full-sized image"
          i.fa.fa-eye>
          = @image.width
          | x
          = @image.height
-       a.meta.image__meta.meta--text-overflow href=@image.source
-         i.fa.fa-retweet>
+       a.meta.image__meta.meta--wrap href=@image.source
          = short_source(@image)
       = if animated?(@image) do
         / Animated image
@@ -66,23 +65,29 @@
     ' suggested this image
     = time_tag(@image.inserted_at)
 
-  .block.flex
+  .pane.flex
     .flex__grow: section
       = for tag <- @image.tags do
         a.tag href=image_path(@conn, :index, q: tag)
           = tag
     .flex__fixed.flex__right
-      a.button.button--round title="Edit tags and source" href=image_path(@conn, :edit, @image)
+      a.button.button--round.button--inline title="Edit tags and source" href=image_path(@conn, :edit, @image)
         i.fa.fa-pencil
       = if has_paper_trail_versions?(@image) do
-        br
-        a.button.button--round title="Image update history" href=image_path(@conn, :history, @image)
+        a.button.button--round.button--inline title="Image update history" href=image_path(@conn, :history, @image)
           i.fa.fa-history
 
-  .block
-    = render Fanuniverse.Web.CommentView, "form.html",
-        conn: @conn, resource: @image
+  .leantabs.leantabs--horizontal.image-tabs ujs-tab-links-for=".js-image-tabs"
+    a.leantabs__item.image-tabs__item.active ujs-tab=".js-image-tabs__mlt" Discover more
+    a.leantabs__item.image-tabs__item ujs-tab=".js-image-tabs__comments" Comments
 
-  = Fanuniverse.Web.CommentView.js_comments(@conn, @image)
+  .pane.js-image-tabs
+    .js-image-tabs__mlt data-url=image_path(@conn, :mlt, @image.id)
+    .js-image-tabs__comments.hidden
+      = render Fanuniverse.Web.CommentView, "form.html",
+        conn: @conn, resource: @image
+      br
+      .js-image-comments data-url=Fanuniverse.Web.CommentView.commentable_url(@conn, @image)
+        | Loading comments…
 
   = Fanuniverse.Web.StarView.js_stars(@conn, @image)

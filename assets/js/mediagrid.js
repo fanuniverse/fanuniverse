@@ -8,12 +8,12 @@ export default function() {
   if (gridExists) {
     setupLayout();
     window.addEventListener('resize', () => setupLayout());
-  }
 
-  /* Fonts that have not been loaded yet may throw off layout calculations.
-   * FontFaceSet provides a neat way to account for that, but it's not
-   * supported in Edge yet, so we have to check if it's present. */
-  document.fonts && document.fonts.ready.then(() => setupLayout(true));
+    /* Fonts that have not been loaded yet may throw off layout calculations.
+     * FontFaceSet provides a neat way to account for that, but it's not
+     * supported in Edge yet, so we have to check if it's present. */
+    document.fonts && document.fonts.ready.then(() => setupLayout(true));
+  }
 }
 
 function setupLayout(force) {
@@ -28,7 +28,7 @@ function setupLayout(force) {
 }
 
 function calculateLayout(grid) {
-  const itemMargin = 10; /* TODO: move to CSS */
+  const itemMargin = 16; /* TODO: move to CSS */
 
   const itemWidth = $('.js-grid__item', grid).clientWidth,
     spaceFree = grid.closest('.js-grid-container').clientWidth;

@@ -13,6 +13,8 @@ import video from './video';
 import mediagrid from './mediagrid';
 import swipeto from './swipeto';
 
+import imagetabs from './imagetabs';
+
 import ujsEventactions from './ujs/eventactions';
 import ujsLinks from './ujs/links';
 import ujsForm from './ujs/form';
@@ -38,6 +40,8 @@ function load() {
   ujsLinks();
   ujsForm();
   ujsTab();
+
+  imagetabs();
 
   ga();
 }

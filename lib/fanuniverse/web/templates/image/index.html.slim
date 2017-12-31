@@ -24,39 +24,5 @@ elixir:
   - else
     p No images found
 
-  .media-grid.js-grid
-    = for image <- @images do
-      - image_show_link = image_path(@conn,
-          :show, image.id, Map.take(@conn.params, ["q", "sort"]))
-      - aspect_ratio = (image.width / image.height) |> Float.round(4) |> to_string()
-      .media.media--unstyled.block.js-grid__item
-        / Meta links
-        a.meta data-starrable-key="image_id" data-starrable-id=image.id title="Star this image!" href="#"
-          i.fa.fa-star>
-          span.meta__count= image.stars_count
-        a.meta href="#{image_show_link}#comments"
-          i.fa.fa-comments>
-          span.meta__count= image.comments_count
-        = if animated?(image) do
-          / Animated image
-          .video-container.js-video
-            a.media__link.js-grid__media data-ratio=aspect_ratio href=image_show_link title=image.tags
-              .video-container__overlay.js-video__controls
-                section
-                  i.fa.fa-play
-                  br
-                  span.js-video__state Animated
-              video.video-container__video.media__video(loop muted playsinline preload="none" poster=version_url(image, "poster", "jpg"))
-                source src=version_url(image, "rendered", "webm") type="video/webm"
-                source src=version_url(image, "rendered", "mp4") type="video/mp4"
-                img src=version_url(image, "poster", "jpg")
-        - else
-          / Still image
-          a.media__link.js-grid__media data-ratio=aspect_ratio href=image_show_link title=image.tags
-            img src=version_url(image, "thumbnail")
-        // Source
-        a.meta.meta--bottom.meta--text-overflow href=image.source
-          i.fa.fa-retweet>
-          span= short_source(image)
-
-  = Fanuniverse.Web.StarView.js_stars(@conn, @images)
+  = render Fanuniverse.Web.ImageView, "grid.html",
+      conn: @conn, images: @images

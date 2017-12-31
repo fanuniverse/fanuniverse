@@ -1,0 +1,6 @@
+= if Enum.empty?(@images) do
+  | No related images found
+- else
+  .js-grid-container
+    = render Fanuniverse.Web.ImageView, "grid.html",
+        conn: @conn, images: @images

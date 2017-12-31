@@ -53,9 +53,30 @@ defmodule Fanuniverse.Web.ImageView do
     "#{root}/#{id}/#{version}.#{ext}"
   end
 
-
   def short_source(image) do
-    URI.parse(image.source).host
+    uri = URI.parse(image.source)
+
+    {artist, icon_class} =
+      cond do
+        String.ends_with?(uri.host, ".deviantart.com") ->
+          artist = String.trim_trailing(uri.host, ".deviantart.com")
+          {artist, "fa-deviantart"}
+        String.ends_with?(uri.host, ".tumblr.com") ->
+          artist = String.trim_trailing(uri.host, ".tumblr.com")
+          {artist, "fa-tumblr"}
+        uri.host == "twitter.com" ->
+          case Regex.run(~r/^\/(\w+)\//, uri.path) do
+            [_, artist] -> {artist, "fa-twitter"}
+            _ -> {uri.host, "fa-retweet"}
+          end
+        true ->
+          {uri.host, "fa-retweet"}
+      end
+
+    [
+      content_tag(:i, "", class: "fa #{icon_class}"), " ",
+      content_tag(:span, artist)
+    ]
   end
 
   def has_paper_trail_versions?(%Image{id: id}) do
