@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.3
--- Dumped by pg_dump version 9.6.3
+-- Dumped from database version 10.1
+-- Dumped by pg_dump version 10.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -53,12 +53,12 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE comments (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     body text,
-    user_id integer,
+    user_id bigint,
     stars_count integer DEFAULT 0 NOT NULL,
-    image_id integer,
-    user_profile_id integer,
+    image_id bigint,
+    user_profile_id bigint,
     inserted_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     CONSTRAINT belongs_to_integrity CHECK (((((image_id IS NOT NULL))::integer + ((user_profile_id IS NOT NULL))::integer) = 1))
@@ -89,10 +89,10 @@ CREATE FUNCTION assoc_for_comment(comment comments, OUT assoc_name text, OUT ass
 --
 
 CREATE TABLE stars (
-    id integer NOT NULL,
-    user_id integer,
-    image_id integer,
-    comment_id integer,
+    id bigint NOT NULL,
+    user_id bigint,
+    image_id bigint,
+    comment_id bigint,
     CONSTRAINT belongs_to_integrity CHECK (((((image_id IS NOT NULL))::integer + ((comment_id IS NOT NULL))::integer) = 1))
 );
 
@@ -254,10 +254,10 @@ ALTER SEQUENCE comments_id_seq OWNED BY comments.id;
 --
 
 CREATE TABLE images (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     tags text[],
     source text DEFAULT ''::text NOT NULL,
-    suggested_by_id integer,
+    suggested_by_id bigint,
     stars_count integer DEFAULT 0 NOT NULL,
     comments_count integer DEFAULT 0 NOT NULL,
     width integer,
@@ -265,7 +265,7 @@ CREATE TABLE images (
     hash text,
     ext text,
     processed boolean DEFAULT false,
-    merged_into_id integer,
+    merged_into_id bigint,
     inserted_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -295,13 +295,13 @@ ALTER SEQUENCE images_id_seq OWNED BY images.id;
 --
 
 CREATE TABLE reports (
-    id integer NOT NULL,
-    creator_id integer,
-    resolver_id integer,
+    id bigint NOT NULL,
+    creator_id bigint,
+    resolver_id bigint,
     body text NOT NULL,
     resolved boolean DEFAULT false,
-    image_id integer,
-    comment_id integer,
+    image_id bigint,
+    comment_id bigint,
     inserted_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     CONSTRAINT belongs_to_integrity CHECK (((((image_id IS NOT NULL))::integer + ((comment_id IS NOT NULL))::integer) = 1))
@@ -361,10 +361,10 @@ ALTER SEQUENCE stars_id_seq OWNED BY stars.id;
 --
 
 CREATE TABLE user_profiles (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     bio text DEFAULT ''::text NOT NULL,
     comments_count integer DEFAULT 0 NOT NULL,
-    user_id integer
+    user_id bigint
 );
 
 
@@ -392,7 +392,7 @@ ALTER SEQUENCE user_profiles_id_seq OWNED BY user_profiles.id;
 --
 
 CREATE TABLE users (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     name text,
     email text,
     password_hash text,
@@ -427,12 +427,12 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 --
 
 CREATE TABLE versions (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     event text NOT NULL,
     item_type text NOT NULL,
     item_id integer,
     item_changes jsonb NOT NULL,
-    originator_id integer,
+    originator_id bigint,
     origin text,
     meta jsonb,
     inserted_at timestamp without time zone NOT NULL
