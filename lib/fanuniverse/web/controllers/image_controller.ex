@@ -95,7 +95,6 @@ defmodule Fanuniverse.Web.ImageController do
 
   defp image_search_query(%{"q" => "similar to: " <> mlt_image_id}, _),
     do: image_more_query(mlt_image_id, count: 10)
-
   defp image_search_query(params, context) do
     import Elasticfusion.Search.Builder
     import Fanuniverse.Web.ImageView, only: [image_sort_field_direction: 1]
@@ -116,7 +115,8 @@ defmodule Fanuniverse.Web.ImageController do
     import Elasticfusion.Search.Builder
 
     id
-    |> more_like_this(Fanuniverse.ImageIndex)
+    |> more_like_this(Fanuniverse.ImageIndex, minimum_should_match: 3)
+    |> add_filter_clause(%{term: %{visible: true}})
     |> add_sort(:stars, :desc)
     |> add_sort(:id, :desc)
     |> paginate(1, count)
